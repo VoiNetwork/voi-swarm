@@ -4,7 +4,7 @@ services:
     build: .
     image: ghcr.io/voinetwork/docker-participation-node:latest
     volumes:
-      - ~/voi/algod/data:/algod/data/:rw
+      - /var/lib/voi/algod/data:/algod/data/:rw
     deploy:
       replicas: 1
       restart_policy:

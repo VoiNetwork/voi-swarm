@@ -3,22 +3,22 @@
 account_addr=""
 docker_swarm_started=0
 
+execute_sudo() {
+  sudo bash -c "$1"
+}
+
 abort() {
   if [ $docker_swarm_started -eq 1 ]; then
     echo "Shutting down docker swarm"
     echo ""
-    docker swarm leave --force
+    execute_sudo 'docker swarm leave --force'
   fi
   echo "$1"
   exit 1 >&2
 }
 
-execute_sudo() {
-  sudo bash -c "$1"
-}
-
 execute_interactive_docker_command() {
-  docker exec -e account_addr=$account_addr -it "${container_id}" bash -c "$1; (exit \$?)"
+  execute_sudo "docker exec -e account_addr=$account_addr -it \"${container_id}\" bash -c \"$1; (exit \$?)\""
   exit_code=$?
   if [ $exit_code -eq 130 ]; then
     exit $exit_code >&2
@@ -30,7 +30,7 @@ execute_interactive_docker_command() {
 }
 
 execute_docker_command() {
-  docker exec -e account_addr=$account_addr "${container_id}" bash -c "$1"
+  execute_sudo "docker exec -e account_addr=$account_addr \"${container_id}\" bash -c \"$1\""
 }
 
 get_node_status() {
@@ -72,8 +72,8 @@ busy_wait_until_balance_is_1_voi() {
 }
 
 get_account_addr() {
-  account_addr=$(execute_docker_command 'goal account list | head -n 1 | awk '\''{print $3}'\''')
-  account_addr=${account_addr//[!0-9a-zA-Z]/}
+  account_addr=$(execute_interactive_docker_command 'goal account list')
+  account_addr=$(echo account_addr | awk -F ' ' '{print $3}')
 }
 
 display_banner() {
@@ -92,11 +92,10 @@ docker_swarm_instructions() {
 }
 
 add_docker_groups() {
-  if [ ! $(getent group docker)  ]; then
+  if [ ! "$(getent group docker)"  ]; then
     execute_sudo "groupadd docker"
-    execute_sudo "usermod -aG docker ${USER}"
-    newgrp docker
   fi
+  execute_sudo "usermod -aG docker ${USER}"
 }
 
 if [ -z "${BASH_VERSION:-}" ]; then
@@ -125,14 +124,14 @@ execute_sudo "install -m 0755 -d /etc/apt/keyrings"
 
 case ${operating_system_distribution} in
   "ubuntu")
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
-    sudo chmod a+r /etc/apt/keyrings/docker.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    execute_sudo "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg"
+    execute_sudo "chmod a+r /etc/apt/keyrings/docker.gpg"
+    execute_sudo "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable\" > /etc/apt/sources.list.d/docker.list"
     ;;
   "debian")
-    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
-    sudo chmod a+r /etc/apt/keyrings/docker.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    execute_sudo "curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg"
+    execute_sudo "chmod a+r /etc/apt/keyrings/docker.gpg"
+    execute_sudo "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable\" > /etc/apt/sources.list.d/docker.list"
     ;;
 esac
 
@@ -152,40 +151,39 @@ execute_sudo "apt-get install -y jq"
 display_banner "Starting stack"
 
 if [[ -n ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS} ]]; then
-  docker swarm init ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS}
+  execute_sudo "docker swarm init ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS}"
   if [ $? -ne 0 ]; then
     docker_swarm_instructions
   fi
 else
-  docker swarm init
+  execute_sudo "docker swarm init"
   if [ $? -ne 0 ]; then
     docker_swarm_instructions
   fi
 fi
 docker_swarm_started=1
 
-if [ ! -e ~/voi/algod ]; then
-  mkdir -p ~/voi/algod/data
+if [ ! -e /var/lib/voi/algod/data ]; then
+  execute_sudo "mkdir -p /var/lib/voi/algod/data"
 else
-  abort "$HOME/voi/algod directory already exists. Possibly from a previous installation. Aborting to avoid conflict."
+  abort "/var/lib/voi/algod directory already exists. Possibly from a previous installation. Aborting to avoid conflict."
 fi
 
-display_banner "Downloading latest Voi Network swarm and utility scripts to $HOME/voi"
-curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --output ~/voi/docker-swarm.tar.gz
-tar -xzf ~/voi/docker-swarm.tar.gz -C ~/voi --strip-components=1
-rm ~/voi/docker-swarm.tar.gz
+display_banner "Downloading latest Voi Network swarm and utility scripts to /var/lib/voi"
+execute_sudo "curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --output /var/lib/voi/docker-swarm.tar.gz"
+execute_sudo "tar -xzf /var/lib/voi/docker-swarm.tar.gz -C /var/lib/voi --strip-components=1"
+execute_sudo "rm /var/lib/voi/docker-swarm.tar.gz"
 
-docker stack deploy -c ~/voi/compose.yml voinetwork
+execute_sudo "docker stack deploy -c /var/lib/voi/compose.yml voinetwork"
 
-# Waiting for stack to be ready
-while [ "$(docker service ls | grep voinetwork_algod | awk '{print $4}')" != "1/1" ]
+while [ "$(execute_sudo 'docker service ls' | grep voinetwork_algod | awk '{print $4}')" != "1/1" ]
 do
   echo "Waiting for stack to be ready..."
   sleep 2
 done
 display_banner "Stack is ready!"
 
-container_id=$(docker ps -q -f name=voinetwork_algod)
+container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
 
 if [[ -n $VOINETWORK_SKIP_WALLET_SETUP && $VOINETWORK_SKIP_WALLET_SETUP -eq 1  ]]; then
   display_banner "Skipping wallet setup"
@@ -198,7 +196,7 @@ if [[ -n $VOINETWORK_SKIP_WALLET_SETUP && $VOINETWORK_SKIP_WALLET_SETUP -eq 1  ]
   echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
   echo ""
   echo "Network catchup has been initiated and will continue in the background."
-  exit 0
+  newgrp docker
 fi
 
 display_banner "Setting up Voi wallets and accounts"
@@ -243,7 +241,7 @@ account_status=$(execute_docker_command 'goal account dump -a "${account_addr}" 
 
 if [ "$account_status" -eq 1 ]; then
   display_banner "Welcome to Voi! You are now online!"
-  echo "IMPORTANT: Utility scripts for managing your setup are available in $HOME/voi/scripts"
+  echo "IMPORTANT: Utility scripts for managing your setup are available in /var/lib/voi/scripts"
   echo ""
 else
   display_banner "ERROR: Your account $account_addr is offline."
@@ -257,3 +255,4 @@ echo "******************************************"
 echo "Your Voi address is: ${account_addr}"
 echo "Enter password to unlock your wallet and retrieve your account recovery mnemonic. Make sure to store your mnemonic in a secure location:"
 execute_interactive_docker_command "goal account export -a $account_addr"
+newgrp docker
