@@ -91,12 +91,30 @@ docker_swarm_instructions() {
   exit 1
 }
 
+add_docker_groups() {
+  if [ ! $(getent group docker)  ]; then
+    execute_sudo "groupadd docker"
+    execute_sudo "usermod -aG docker ${USER}"
+    newgrp docker
+  fi
+}
+
 if [ -z "${BASH_VERSION:-}" ]; then
   abort "Bash is required to interpret this script."
 fi
 
-if [ "$(uname)" != "Linux" ]; then
-  abort "This script is only meant to run on Linux."
+# Get Linux OS distribution
+if [ -f /etc/os-release ]; then
+  . /etc/os-release
+  operating_system_distribution="${ID}"
+else
+  abort "This script is only meant to be run on Debian or Ubuntu."
+fi
+
+if [[ ! (${operating_system_distribution} == "ubuntu" || ${operating_system_distribution} == "debian") ]]; then
+  abort "This script is only meant to be run on Debian or Ubuntu."
+else
+  echo "Detected operating system: ${operating_system_distribution}"
 fi
 
 display_banner "Installing Docker"
@@ -104,10 +122,25 @@ display_banner "Installing Docker"
 execute_sudo "apt-get update"
 execute_sudo "apt-get install -y ca-certificates curl gnupg"
 execute_sudo "install -m 0755 -d /etc/apt/keyrings"
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | execute_sudo "gpg -n --dearmor -o /etc/apt/keyrings/docker.gpg"
-execute_sudo "chmod a+r /etc/apt/keyrings/docker.gpg"
+
+case ${operating_system_distribution} in
+  "ubuntu")
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    ;;
+  "debian")
+    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    ;;
+esac
+
+execute_sudo "apt-get update"
 
 execute_sudo "apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin"
+
+add_docker_groups
 
 if [ -z "$(docker --version | grep 'Docker version')" ]; then
   abort "Docker installation failed."

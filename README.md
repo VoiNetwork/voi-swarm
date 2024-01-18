@@ -1,5 +1,17 @@
 # Docker Swarm Voi Participation node setup
 
+## Prerequisites
+- `curl` installed. If on a system without `curl` installed, follow applicable OS guidance for installing `curl`. 
+
+## Supported OS and compute platforms
+### OS
+- Debian
+- Ubuntu
+
+### Compute platform
+- arm64
+- amd64 (x86_64)
+
 ## New to Voi
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
@@ -86,3 +98,4 @@ Commands are wrapped in shell scripts that execute into a running docking contai
 - [ ] Add apprise / alarming on scaling events in docker-compose.yml
 - [ ] Add participation key rotation
 - [ ] Add mechanism for updating scripts and compose files (and swarm) on top of existing installation
+- [ ] Adds script for participation key
