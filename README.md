@@ -42,42 +42,52 @@ Commands are wrapped in shell scripts that execute into a running docking contai
 
 ### Creating a node wallet
 ```bash
-~/voi/scripts/create-wallet.sh <wallet_name>
+/var/lib/voi/scripts/create-wallet.sh <wallet_name>
 ```
 
 ### Creating an account
 ```bash
-~/voi/scripts/create-account.sh 
+/var/lib/voi/scripts/create-account.sh 
 ```
 
 ### Get account mnemonic
 ```bash
-~/voi/scripts/get-account-mnemonic.sh <account_address>
+/var/lib/voi/scripts/get-account-mnemonic.sh <account_address>
 ```
 
 ### Importing an account
 ```bash
-~/voi/scripts/import-account.sh
+/var/lib/voi/scripts/import-account.sh
 ```
 
 ### Generating participation key
 ```bash
-~/voi/scripts/generate-participation-key.sh <account_address>
+/var/lib/voi/scripts/generate-participation-key.sh <account_address>
 ```
 
 ### Get account status
 ```bash
-~/voi/scripts/get-account-status.sh <account_address>
+/var/lib/voi/scripts/get-account-status.sh <account_address>
 ```
 
 ### Go online
 ```bash
-~/voi/scripts/go-online.sh <account_address>
+/var/lib/voi/scripts/go-online.sh <account_address>
 ```
 
 ### Go offline
 ```bash
-~/voi/scripts/go-offline.sh <account_address>
+/var/lib/voi/cripts/go-offline.sh <account_address>
+```
+
+### Goal
+```
+/var/lib/voi/scripts/goal.sh <goal_command>
+```
+
+### Open bash in AVM container
+```bash
+/var/lib/voi/scripts/bash.sh
 ```
 
 ## Debugging
