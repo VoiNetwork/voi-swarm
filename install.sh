@@ -192,9 +192,8 @@ container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
 
 if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1  ]]; then
   display_banner "Skipping wallet setup"
-  echo "Your Docker container ID is: ${container_id}"
-  echo "You can run the following command to enter the container once you have restarted your shell:"
-  echo "docker exec -it ${container_id} bash"
+  echo "IMPORTANT: Utility scripts for managing your setup are available in ${voi_home}/bin"
+  echo "Ensure you restart your shell to use them, or type 'newgrp docker' in your existing shell."
   echo ""
   echo "To see a list of useful commands reference:"
   echo " - Install README.md: https://github.com/VoiNetwork/docker-swarm/blob/main/README.md"
@@ -247,6 +246,7 @@ account_status=$(execute_docker_command "goal account dump -a ${account_addr}" |
 if [ "${account_status}" -eq 1 ]; then
   display_banner "Welcome to Voi! You are now online!"
   echo "IMPORTANT: Utility scripts for managing your setup are available in ${voi_home}/bin"
+  echo "Ensure you restart your shell to use them, or type 'newgrp docker' in your existing shell."
   echo ""
 else
   display_banner "ERROR: Your account ${account_addr} is offline."
