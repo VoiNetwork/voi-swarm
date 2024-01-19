@@ -188,7 +188,7 @@ container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
 if [[ -n $VOINETWORK_SKIP_WALLET_SETUP && $VOINETWORK_SKIP_WALLET_SETUP -eq 1  ]]; then
   display_banner "Skipping wallet setup"
   echo "Your Docker container ID is: ${container_id}"
-  echo "You can run the following command to enter the container:"
+  echo "You can run the following command to enter the container once you have restarted your shell:"
   echo "docker exec -it ${container_id} bash"
   echo ""
   echo "To see a list of useful commands reference:"
