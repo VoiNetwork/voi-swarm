@@ -5,6 +5,8 @@ services:
     image: ghcr.io/voinetwork/docker-participation-node:latest
     volumes:
       - /var/lib/voi/algod/data:/algod/data/:rw
+    environment:
+      TELEMETRY_NAME: ${VOINETWORK_TELEMETRY_NAME}
     deploy:
       replicas: 1
       restart_policy:

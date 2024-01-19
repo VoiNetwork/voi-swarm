@@ -2,6 +2,7 @@
 
 ## Prerequisites
 - `curl` installed. If on a system without `curl` installed, follow applicable OS guidance for installing `curl`. 
+- Ability to use `sudo`
 
 ## Supported OS and compute platforms
 ### OS
@@ -29,6 +30,13 @@ export VOINETWORK_SKIP_WALLET_SETUP=1
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
 ```
 
+## Set custom telemetry name
+```bash
+export VOINETWORK_TELEMETRY_NAME="my_custom_telemetry_name"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+```
+Custom telemetry name can be combined with other environment variables.
+
 ## Uninstalling
 - `rm -rf ~/voi/algod`
 - `docker stack rm voinetwork`
@@ -36,58 +44,58 @@ export VOINETWORK_SKIP_WALLET_SETUP=1
 
 ## Useful scripts
 This section of the README closely follows commands outlined in the excellent D13 guide for setting up a Voi participation
-node under Ubuntu 20.04. The guide can be found here: https://d13.co/posts/set-up-voi-participation-node/
+node under Ubuntu 22.04. The guide can be found here: https://d13.co/posts/set-up-voi-participation-node/
 
 Commands are wrapped in shell scripts that execute into a running docking container.
 
 ### Creating a node wallet
 ```bash
-/var/lib/voi/scripts/create-wallet.sh <wallet_name>
+~/voi/bin/create-wallet.sh <wallet_name>
 ```
 
 ### Creating an account
 ```bash
-/var/lib/voi/scripts/create-account.sh 
+~/voi/bin/create-account.sh 
 ```
 
 ### Get account mnemonic
 ```bash
-/var/lib/voi/scripts/get-account-mnemonic.sh <account_address>
+~/voi/bin/get-account-mnemonic.sh <account_address>
 ```
 
 ### Importing an account
 ```bash
-/var/lib/voi/scripts/import-account.sh
+~/voi/bin/import-account.sh
 ```
 
 ### Generating participation key
 ```bash
-/var/lib/voi/scripts/generate-participation-key.sh <account_address>
+~/voi/bin/generate-participation-key.sh <account_address>
 ```
 
 ### Get account status
 ```bash
-/var/lib/voi/scripts/get-account-status.sh <account_address>
+~/voi/bin/get-account-status.sh <account_address>
 ```
 
 ### Go online
 ```bash
-/var/lib/voi/scripts/go-online.sh <account_address>
+~/voi/bin/go-online.sh <account_address>
 ```
 
 ### Go offline
 ```bash
-/var/lib/voi/cripts/go-offline.sh <account_address>
+~/voi/bin/go-offline.sh <account_address>
 ```
 
 ### Goal
-```
-/var/lib/voi/scripts/goal.sh <goal_command>
+```bash
+~/voi/bin/goal.sh <goal_command>
 ```
 
 ### Open bash in AVM container
 ```bash
-/var/lib/voi/scripts/bash.sh
+~/voi/bin/bash.sh
 ```
 
 ## Debugging
@@ -104,8 +112,7 @@ Commands are wrapped in shell scripts that execute into a running docking contai
 `docker inspect voinetwork_algod`
 
 ## TODO
-- [ ] Add telemetry to docker-compose.yml
 - [ ] Add apprise / alarming on scaling events in docker-compose.yml
 - [ ] Add participation key rotation
 - [ ] Add mechanism for updating scripts and compose files (and swarm) on top of existing installation
-- [ ] Adds script for participation key
+- [ ] Adds script for participation key management

@@ -3,6 +3,7 @@
 account_addr=""
 docker_swarm_started=0
 voi_home="${HOME}/voi"
+headless_install=0
 
 execute_sudo() {
   sudo bash -c "$1"
@@ -104,6 +105,29 @@ add_docker_groups() {
   execute_sudo "usermod -aG docker ${USER}"
 }
 
+set_telemetry_name() {
+  if [[ ${headless_install} -eq 1 ]]; then
+    ## Allow headless install to skip telemetry name setup in case people bring their own wallets / use CI
+    return
+  fi
+  if [[ -z ${VOINETWORK_TELEMETRY_NAME} ]]; then
+    echo "Voi uses node telemetry to improve the network, and reward people with Voi based on telemetry participation."
+    echo ""
+    echo "To set a custom telemetry name, set the VOINETWORK_TELEMETRY_NAME environment variable before running this script."
+    echo "Example: export VOINETWORK_TELEMETRY_NAME='my_custom_name'"
+    echo ""
+    echo "If you do set a name we will prefix the name with 'VOI:' to make it clear that it is running this package."
+    echo "To set your own Voi docker node name enter it now, to skip telemetry gathering type 'continue' below."
+    read -p "Telemetry name: " VOINETWORK_TELEMETRY_NAME
+    if [[ "${VOINETWORK_TELEMETRY_NAME}" == "continue" ]]; then
+      unset VOINETWORK_TELEMETRY_NAME
+      return
+    else
+      VOINETWORK_TELEMETRY_NAME="VOI:$VOINETWORK_TELEMETRY_NAME"
+    fi
+  fi
+}
+
 if [ -z "${BASH_VERSION:-}" ]; then
   abort "Bash is required to interpret this script."
 fi
@@ -117,10 +141,17 @@ else
 fi
 
 if [[ ! (${operating_system_distribution} == "ubuntu" || ${operating_system_distribution} == "debian") ]]; then
-  abort "This script is only meant to be run on Debian or Ubuntu."
-else
   echo "Detected operating system: ${operating_system_distribution}"
+  abort "This script is only meant to be run on Debian or Ubuntu."
 fi
+
+if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1  ]]; then
+  if [[ -n $VOINETWORK_HEADLESS_INSTALL ]]; then
+    headless_install=1
+  fi
+fi
+
+set_telemetry_name
 
 display_banner "Installing Docker"
 
