@@ -8,7 +8,7 @@ execute_sudo() {
 }
 
 abort() {
-  if [ $docker_swarm_started -eq 1 ]; then
+  if [ ${docker_swarm_started} -eq 1 ]; then
     echo "Shutting down docker swarm"
     echo ""
     execute_sudo 'docker swarm leave --force'
@@ -18,19 +18,19 @@ abort() {
 }
 
 execute_interactive_docker_command() {
-  execute_sudo "docker exec -e account_addr=$account_addr -it \"${container_id}\" bash -c \"$1; (exit \$?)\""
+  execute_sudo "docker exec -e account_addr=${account_addr} -it \"${container_id}\" bash -c \"$1; (exit \$?)\""
   exit_code=$?
-  if [ $exit_code -eq 130 ]; then
-    exit $exit_code >&2
+  if [ ${exit_code} -eq 130 ]; then
+    exit ${exit_code} >&2
   fi
-  if [ $exit_code -ne 0 ]; then
+  if [ ${exit_code} -ne 0 ]; then
     echo "Error executing command. Please try again or press CTRL-C to exit."
     execute_interactive_docker_command "$1"
   fi
 }
 
 execute_docker_command() {
-  execute_sudo "docker exec -e account_addr=$account_addr \"${container_id}\" bash -c \"$1\""
+  execute_sudo "docker exec -e account_addr=${account_addr} \"${container_id}\" bash -c \"$1\""
 }
 
 get_node_status() {
@@ -42,12 +42,12 @@ get_node_status() {
 catchup_node() {
   display_banner "Catching up with network... This may take a while ..."
   get_node_status
-  while [ "$current_node_round" -lt "$current_net_round" ]; do
-    rounds_to_go=$(($current_net_round-$current_node_round))
-    if [ $rounds_to_go -gt 1 ]; then
-      echo "Waiting for catchup: $rounds_to_go blocks to go"
+  while [ "${current_node_round}" -lt "${current_net_round}" ]; do
+    rounds_to_go=$((${current_net_round}-${current_node_round}))
+    if [ ${rounds_to_go} -gt 1 ]; then
+      echo "Waiting for catchup: ${rounds_to_go} blocks to go"
     else
-      echo "One more to go!"
+      echo "One more block to go!"
     fi
     get_node_status
     sleep 10
@@ -55,25 +55,30 @@ catchup_node() {
   display_banner "Caught up with the network!"
 }
 
-get_addr_balanace() {
-    balance=$(execute_docker_command 'goal account balance -a "${account_addr}"')
+get_addr_balance() {
+    balance=$(execute_docker_command "goal account balance -a ${account_addr}")
     balance=${balance//[!0-9]/}
 }
 
 busy_wait_until_balance_is_1_voi() {
-  display_banner "Waiting for balance (account: $account_addr) to be 1 Voi"
-  get_addr_balanace
-  while [ "$balance" -lt "1000000" ]; do
+  display_banner "Waiting for balance (account: ${account_addr}) to be 1 Voi"
+  get_addr_balance
+  while [ "${balance}" -lt "1000000" ]; do
     echo "Waiting for balance to be 1 Voi"
-    get_addr_balanace
+    get_addr_balance
     sleep 10
   done
   display_banner "Balance is 1 Voi!"
 }
 
 get_account_addr() {
-  account_addr=$(execute_interactive_docker_command 'goal account list')
-  account_addr=$(echo account_addr | awk -F ' ' '{print $3}')
+  account_addr=$(execute_sudo 'cat /var/lib/voi/algod/data/voi_address')
+}
+
+generate_participation_key() {
+  start_block=$(execute_interactive_docker_command "goal node status" | grep "Last committed block" | cut -d\  -f4 | tr -d '\r')
+  end_block=$((${start_block} + 2000000))
+  execute_interactive_docker_command "goal account addpartkey -a ${account_addr} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
 }
 
 display_banner() {
@@ -185,7 +190,7 @@ display_banner "Stack is ready!"
 
 container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
 
-if [[ -n $VOINETWORK_SKIP_WALLET_SETUP && $VOINETWORK_SKIP_WALLET_SETUP -eq 1  ]]; then
+if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1  ]]; then
   display_banner "Skipping wallet setup"
   echo "Your Docker container ID is: ${container_id}"
   echo "You can run the following command to enter the container once you have restarted your shell:"
@@ -203,11 +208,11 @@ display_banner "Setting up Voi wallets and accounts"
 
 execute_interactive_docker_command "goal wallet new voi"
 
-if [[ -n $VOINETWORK_IMPORT_ACCOUNT && $VOINETWORK_IMPORT_ACCOUNT -eq 1 ]]; then
-  execute_interactive_docker_command "goal account import"
+if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; then
+  execute_interactive_docker_command "goal account import | tee  >(tail -n 1 | cut -d\  -f2 > /algod/data/voi_address)"
   get_account_addr
 else
-  execute_interactive_docker_command 'goal account new'
+  execute_interactive_docker_command "goal account new | tee  >(tail -n 1 | cut -d\  -f6 > /algod/data/voi_address)"
   get_account_addr
 
   # Get Voi from faucet
@@ -220,7 +225,7 @@ else
   echo "************************************************************************************"
 
   read -p "After step 3 above type 'completed' to continue: " prompt
-  while [ "$prompt" != "completed" ]
+  while [ "${prompt}" != "completed" ]
   do
     read -p "Type 'completed' to continue once you have completed step 3 above: " prompt
   done
@@ -231,20 +236,20 @@ catchup_node
 
 display_banner "Joining network"
 
-execute_docker_command 'start=$(goal node status | grep "Last committed block:" | cut -d\  -f4) && duration=${duration:-2000000} && end=$((start + duration)) && goal account addpartkey -a ${account_addr} --roundFirstValid $start --roundLastValid $end'
+generate_participation_key
 
 busy_wait_until_balance_is_1_voi
 
-execute_interactive_docker_command 'goal account changeonlinestatus -a "${account_addr}"'
+execute_interactive_docker_command "goal account changeonlinestatus -a ${account_addr}"
 
-account_status=$(execute_docker_command 'goal account dump -a "${account_addr}" | jq -r .onl')
+account_status=$(execute_docker_command "goal account dump -a ${account_addr}" | jq -r .onl)
 
-if [ "$account_status" -eq 1 ]; then
+if [ "${account_status}" -eq 1 ]; then
   display_banner "Welcome to Voi! You are now online!"
   echo "IMPORTANT: Utility scripts for managing your setup are available in /var/lib/voi/scripts"
   echo ""
 else
-  display_banner "ERROR: Your account $account_addr is offline."
+  display_banner "ERROR: Your account ${account_addr} is offline."
   echo "Something went wrong going online. Reach out on #node-help on the Voi Network Discord for help."
   echo "https://discord.com/invite/vnFbrJrHeW"
   abort "Exiting."
@@ -254,4 +259,4 @@ echo "SAVE THE FOLLOWING INFORMATION IN A SECURE PLACE"
 echo "******************************************"
 echo "Your Voi address is: ${account_addr}"
 echo "Enter password to unlock your wallet and retrieve your account recovery mnemonic. Make sure to store your mnemonic in a secure location:"
-execute_interactive_docker_command "goal account export -a $account_addr"
+execute_interactive_docker_command "goal account export -a ${account_addr}"
