@@ -196,7 +196,7 @@ if [[ -n $VOINETWORK_SKIP_WALLET_SETUP && $VOINETWORK_SKIP_WALLET_SETUP -eq 1  ]
   echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
   echo ""
   echo "Network catchup has been initiated and will continue in the background."
-  newgrp docker
+  exit 0
 fi
 
 display_banner "Setting up Voi wallets and accounts"
@@ -255,4 +255,3 @@ echo "******************************************"
 echo "Your Voi address is: ${account_addr}"
 echo "Enter password to unlock your wallet and retrieve your account recovery mnemonic. Make sure to store your mnemonic in a secure location:"
 execute_interactive_docker_command "goal account export -a $account_addr"
-newgrp docker
