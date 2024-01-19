@@ -2,6 +2,7 @@
 
 account_addr=""
 docker_swarm_started=0
+voi_home="${HOME}/voi"
 
 execute_sudo() {
   sudo bash -c "$1"
@@ -170,16 +171,15 @@ docker_swarm_started=1
 
 if [ ! -e /var/lib/voi/algod/data ]; then
   execute_sudo "mkdir -p /var/lib/voi/algod/data"
-else
-  abort "/var/lib/voi/algod directory already exists. Possibly from a previous installation. Aborting to avoid conflict."
 fi
+mkdir -p ${voi_home}
 
-display_banner "Downloading latest Voi Network swarm and utility scripts to /var/lib/voi"
-execute_sudo "curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --output /var/lib/voi/docker-swarm.tar.gz"
-execute_sudo "tar -xzf /var/lib/voi/docker-swarm.tar.gz -C /var/lib/voi --strip-components=1"
-execute_sudo "rm /var/lib/voi/docker-swarm.tar.gz"
+display_banner "Downloading latest Voi Network swarm and utility scripts to ${voi_home}"
+curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --output ${voi_home}/docker-swarm.tar.gz
+tar -xzf ${voi_home}/docker-swarm.tar.gz -C ${voi_home} --strip-components=1
+rm ${voi_home}/docker-swarm.tar.gz
 
-execute_sudo "docker stack deploy -c /var/lib/voi/compose.yml voinetwork"
+execute_sudo "docker stack deploy -c ${voi_home}/docker-swarm/compose.yml voinetwork"
 
 while [ "$(execute_sudo 'docker service ls' | grep voinetwork_algod | awk '{print $4}')" != "1/1" ]
 do
@@ -246,7 +246,7 @@ account_status=$(execute_docker_command "goal account dump -a ${account_addr}" |
 
 if [ "${account_status}" -eq 1 ]; then
   display_banner "Welcome to Voi! You are now online!"
-  echo "IMPORTANT: Utility scripts for managing your setup are available in /var/lib/voi/scripts"
+  echo "IMPORTANT: Utility scripts for managing your setup are available in ${voi_home}/bin"
   echo ""
 else
   display_banner "ERROR: Your account ${account_addr} is offline."

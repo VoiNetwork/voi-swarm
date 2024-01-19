@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   algod:
-    build: .
+    build: ..
     image: ghcr.io/voinetwork/docker-participation-node:latest
     volumes:
       - /var/lib/voi/algod/data:/algod/data/:rw
@@ -10,7 +10,7 @@ services:
       restart_policy:
         condition: on-failure
   shepherd:
-    build: .
+    build: ..
     image: containrrr/shepherd
     environment:
       RUN_ONCE_AND_EXIT: "true"
