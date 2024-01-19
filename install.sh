@@ -95,7 +95,7 @@ docker_swarm_instructions() {
   echo "Error initializing Docker Swarm."
   echo "Set VOINETWORK_DOCKER_SWARM_INIT_SETTINGS to the settings you want to use to initialize Docker Swarm and try again."
   echo "Example: export VOINETWORK_DOCKER_SWARM_INIT_SETTINGS='--advertise-addr 10.0.0.1'"
-  exit 1
+  abort "Exiting."
 }
 
 add_docker_groups() {
@@ -145,10 +145,8 @@ if [[ ! (${operating_system_distribution} == "ubuntu" || ${operating_system_dist
   abort "This script is only meant to be run on Debian or Ubuntu."
 fi
 
-if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1  ]]; then
-  if [[ -n $VOINETWORK_HEADLESS_INSTALL ]]; then
-    headless_install=1
-  fi
+if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1 ]] || [[ -n $VOINETWORK_HEADLESS_INSTALL ]]; then
+  headless_install=1
 fi
 
 set_telemetry_name
