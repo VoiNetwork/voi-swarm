@@ -35,6 +35,26 @@ execute_docker_command() {
   execute_sudo "docker exec -e account_addr=${account_addr} \"${container_id}\" bash -c \"$1\""
 }
 
+start_docker_swarm() {
+  local docker_swarm
+  docker_swarm=$(execute_sudo 'docker info | grep Swarm | cut -d\  -f3')
+  if [ "${docker_swarm}" != "active" ]; then
+    command="docker swarm init"
+
+    if [[ -n ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS} ]]; then
+      command+=" ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS}"
+    fi
+
+    execute_sudo "$command"
+
+    if [ $? -ne 0 ]; then
+      docker_swarm_instructions
+    fi
+
+    docker_swarm_started=1
+  fi
+}
+
 get_node_status() {
     current_node_round=$(execute_docker_command 'goal node lastround | head -n 1')
     current_net_round=$(curl -s https://testnet-api.voi.nodly.io/v2/status | jq -r '.["last-round"]' )
@@ -188,18 +208,7 @@ execute_sudo "apt-get install -y jq"
 
 display_banner "Starting stack"
 
-if [[ -n ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS} ]]; then
-  execute_sudo "docker swarm init ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS}"
-  if [ $? -ne 0 ]; then
-    docker_swarm_instructions
-  fi
-else
-  execute_sudo "docker swarm init"
-  if [ $? -ne 0 ]; then
-    docker_swarm_instructions
-  fi
-fi
-docker_swarm_started=1
+start_docker_swarm
 
 if [ ! -e /var/lib/voi/algod/data ]; then
   execute_sudo "mkdir -p /var/lib/voi/algod/data"
