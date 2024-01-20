@@ -1,8 +1,12 @@
 # Docker Swarm Voi Participation Node Setup
 
 ## Prerequisites
-- `curl` installed. If your system does not have `curl` installed, follow the applicable OS guidance for installing `curl`. 
-- Ability to use `sudo`
+- `curl` 
+- `sudo`
+- `apt-get`
+
+If any package is not available on your system, or if you do not have permission to use said package, follow operating 
+system guidance on installation and setup.
 
 ## Supported Operating Systems and Compute Platforms
 ### Operating Systems
@@ -21,7 +25,8 @@ To set up a new Voi node, run the following command:
 ```
 
 ##  Using an Existing Account/Address with Mnemonic
-If you have an existing account/address with a mnemonic that you want to use, set the VOINETWORK_IMPORT_ACCOUNT environment variable to 1 and run the install script:
+If you have an existing account/address with a mnemonic that you want to use, set the VOINETWORK_IMPORT_ACCOUNT
+environment variable to 1 and run the install script:
 
 ```bash
 export VOINETWORK_IMPORT_ACCOUNT=1
@@ -29,7 +34,8 @@ export VOINETWORK_IMPORT_ACCOUNT=1
 ```
 
 ## Installing Without Wallet Setup
-If you want to install without including wallet setup, set the VOINETWORK_SKIP_WALLET_SETUP environment variable to 1 and run the install script:
+If you want to install without including wallet setup, set the VOINETWORK_SKIP_WALLET_SETUP environment variable to 1
+and run the install script:
 
 ```bash
 export VOINETWORK_SKIP_WALLET_SETUP=1
@@ -53,7 +59,9 @@ To uninstall, execute the following commands:
 
 
 ## Useful Scripts
-This section provides a collection of useful scripts for managing your Voi participation node. These scripts are designed to be executed within a running Docker container. They closely follow the commands outlined in the [D13 guide](https://d13.co/posts/set-up-voi-participation-node/) for setting up a Voi participation node under Ubuntu 22.04.
+This section provides a collection of useful scripts for managing your Voi participation node. These scripts are 
+designed to be executed within a running Docker container. They closely follow the commands outlined in the
+[D13 guide](https://d13.co/posts/set-up-voi-participation-node/) for setting up a Voi participation node under Ubuntu 22.04.
 
 ### Creating a Node Wallet
 Create a new wallet with the following command:
