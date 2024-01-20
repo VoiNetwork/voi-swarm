@@ -47,14 +47,14 @@ catchup_node() {
   while [ "${current_node_round}" -lt "${current_net_round}" ]; do
     rounds_to_go=$((${current_net_round}-${current_node_round}))
     if [ ${rounds_to_go} -gt 1 ]; then
-      printf "\rWaiting for catchup: %d blocks to go" ${rounds_to_go}
+      printf "\rWaiting for catchup: %d blocks to go " ${rounds_to_go} "                             "
     else
-      printf "\rWaiting for catchup: One more block to go!                         "
+      printf "\rWaiting for catchup: One more block to go!                                           "
     fi
     get_node_status
     sleep 2
   done
-  display_banner "\nCaught up with the network!"
+  display_banner "Caught up with the network!"
 }
 
 get_addr_balance() {
