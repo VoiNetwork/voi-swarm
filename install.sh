@@ -115,7 +115,7 @@ catchup_node() {
       printf "\rWaiting for catchup: One more block to go!                                           "
     fi
     get_node_status
-    sleep 2
+    sleep 5
   done
   display_banner "Caught up with the network!"
 }
