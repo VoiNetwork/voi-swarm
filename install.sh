@@ -120,17 +120,17 @@ catchup_node() {
   display_banner "Caught up with the network!"
 }
 
-get_addr_balance() {
+get_address_balance() {
     balance=$(execute_docker_command "goal account balance -a ${account_addr}")
     balance=${balance//[!0-9]/}
 }
 
 busy_wait_until_balance_is_1_voi() {
   display_banner "Waiting for balance (account: ${account_addr}) to be 1 Voi"
-  get_addr_balance
+  get_address_balance
   while [ "${balance}" -lt "1000000" ]; do
     echo "Waiting for balance to be 1 Voi at minimum"
-    get_addr_balance
+    get_address_balance
     sleep 10
   done
   display_banner "Account has balance of 1 Voi or greater!"
@@ -291,7 +291,7 @@ fi
 
 display_banner "Setting up Voi wallets and accounts"
 
-execute_interactive_docker_command "goal wallet new voi"
+execute_interactive_docker_command "goal wallet new voi-$RANDOM"
 
 if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; then
   execute_interactive_docker_command "goal account import | tee  >(tail -n 1 | cut -d\  -f2 > /algod/data/voi_address)"
