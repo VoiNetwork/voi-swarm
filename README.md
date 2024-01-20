@@ -38,9 +38,10 @@ export VOINETWORK_TELEMETRY_NAME="my_custom_telemetry_name"
 Custom telemetry name can be combined with other environment variables.
 
 ## Uninstalling
-- `rm -rf ~/voi/algod`
-- `docker stack rm voinetwork`
 - `docker swarm leave --force`
+- `rm -rf ~/voi/algod`
+- `sudo rm -rf /var/lib/voi`
+
 
 ## Useful scripts
 This section of the README closely follows commands outlined in the excellent D13 guide for setting up a Voi participation

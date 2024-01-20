@@ -42,19 +42,19 @@ get_node_status() {
 }
 
 catchup_node() {
-  display_banner "Catching up with network... This may take a while ..."
+  display_banner "Catching up with network... This may take a while, and numbers may go backwards for a bit."
   get_node_status
   while [ "${current_node_round}" -lt "${current_net_round}" ]; do
     rounds_to_go=$((${current_net_round}-${current_node_round}))
     if [ ${rounds_to_go} -gt 1 ]; then
-      echo "Waiting for catchup: ${rounds_to_go} blocks to go"
+      printf "\rWaiting for catchup: %d blocks to go" ${rounds_to_go}
     else
-      echo "One more block to go!"
+      printf "\rWaiting for catchup: One more block to go!                         "
     fi
     get_node_status
-    sleep 10
+    sleep 2
   done
-  display_banner "Caught up with the network!"
+  display_banner "\nCaught up with the network!"
 }
 
 get_addr_balance() {
@@ -66,11 +66,11 @@ busy_wait_until_balance_is_1_voi() {
   display_banner "Waiting for balance (account: ${account_addr}) to be 1 Voi"
   get_addr_balance
   while [ "${balance}" -lt "1000000" ]; do
-    echo "Waiting for balance to be 1 Voi"
+    echo "Waiting for balance to be 1 Voi at minimum"
     get_addr_balance
     sleep 10
   done
-  display_banner "Balance is 1 Voi!"
+  display_banner "Account has balance of 1 Voi or greater!"
 }
 
 get_account_addr() {
@@ -85,9 +85,9 @@ generate_participation_key() {
 
 display_banner() {
   echo
-  echo "******************************************"
+  echo "****************************************************************************************************************"
   echo "* $1"
-  echo "******************************************"
+  echo "****************************************************************************************************************"
   echo
 }
 
@@ -201,12 +201,12 @@ docker_swarm_started=1
 if [ ! -e /var/lib/voi/algod/data ]; then
   execute_sudo "mkdir -p /var/lib/voi/algod/data"
 fi
-mkdir -p ${voi_home}
+mkdir -p "${voi_home}"
 
 display_banner "Downloading latest Voi Network swarm and utility scripts to ${voi_home}"
-curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --output ${voi_home}/docker-swarm.tar.gz
-tar -xzf ${voi_home}/docker-swarm.tar.gz -C ${voi_home} --strip-components=1
-rm ${voi_home}/docker-swarm.tar.gz
+curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --output "${voi_home}"/docker-swarm.tar.gz
+tar -xzf "${voi_home}"/docker-swarm.tar.gz -C "${voi_home}" --strip-components=1
+rm "${voi_home}"/docker-swarm.tar.gz
 
 execute_sudo "docker stack deploy -c ${voi_home}/docker-swarm/compose.yml voinetwork"
 
@@ -244,13 +244,13 @@ else
   get_account_addr
 
   # Get Voi from faucet
-  echo "************************************************************************************"
+  echo "****************************************************************************************************************"
   echo "*    To participate in the Voi network you must complete the following steps:"
   echo "*       1) Open the Voi Network Discord - https://discord.com/invite/vnFbrJrHeW"
   echo "*       2) Go to the #node-runners channel"
   echo "*       3) Type /voi-testnet-faucet ${account_addr}"
   echo "*    Once completed type 'completed' to continue"
-  echo "************************************************************************************"
+  echo "****************************************************************************************************************"
 
   read -p "After step 3 above type 'completed' to continue: " prompt
   while [ "${prompt}" != "completed" ]
