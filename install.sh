@@ -76,6 +76,30 @@ start_docker_swarm() {
   fi
 }
 
+verify_node_is_running() {
+  local retries=0
+  local max_retries=5
+
+  while [ $retries -lt $max_retries ]; do
+    container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
+    if [ -n "$container_id" ]; then
+      execute_sudo "docker exec -e account_addr=${account_addr} ${container_id} bash -c \"goal node status\"" > /dev/null
+      local exit_code=$?
+      if [ $exit_code -eq 0 ]; then
+        break
+      fi
+    fi
+
+    echo "Error connecting to node. Retrying in 10 seconds..."
+    sleep 10
+    ((retries++))
+  done
+
+  if [ $retries -eq $max_retries ]; then
+    abort "Error connecting to node after $max_retries attempts. Exiting."
+  fi
+}
+
 get_current_net_round() {
   local retries=0
   local max_retries=5
@@ -282,7 +306,7 @@ do
 done
 display_banner "Stack is ready!"
 
-container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
+verify_node_is_running
 
 if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1  ]]; then
   display_banner "Skipping wallet setup"
@@ -296,6 +320,8 @@ if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 
   echo "Network catchup has been initiated and will continue in the background."
   exit 0
 fi
+
+
 
 display_banner "Setting up Voi wallets and accounts"
 
