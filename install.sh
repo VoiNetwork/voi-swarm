@@ -120,6 +120,14 @@ catchup_node() {
   display_banner "Caught up with the network!"
 }
 
+create_wallet() {
+  if [[ $(execute_docker_command "goal wallet list | wc -l") -eq 1 ]]; then
+    execute_interactive_docker_command "goal wallet new voi"
+  else
+    echo "Wallet already exists. Skipping wallet creation."
+  fi
+}
+
 get_address_balance() {
     balance=$(execute_docker_command "goal account balance -a ${account_addr}")
     balance=${balance//[!0-9]/}
@@ -291,7 +299,7 @@ fi
 
 display_banner "Setting up Voi wallets and accounts"
 
-execute_interactive_docker_command "goal wallet new voi-$RANDOM"
+create_wallet
 
 if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; then
   execute_interactive_docker_command "goal account import | tee  >(tail -n 1 | cut -d\  -f2 > /algod/data/voi_address)"
