@@ -51,52 +51,52 @@ Commands are wrapped in shell scripts that execute into a running docking contai
 
 ### Creating a node wallet
 ```bash
-~/voi/bin/create-wallet.sh <wallet_name>
+~/voi/bin/create-wallet <wallet_name>
 ```
 
 ### Creating an account
 ```bash
-~/voi/bin/create-account.sh 
+~/voi/bin/create-account 
 ```
 
 ### Get account mnemonic
 ```bash
-~/voi/bin/get-account-mnemonic.sh <account_address>
+~/voi/bin/get-account-mnemonic <account_address>
 ```
 
 ### Importing an account
 ```bash
-~/voi/bin/import-account.sh
+~/voi/bin/import-account
 ```
 
 ### Generating participation key
 ```bash
-~/voi/bin/generate-participation-key.sh <account_address>
+~/voi/bin/generate-participation-key <account_address>
 ```
 
-### Get account status
+### Get participation status
 ```bash
-~/voi/bin/get-account-status.sh <account_address>
+~/voi/bin/get-participation-status.sh <account_address>
 ```
 
 ### Go online
 ```bash
-~/voi/bin/go-online.sh <account_address>
+~/voi/bin/go-online <account_address>
 ```
 
 ### Go offline
 ```bash
-~/voi/bin/go-offline.sh <account_address>
+~/voi/bin/go-offline <account_address>
 ```
 
 ### Goal
 ```bash
-~/voi/bin/goal.sh <goal_command>
+~/voi/bin/goal <goal_command>
 ```
 
 ### Open bash in AVM container
 ```bash
-~/voi/bin/bash.sh
+~/voi/bin/start-shell
 ```
 
 ## Debugging
