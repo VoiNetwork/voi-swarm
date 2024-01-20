@@ -136,7 +136,9 @@ display_banner() {
 }
 
 docker_swarm_instructions() {
+  echo ""
   echo "Error initializing Docker Swarm."
+  echo ""
   echo "Set VOINETWORK_DOCKER_SWARM_INIT_SETTINGS to the settings you want to use to initialize Docker Swarm and try again."
   echo "Example: export VOINETWORK_DOCKER_SWARM_INIT_SETTINGS='--advertise-addr 10.0.0.1'"
   abort "Exiting."
