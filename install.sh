@@ -75,7 +75,7 @@ busy_wait_until_balance_is_1_voi() {
 
 get_account_addr() {
   account_addr=$(execute_sudo 'cat /var/lib/voi/algod/data/voi_address')
-  if [[ ! $account_addr =~ ^[A-Za-z0-9]{32}$ ]]; then
+  if [[ ! $account_addr =~ ^[A-Za-z0-9]{58}$ ]]; then
     abort "Invalid account address: ${account_addr}"
   fi
 }
