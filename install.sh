@@ -4,9 +4,14 @@ account_addr=""
 docker_swarm_started=0
 voi_home="${HOME}/voi"
 headless_install=0
+is_root=0
 
 execute_sudo() {
-  sudo bash -c "$1"
+  if [ ${is_root} -eq 1 ]; then
+    bash -c "$1"
+  else
+    sudo bash -c "$1"
+  fi
 }
 
 abort() {
@@ -198,11 +203,27 @@ docker_swarm_instructions() {
   abort "Exiting."
 }
 
-add_docker_groups() {
-  if [ ! "$(getent group docker)"  ]; then
-    execute_sudo "groupadd docker"
+joined_network_instructions() {
+  echo "IMPORTANT: Utility scripts for managing your setup are available in ${voi_home}/bin"
+
+  if [[ ${is_root} -eq 0 ]]; then
+    echo "Ensure you restart your shell to use them, or type 'newgrp docker' in your existing shell."
   fi
-  execute_sudo "usermod -aG docker ${USER}"
+
+  echo ""
+  echo "To see a list of useful commands reference:"
+  echo " - Install README.md: https://github.com/VoiNetwork/docker-swarm/blob/main/README.md"
+  echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
+  echo ""
+}
+
+add_docker_groups() {
+  if [[ is_root -eq 0 ]]; then
+    if [ ! "$(getent group docker)"  ]; then
+      execute_sudo "groupadd docker"
+    fi
+    execute_sudo "usermod -aG docker ${USER}"
+  fi
 }
 
 set_telemetry_name() {
@@ -231,6 +252,11 @@ set_telemetry_name() {
 
 if [ -z "${BASH_VERSION:-}" ]; then
   abort "Bash is required to interpret this script."
+fi
+
+if [ $(id -u) -eq 0 ]; then
+  echo ${is_root}
+  is_root=1
 fi
 
 # Get Linux OS distribution
@@ -311,13 +337,9 @@ verify_node_is_running
 
 if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1  ]]; then
   display_banner "Skipping wallet setup"
-  echo "IMPORTANT: Utility scripts for managing your setup are available in ${voi_home}/bin"
-  echo "Ensure you restart your shell to use them, or type 'newgrp docker' in your existing shell."
-  echo ""
-  echo "To see a list of useful commands reference:"
-  echo " - Install README.md: https://github.com/VoiNetwork/docker-swarm/blob/main/README.md"
-  echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
-  echo ""
+
+  joined_network_instructions
+
   echo "Network catchup has been initiated and will continue in the background."
   exit 0
 fi
@@ -364,9 +386,7 @@ account_status=$(execute_docker_command "goal account dump -a ${account_addr}" |
 
 if [ "${account_status}" -eq 1 ]; then
   display_banner "Welcome to Voi! You are now online!"
-  echo "IMPORTANT: Utility scripts for managing your setup are available in ${voi_home}/bin"
-  echo "Ensure you restart your shell to use them, or type 'newgrp docker' in your existing shell."
-  echo ""
+  joined_network_instructions
 else
   display_banner "ERROR: Your account ${account_addr} is offline."
   echo "Something went wrong going online. Reach out on #node-help on the Voi Network Discord for help."
