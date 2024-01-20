@@ -211,13 +211,14 @@ set_telemetry_name() {
     return
   fi
   if [[ -z ${VOINETWORK_TELEMETRY_NAME} ]]; then
-    echo "Voi uses node telemetry to improve the network, and reward people with Voi based on telemetry participation."
+    echo "Voi uses telemetry to make the network better and reward users with Voi if participating."
     echo ""
-    echo "To set a custom telemetry name, set the VOINETWORK_TELEMETRY_NAME environment variable before running this script."
+    echo "Type your telemetry name below. We'll add 'VOI:' at the start to show you're using this package."
+    echo ""
+    echo "To use a custom name, set the VOINETWORK_TELEMETRY_NAME variable before running this script."
     echo "Example: export VOINETWORK_TELEMETRY_NAME='my_custom_name'"
     echo ""
-    echo "If you do set a name we will prefix the name with 'VOI:' to make it clear that it is running this package."
-    echo "To set your own Voi docker node name enter it now, to skip telemetry gathering type 'continue' below."
+    echo "To skip telemetry sharing, type 'continue' below."
     read -p "Telemetry name: " VOINETWORK_TELEMETRY_NAME
     if [[ "${VOINETWORK_TELEMETRY_NAME}" == "continue" ]]; then
       unset VOINETWORK_TELEMETRY_NAME
