@@ -19,20 +19,41 @@ abort() {
   exit 1 >&2
 }
 
-execute_interactive_docker_command() {
-  execute_sudo "docker exec -e account_addr=${account_addr} -it \"${container_id}\" bash -c \"$1; (exit \$?)\""
-  exit_code=$?
-  if [ ${exit_code} -eq 130 ]; then
-    exit ${exit_code} >&2
+execute_docker_command_internal() {
+  local interactive=$1
+  local command=$2
+  local options=""
+
+  if [ "$interactive" = "yes" ]; then
+    options="-it"
   fi
-  if [ ${exit_code} -ne 0 ]; then
-    echo "Error executing command. Please try again or press CTRL-C to exit."
-    execute_interactive_docker_command "$1"
+
+  execute_sudo "docker exec -e account_addr=${account_addr} ${options} \"${container_id}\" bash -c \"${command}\""
+}
+
+execute_interactive_docker_command() {
+  local retries=0
+  while [ $retries -lt 10 ]; do
+    execute_docker_command_internal "yes" "$1"
+    local exit_code=$?
+    if [ ${exit_code} -eq 130 ]; then
+      exit ${exit_code} >&2
+    fi
+    if [ ${exit_code} -ne 0 ]; then
+      echo "Error executing command. Please try again or press CTRL-C to exit."
+      ((retries++))
+    else
+      break
+    fi
+  done
+
+  if [ $retries -eq 10 ]; then
+    abort "Command failed after 10 attempts. Exiting."
   fi
 }
 
 execute_docker_command() {
-  execute_sudo "docker exec -e account_addr=${account_addr} \"${container_id}\" bash -c \"$1\""
+  execute_docker_command_internal "no" "$1"
 }
 
 get_node_status() {
