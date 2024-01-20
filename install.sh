@@ -321,8 +321,6 @@ if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 
   exit 0
 fi
 
-
-
 display_banner "Setting up Voi wallets and accounts"
 
 create_wallet

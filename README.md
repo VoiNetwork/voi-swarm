@@ -1,36 +1,43 @@
-# Docker Swarm Voi Participation node setup
+# Docker Swarm Voi Participation Node Setup
 
 ## Prerequisites
-- `curl` installed. If on a system without `curl` installed, follow applicable OS guidance for installing `curl`. 
+- `curl` installed. If your system does not have `curl` installed, follow the applicable OS guidance for installing `curl`. 
 - Ability to use `sudo`
 
-## Supported OS and compute platforms
-### OS
+## Supported Operating Systems and Compute Platforms
+### Operating Systems
 - Debian
 - Ubuntu
 
-### Compute platform
+### Compute Platforms
 - arm64
 - amd64 (x86_64)
 
 ## New to Voi
+To set up a new Voi node, run the following command:
+
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
 ```
 
-##  Have an existing account/address with mnemonic that you want to use
+##  Using an Existing Account/Address with Mnemonic
+If you have an existing account/address with a mnemonic that you want to use, set the VOINETWORK_IMPORT_ACCOUNT environment variable to 1 and run the install script:
+
 ```bash
 export VOINETWORK_IMPORT_ACCOUNT=1
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
 ```
 
-## Want to install with no wallet setup included
+## Installing Without Wallet Setup
+If you want to install without including wallet setup, set the VOINETWORK_SKIP_WALLET_SETUP environment variable to 1 and run the install script:
+
 ```bash
 export VOINETWORK_SKIP_WALLET_SETUP=1
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
 ```
 
-## Set custom telemetry name
+## Setting a Custom Telemetry Name
+To set a custom telemetry name, set the VOINETWORK_TELEMETRY_NAME environment variable to your desired name:
 ```bash
 export VOINETWORK_TELEMETRY_NAME="my_custom_telemetry_name"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
@@ -38,63 +45,72 @@ export VOINETWORK_TELEMETRY_NAME="my_custom_telemetry_name"
 Custom telemetry name can be combined with other environment variables.
 
 ## Uninstalling
-- `docker swarm leave --force`
-- `rm -rf ~/voi/algod`
-- `sudo rm -rf /var/lib/voi`
+To uninstall, execute the following commands:
+
+- Leave the Docker swarm with `docker swarm leave --force`
+- Remove the `voi` directory with `rm -rf /voi/`
+- Remove the `data` directory with `sudo rm -rf /var/lib/voi`
 
 
-## Useful scripts
-This section of the README closely follows commands outlined in the excellent D13 guide for setting up a Voi participation
-node under Ubuntu 22.04. The guide can be found here: https://d13.co/posts/set-up-voi-participation-node/
+## Useful Scripts
+This section provides a collection of useful scripts for managing your Voi participation node. These scripts are designed to be executed within a running Docker container. They closely follow the commands outlined in the [D13 guide](https://d13.co/posts/set-up-voi-participation-node/) for setting up a Voi participation node under Ubuntu 22.04.
 
-Commands are wrapped in shell scripts that execute into a running docking container.
-
-### Creating a node wallet
+### Creating a Node Wallet
+Create a new wallet with the following command:
 ```bash
 ~/voi/bin/create-wallet <wallet_name>
 ```
 
-### Creating an account
+### Creating an Account
+Create a new account with the following command:
 ```bash
 ~/voi/bin/create-account 
 ```
 
-### Get account mnemonic
+### Retrieving Account Mnemonic
+Retrieve the mnemonic of an existing account with the following command:
 ```bash
 ~/voi/bin/get-account-mnemonic <account_address>
 ```
 
-### Importing an account
+### Importing an Account
+Import an existing account with the following command:
 ```bash
 ~/voi/bin/import-account
 ```
 
-### Generating participation key
+### Generating Participation Key
+Generate a participation key for an existing account with the following command:
 ```bash
 ~/voi/bin/generate-participation-key <account_address>
 ```
 
-### Get participation status
+### Checking Participation Status
+Check the participation status of an existing account with the following command:
 ```bash
 ~/voi/bin/get-participation-status.sh <account_address>
 ```
 
-### Go online
+### Going Online
+Bring an existing account online with the following command:
 ```bash
 ~/voi/bin/go-online <account_address>
 ```
 
-### Go offline
+### Going Offline
+Take an existing account offline with the following command:
 ```bash
 ~/voi/bin/go-offline <account_address>
 ```
 
-### Goal
+### Executing Goal Commands
+Execute goal commands with the following command:
 ```bash
 ~/voi/bin/goal <goal_command>
 ```
 
-### Open bash in AVM container
+### Opening a Bash Shell in the AVM Container
+Open a bash shell in the AVM container with the following command:
 ```bash
 ~/voi/bin/start-shell
 ```
