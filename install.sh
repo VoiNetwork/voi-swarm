@@ -83,7 +83,7 @@ verify_node_is_running() {
   while [ $retries -lt $max_retries ]; do
     container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
     if [ -n "$container_id" ]; then
-      execute_sudo "docker exec -e account_addr=${account_addr} ${container_id} bash -c \"goal node status\"" > /dev/null
+      execute_sudo "docker exec -e account_addr=${account_addr} ${container_id} bash -c \"goal node status\""
       local exit_code=$?
       if [ $exit_code -eq 0 ]; then
         break
