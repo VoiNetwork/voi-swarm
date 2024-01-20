@@ -7,7 +7,7 @@ headless_install=0
 is_root=0
 
 execute_sudo() {
-  if [ ${is_root} -eq 0 ]; then
+  if [ ${is_root} -eq 1 ]; then
     bash -c "$1"
   else
     sudo bash -c "$1"
@@ -218,10 +218,12 @@ joined_network_instructions() {
 }
 
 add_docker_groups() {
-  if [ ! "$(getent group docker)"  ]; then
-    execute_sudo "groupadd docker"
+  if [[ is_root -eq 0 ]]; then
+    if [ ! "$(getent group docker)"  ]; then
+      execute_sudo "groupadd docker"
+    fi
+    execute_sudo "usermod -aG docker ${USER}"
   fi
-  execute_sudo "usermod -aG docker ${USER}"
 }
 
 set_telemetry_name() {
@@ -253,6 +255,7 @@ if [ -z "${BASH_VERSION:-}" ]; then
 fi
 
 if [ $(id -u) -eq 0 ]; then
+  echo ${is_root}
   is_root=1
 fi
 
