@@ -144,7 +144,7 @@ busy_wait_until_balance_is_1_voi() {
   display_banner "Account has balance of 1 Voi or greater!"
 }
 
-get_account_addr() {
+get_account_address() {
   account_addr=$(execute_sudo 'cat /var/lib/voi/algod/data/voi_address')
   if [[ ! $account_addr =~ ^[A-Za-z0-9]{58}$ ]]; then
     abort "Invalid account address: ${account_addr}"
@@ -303,10 +303,10 @@ create_wallet
 
 if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; then
   execute_interactive_docker_command "goal account import | tee  >(tail -n 1 | cut -d\  -f2 > /algod/data/voi_address)"
-  get_account_addr
+  get_account_address
 else
   execute_interactive_docker_command "goal account new | tee  >(tail -n 1 | cut -d\  -f6 > /algod/data/voi_address)"
-  get_account_addr
+  get_account_address
 
   # Get Voi from faucet
   echo "****************************************************************************************************************"
