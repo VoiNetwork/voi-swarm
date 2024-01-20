@@ -76,9 +76,31 @@ start_docker_swarm() {
   fi
 }
 
+get_current_net_round() {
+  local retries=0
+  local max_retries=5
+
+  while [ $retries -lt $max_retries ]; do
+    current_net_round=$(curl -s https://testnet-api.voi.nodly.io/v2/status | jq -r '.["last-round"]' )
+    exit_code=$?
+
+    if [ $exit_code -eq 0 ] && [ -n "$current_net_round" ]; then
+      break
+    fi
+
+    echo "Error fetching network status. Retrying in 5 seconds..."
+    sleep 5
+    ((retries++))
+  done
+
+  if [ $retries -eq $max_retries ]; then
+    abort "Error fetching network status after $max_retries attempts. Please check your internet connection and try again."
+  fi
+}
+
 get_node_status() {
     current_node_round=$(execute_docker_command 'goal node lastround | head -n 1')
-    current_net_round=$(curl -s https://testnet-api.voi.nodly.io/v2/status | jq -r '.["last-round"]' )
+    get_current_net_round
     current_node_round=${current_node_round//[!0-9]/}
 }
 
@@ -93,7 +115,7 @@ catchup_node() {
       printf "\rWaiting for catchup: One more block to go!                                           "
     fi
     get_node_status
-    sleep 2
+    sleep 5
   done
   display_banner "Caught up with the network!"
 }
