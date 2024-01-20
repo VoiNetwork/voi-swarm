@@ -36,7 +36,6 @@ jobs:
       # Run goal command to verify service is running
       - name: Run goal command
         run: |
-          docker ps
           container_id=$(docker ps -q -f name=voinetwork_algod)
-          docker exec \\ "${container_id}" bash -c "goal $*"
+          docker exec "${container_id}" bash -c "goal node status"
 
