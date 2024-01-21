@@ -28,5 +28,4 @@ set_telemetry_name() {
 
 set_telemetry_name
 
-bash -c "export VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" && docker stack deploy -c ../docker-swarm/compose.yml voinetwork"
-
+bash -c "env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ../docker-swarm/compose.yml voinetwork"
