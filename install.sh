@@ -255,7 +255,6 @@ if [ -z "${BASH_VERSION:-}" ]; then
 fi
 
 if [ $(id -u) -eq 0 ]; then
-  echo ${is_root}
   is_root=1
 fi
 
