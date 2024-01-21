@@ -351,7 +351,7 @@ if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; 
   execute_interactive_docker_command "goal account import | tee  >(stdbuf -oL tail -n 1 | cut -d\  -f2 > /algod/data/voi_address)"
   get_account_address
 else
-  execute_interactive_docker_command "goal account new | tee  >(stdbuf -oL tail -n 1 | cut -d\  -f6 > /algod/data/voi_address))"
+  execute_interactive_docker_command "goal account new | tee  >(stdbuf -oL tail -n 1 | cut -d\  -f6 > /algod/data/voi_address)"
   get_account_address
 
   # Get Voi from faucet
