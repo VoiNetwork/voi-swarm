@@ -348,7 +348,8 @@ display_banner "Setting up Voi wallets and accounts"
 create_wallet
 
 if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; then
-  execute_interactive_docker_command "goal account import | tee  >(tail -n 1 | cut -d\  -f2 > /algod/data/voi_address)"
+  execute_interactive_docker_command "goal account import | tee  >(tail -n 1 | (sleep 2 && cut -d\  -f2 > /algod/data/voi_address))"
+  sleep 5
   get_account_address
 else
   execute_interactive_docker_command "goal account new | tee  >(tail -n 1 | cut -d\  -f6 > /algod/data/voi_address)"
