@@ -323,7 +323,7 @@ curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --outp
 tar -xzf "${voi_home}"/docker-swarm.tar.gz -C "${voi_home}" --strip-components=1
 rm "${voi_home}"/docker-swarm.tar.gz
 
-execute_sudo "docker stack deploy -c ${voi_home}/docker-swarm/compose.yml voinetwork"
+execute_sudo "env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${voi_home}/docker-swarm/compose.yml voinetwork"
 
 while [ "$(execute_sudo 'docker service ls' | grep voinetwork_algod | awk '{print $4}')" != "1/1" ]
 do
@@ -349,7 +349,6 @@ create_wallet
 
 if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; then
   execute_interactive_docker_command "goal account import | tee  >(tail -n 1 | (sleep 2 && cut -d\  -f2 > /algod/data/voi_address))"
-  sleep 5
   get_account_address
 else
   execute_interactive_docker_command "goal account new | tee  >(tail -n 1 | cut -d\  -f6 > /algod/data/voi_address)"
