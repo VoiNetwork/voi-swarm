@@ -95,7 +95,7 @@ Generate a participation key for an existing account with the following command:
 ### Checking Participation Status
 Check the participation status of an existing account with the following command:
 ```bash
-~/voi/bin/get-participation-status.sh <account_address>
+~/voi/bin/get-participation-status <account_address>
 ```
 
 ### Going Online

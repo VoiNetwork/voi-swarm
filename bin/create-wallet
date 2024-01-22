@@ -8,7 +8,7 @@ fi
 
 if [ -z "$1" ]; then
     echo "Please provide a wallet name as a parameter."
-    echo "Example: create-wallet.sh <wallet_name>"
+    echo "Example: create-wallet <wallet_name>"
     exit 1
 fi
 

@@ -8,10 +8,10 @@ fi
 
 if [ -z "$1" ]; then
     echo "Please provide an account address as a parameter."
-    echo "Example: go-online.sh <account_address>"
+    echo "Example: go-online <account_address>"
     exit 1
 fi
 
 docker exec -e account_addr="$1" -it "${container_id}" bash -c 'goal account changeonlinestatus -a "${account_addr}"'
 sleep 1
-"$(dirname "$0")"/get-participation-status.sh "$1"
+"$(dirname "$0")"/get-participation-status "$1"

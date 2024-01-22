@@ -8,7 +8,7 @@ fi
 
 if [ -z "$1" ]; then
     echo "Please provide an account address as a parameter."
-    echo "Example: generate-participation-key.sh <account_address>"
+    echo "Example: generate-participation-key <account_address>"
     exit 1
 fi
 
