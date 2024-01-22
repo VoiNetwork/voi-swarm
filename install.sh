@@ -5,6 +5,7 @@ docker_swarm_started=0
 voi_home="${HOME}/voi"
 headless_install=0
 is_root=0
+skip_account_setup=0
 
 execute_sudo() {
   if [ ${is_root} -eq 1 ]; then
@@ -199,11 +200,44 @@ busy_wait_until_balance_is_1_voi() {
   display_banner "Account has balance of 1 Voi or greater!"
 }
 
-get_account_address() {
-  account_addr=$(execute_sudo 'cat /var/lib/voi/algod/data/voi_address')
-  if [[ ! $account_addr =~ ^[A-Za-z0-9]{58}$ ]]; then
-    abort "Invalid account address: ${account_addr}"
+get_account_info() {
+  allow_one_account=$1
+
+  if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voitest-v1/accountList.json"'; then
+    abort "Account list not found. Exiting."
   fi
+
+  accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
+  number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
+
+  if [ "$number_of_accounts" -gt 1 ]; then
+    echo "More than one account found in wallet. Skipping account creation."
+    skip_account_setup=1
+    return 1
+  elif [ "$number_of_accounts" -eq 1 ] && [ "$allow_one_account" != "true" ]; then
+    echo "One account found in wallet. Skipping account creation."
+    skip_account_setup=1
+    return 1
+  fi
+
+  account_address=$(echo $accounts_json | jq '.Accounts | keys[0]')
+  echo "${account_address}"
+}
+
+check_if_account_exists() {
+  allow_one_account_override="$1"
+  get_account_info "$allow_one_account_override" > /dev/null
+}
+
+get_account_address() {
+  account_address=$(get_account_info true)
+  account_address=${account_address//\"/}
+
+  if [[ ! "${account_address}" =~ ^[A-Za-z0-9]{58}$ ]]; then
+    abort "Invalid account address: \"${account_address}\""
+  fi
+
+  account_addr=$account_address
 }
 
 generate_participation_key() {
@@ -214,9 +248,9 @@ generate_participation_key() {
 
 display_banner() {
   echo
-  echo "****************************************************************************************************************"
+  echo "********************************************************************************"
   echo "* $1"
-  echo "****************************************************************************************************************"
+  echo "********************************************************************************"
   echo
 }
 
@@ -230,7 +264,7 @@ docker_swarm_instructions() {
 }
 
 joined_network_instructions() {
-  echo "IMPORTANT: Utility scripts for managing your setup are available in ${voi_home}/bin"
+  echo "IMPORTANT: Utility scripts for managing your setup is available in ${voi_home}/bin"
 
   if [[ ${is_root} -eq 0 ]]; then
     echo "Ensure you restart your shell to use them, or type 'newgrp docker' in your existing shell."
@@ -241,6 +275,12 @@ joined_network_instructions() {
   echo " - Install README.md: https://github.com/VoiNetwork/docker-swarm/blob/main/README.md"
   echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
   echo ""
+  if [[ ${skip_account_setup} -eq 1 ]]; then
+    echo "We skipped creation of a new account as we detected you have a wallet with an account already."
+    echo ""
+    echo "To see network participation status use ${HOME}/voi/bin/get-participation-status <account_address>"
+    echo "To go online use ${HOME}/voi/bin/go-online <account_address>"
+  fi
 }
 
 add_docker_groups() {
@@ -369,60 +409,77 @@ display_banner "Setting up Voi wallets and accounts"
 create_wallet
 
 if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; then
-  execute_interactive_docker_command "goal account import | tee  >(stdbuf -oL tail -n 1 | cut -d\  -f2 > /algod/data/voi_address)"
-  get_account_address
+
+  if ! (check_if_account_exists true); then
+    echo "Account already exists. Skipping account import."
+  else
+    execute_interactive_docker_command "goal account import"
+    get_account_address
+  fi
+
 else
-  execute_interactive_docker_command "goal account new | tee  >(stdbuf -oL tail -n 1 | cut -d\  -f6 > /algod/data/voi_address)"
-  get_account_address
+  if check_if_account_exists; then
+    execute_interactive_docker_command "goal account new"
+    get_account_address
 
-  # Get Voi from faucet
-  echo "****************************************************************************************************************"
-  echo "*    To join the Voi network, do one of these:"
-  echo "*"
-  echo "*    a) Send at least 1 Voi to your account ${account_addr} from another account"
-  echo "*"
-  echo "*    OR"
-  echo "*"
-  echo "*    b) Get 1 Voi for free:"
-  echo "*       - Go to the Voi Network Discord - https://discord.com/invite/vnFbrJrHeW"
-  echo "*       - Find the #node-runners channel"
-  echo "*       - Type /voi-testnet-faucet ${account_addr}"
-  echo "*"
-  echo "* After you've done this, type 'completed' to go on"
-  echo "****************************************************************************************************************"
+    # Get Voi from faucet
+    echo "****************************************************************************************************************"
+    echo "*    To join the Voi network, do one of these:"
+    echo "*"
+    echo "*    a) Send at least 1 Voi to your account ${account_addr} from another account"
+    echo "*"
+    echo "*    OR"
+    echo "*"
+    echo "*    b) Get 1 Voi for free:"
+    echo "*       - Go to the Voi Network Discord - https://discord.com/invite/vnFbrJrHeW"
+    echo "*       - Find the #node-runners channel"
+    echo "*       - Type /voi-testnet-faucet ${account_addr}"
+    echo "*"
+    echo "* After you've done this, type 'completed' to go on"
+    echo "****************************************************************************************************************"
 
-  read -p "Type 'completed' when you're ready to continue: " prompt
-  while [ "${prompt}" != "completed" ]
-  do
-    read -p "Type 'completed' to continue: " prompt
-  done
+    read -p "Type 'completed' when you're ready to continue: " prompt
+    while [ "${prompt}" != "completed" ]
+    do
+      read -p "Type 'completed' to continue: " prompt
+    done
+  fi
 fi
 
 # Catchup node before creating participation key and going online
 catchup_node
 
-display_banner "Joining network"
+if [[ "${skip_account_setup}" -eq 0 ]]; then
+  display_banner "Joining network"
 
-generate_participation_key
+  generate_participation_key
 
-busy_wait_until_balance_is_1_voi
+  busy_wait_until_balance_is_1_voi
 
-execute_interactive_docker_command "goal account changeonlinestatus -a ${account_addr}"
+  execute_interactive_docker_command "goal account changeonlinestatus -a ${account_addr}"
 
-account_status=$(execute_docker_command "goal account dump -a ${account_addr}" | jq -r .onl)
-
-if [ "${account_status}" -eq 1 ]; then
-  display_banner "Welcome to Voi! You are now online!"
-  joined_network_instructions
-else
-  display_banner "ERROR: Your account ${account_addr} is offline."
-  echo "Something went wrong going online. Reach out on #node-help on the Voi Network Discord for help."
-  echo "https://discord.com/invite/vnFbrJrHeW"
-  abort "Exiting."
+  account_status=$(execute_docker_command "goal account dump -a ${account_addr}" | jq -r .onl)
 fi
 
-echo "SAVE THE FOLLOWING INFORMATION IN A SECURE PLACE"
-echo "******************************************"
-echo "Your Voi address is: ${account_addr}"
-echo "Enter password to unlock your wallet and retrieve your account recovery mnemonic. Make sure to store your mnemonic in a secure location:"
-execute_interactive_docker_command "goal account export -a ${account_addr}"
+if [[ "${skip_account_setup}" -eq 0 ]]; then
+  if [[ "${account_status}" -eq 1 ]]; then
+    display_banner "Welcome to Voi! You are now online!"
+   joined_network_instructions
+  else
+   display_banner "Your account ${account_addr} is offline."
+   echo "Something went wrong going online. Reach out on #node-help on the Voi Network Discord for help."
+   echo "https://discord.com/invite/vnFbrJrHeW"
+   abort "Exiting."
+  fi
+
+  echo "SAVE THE FOLLOWING INFORMATION IN A SECURE PLACE"
+  echo "******************************************"
+  echo "Your Voi address is: ${account_addr}"
+  echo "Enter password to unlock your wallet and retrieve your account recovery mnemonic. Make sure to store your mnemonic in a secure location:"
+
+  execute_interactive_docker_command "goal account export -a ${account_addr}"
+else
+  display_banner "Welcome to Voi!"
+
+  joined_network_instructions
+fi
