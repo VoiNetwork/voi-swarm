@@ -356,17 +356,24 @@ else
 
   # Get Voi from faucet
   echo "****************************************************************************************************************"
-  echo "*    To participate in the Voi network you must complete the following steps:"
-  echo "*       1) Open the Voi Network Discord - https://discord.com/invite/vnFbrJrHeW"
-  echo "*       2) Go to the #node-runners channel"
-  echo "*       3) Type /voi-testnet-faucet ${account_addr}"
-  echo "*    Once completed type 'completed' to continue"
+  echo "*    To join the Voi network, do one of these:"
+  echo "*"
+  echo "*    a) Send at least 1 Voi to your account ${account_addr} from another account"
+  echo "*"
+  echo "*    OR"
+  echo "*"
+  echo "*    b) Get 1 Voi for free:"
+  echo "*       - Go to the Voi Network Discord - https://discord.com/invite/vnFbrJrHeW"
+  echo "*       - Find the #node-runners channel"
+  echo "*       - Type /voi-testnet-faucet ${account_addr}"
+  echo "*"
+  echo "* After you've done this, type 'completed' to go on"
   echo "****************************************************************************************************************"
 
-  read -p "After step 3 above type 'completed' to continue: " prompt
+  read -p "Type 'completed' when you're ready to continue: " prompt
   while [ "${prompt}" != "completed" ]
   do
-    read -p "Type 'completed' to continue once you have completed step 3 above: " prompt
+    read -p "Type 'completed' to continue: " prompt
   done
 fi
 
