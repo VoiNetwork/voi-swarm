@@ -1,0 +1,8 @@
+container_id=$(docker ps -q -f name=voinetwork_algod)
+if [ -z "${container_id}" ]; then
+    echo "AVM container is not running. Please start it first."
+    exit 1
+fi
+
+PID=$(docker inspect --format '{{.State.Pid}}' $container_id)
+nsenter -t $PID -n netstat -na | grep "5011"
