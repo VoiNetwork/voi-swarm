@@ -491,7 +491,7 @@ if [[ ${skip_account_setup} -eq 0 ]]; then
   echo "PLEASE SAVE THIS INFORMATION SAFELY"
   echo "***********************************"
   echo "Your Voi address: ${account_addr}"
-  echo "Enter password to get your account recovery mnemonic. Store your mnemonic safely:"
+  echo "Enter password to get your Voi account recovery mnemonic. Store your mnemonic safely:"
 
   execute_interactive_docker_command "goal account export -a ${account_addr}"
 else
