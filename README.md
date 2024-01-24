@@ -1,5 +1,7 @@
 # Docker Swarm Voi Participation Node Setup
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ea47d627de494a92b25b97eb65930e85)](https://app.codacy.com/gh/VoiNetwork/docker-swarm/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 ## Prerequisites
 
 - `curl`
