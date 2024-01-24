@@ -81,6 +81,32 @@ start_docker_swarm() {
   fi
 }
 
+wait_for_stack_to_be_ready() {
+  while true; do
+    service_info=$(execute_sudo 'docker stack ps voinetwork --format json' | grep 'voinetwork_algod')
+    service_running=false
+
+    while read -r line; do
+      current_state=$(echo "${line}" | jq -r '.CurrentState')
+      desired_state=$(echo "${line}" | jq -r '.DesiredState')
+
+      if [[ ${current_state} == Running* ]] && [[ ${desired_state} == "Running" ]]; then
+        service_running=true
+        break
+      fi
+    done < <(echo "${service_info}")
+
+    if [[ ${service_running} == true ]]; then
+      break
+    else
+      echo "Waiting for stack to be ready..."
+      sleep 2
+    fi
+  done
+
+  display_banner "Stack is ready!"
+}
+
 verify_node_is_running() {
   local retries=0
   local max_retries=5
@@ -325,12 +351,7 @@ rm "${voi_home}"/docker-swarm.tar.gz
 
 execute_sudo "env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${voi_home}/docker-swarm/compose.yml voinetwork"
 
-while [ "$(execute_sudo 'docker service ls' | grep voinetwork_algod | awk '{print $4}')" != "1/1" ]
-do
-  echo "Waiting for stack to be ready..."
-  sleep 2
-done
-display_banner "Stack is ready!"
+wait_for_stack_to_be_ready
 
 verify_node_is_running
 
