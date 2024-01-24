@@ -22,7 +22,7 @@ abort() {
     execute_sudo 'docker swarm leave --force'
   fi
   echo "$1"
-  exit 1 >&2
+  exit 1
 }
 
 execute_docker_command_internal() {
@@ -54,7 +54,7 @@ execute_interactive_docker_command() {
   done
 
   if [ $retries -eq 10 ]; then
-    abort "Command failed after 10 attempts. Exiting."
+    abort "Command failed after 10 attempts. Exiting the program."
   fi
 }
 
@@ -128,7 +128,7 @@ verify_node_is_running() {
   done
 
   if [ $retries -eq $max_retries ]; then
-    abort "Error connecting to node after $max_retries attempts. Exiting."
+    abort "Error connecting to node after $max_retries attempts. Exiting the program."
   fi
 }
 
@@ -161,7 +161,7 @@ get_node_status() {
 }
 
 catchup_node() {
-  display_banner "Catching up with network... This may take a while, and numbers may go backwards for a bit."
+  display_banner "Catching up with the network... This might take some time, and numbers might briefly increase"
   get_node_status
   while [ "${current_node_round}" -lt "${current_net_round}" ]; do
     rounds_to_go=$((${current_net_round}-${current_node_round}))
@@ -178,6 +178,9 @@ catchup_node() {
 
 create_wallet() {
   if [[ $(execute_docker_command "goal wallet list | wc -l") -eq 1 ]]; then
+    echo "Let's create a new wallet for you. Please provide a password for security."
+    echo "Seeing the wallet's mnemonic is optional. Any Voi will be linked with the account we'll create or import after wallet creation."
+
     execute_interactive_docker_command "goal wallet new voi"
   else
     echo "Wallet already exists. Skipping wallet creation."
@@ -204,7 +207,7 @@ get_account_info() {
   allow_one_account=$1
 
   if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voitest-v1/accountList.json"'; then
-    abort "Account list not found. Exiting."
+    abort "Account list not found. Exiting the program."
   fi
 
   accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
@@ -260,7 +263,7 @@ docker_swarm_instructions() {
   echo ""
   echo "Set VOINETWORK_DOCKER_SWARM_INIT_SETTINGS to the settings you want to use to initialize Docker Swarm and try again."
   echo "Example: export VOINETWORK_DOCKER_SWARM_INIT_SETTINGS='--advertise-addr 10.0.0.1'"
-  abort "Exiting."
+  abort "Exiting the program."
 }
 
 joined_network_instructions() {
@@ -320,7 +323,7 @@ if [ -z "${BASH_VERSION:-}" ]; then
   abort "Bash is required to interpret this script."
 fi
 
-if [ $(id -u) -eq 0 ]; then
+if [ "$(id -u)" -eq 0 ]; then
   is_root=1
 fi
 
@@ -384,7 +387,7 @@ if [ ! -e /var/lib/voi/algod/data ]; then
 fi
 mkdir -p "${voi_home}"
 
-display_banner "Downloading latest Voi Network swarm and utility scripts to ${voi_home}"
+display_banner "Fetching the latest Voi Network updates and scripts."
 curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --output "${voi_home}"/docker-swarm.tar.gz
 tar -xzf "${voi_home}"/docker-swarm.tar.gz -C "${voi_home}" --strip-components=1
 rm "${voi_home}"/docker-swarm.tar.gz
@@ -396,23 +399,25 @@ wait_for_stack_to_be_ready
 verify_node_is_running
 
 if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1  ]]; then
-  display_banner "Skipping wallet setup"
+  display_banner "Wallet setup will be skipped."
 
   joined_network_instructions
 
-  echo "Network catchup has been initiated and will continue in the background."
+  echo "The network is now catching up and will continue to do so in the background."
   exit 0
 fi
 
-display_banner "Setting up Voi wallets and accounts"
+display_banner "Initiating setup for Voi wallets and accounts."
 
 create_wallet
 
 if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; then
 
   if ! (check_if_account_exists true); then
-    echo "Account already exists. Skipping account import."
+    echo "An account already exists. No need to import, skipping this step."
   else
+    echo ""
+    echo "Let's proceed to import an account using your existing account mnemonic."
     execute_interactive_docker_command "goal account import"
     get_account_address
   fi
@@ -466,16 +471,16 @@ if [[ "${skip_account_setup}" -eq 0 ]]; then
     display_banner "Welcome to Voi! You are now online!"
    joined_network_instructions
   else
-   display_banner "Your account ${account_addr} is offline."
-   echo "Something went wrong going online. Reach out on #node-help on the Voi Network Discord for help."
-   echo "https://discord.com/invite/vnFbrJrHeW"
-   abort "Exiting."
+   display_banner "Your account ${account_addr} is currently offline."
+   echo "There seems to be an issue with going online. Please seek assistance in the #node-help channel on the Voi Network Discord."
+   echo "Join us at: https://discord.com/invite/vnFbrJrHeW"
+   abort "Exiting the program."
   fi
 
-  echo "SAVE THE FOLLOWING INFORMATION IN A SECURE PLACE"
-  echo "******************************************"
-  echo "Your Voi address is: ${account_addr}"
-  echo "Enter password to unlock your wallet and retrieve your account recovery mnemonic. Make sure to store your mnemonic in a secure location:"
+  echo "PLEASE SAVE THIS INFORMATION SAFELY"
+  echo "***********************************"
+  echo "Your Voi address: ${account_addr}"
+  echo "Enter password to get your account recovery mnemonic. Store your mnemonic safely:"
 
   execute_interactive_docker_command "goal account export -a ${account_addr}"
 else
