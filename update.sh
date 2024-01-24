@@ -1,3 +1,4 @@
+#!/bin/bash
 
 get new relase tarball
 decompress tarball
