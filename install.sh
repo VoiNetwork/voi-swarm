@@ -219,6 +219,7 @@ get_account_info() {
     return 1
   elif [ "$number_of_accounts" -eq 1 ] && [ "$allow_one_account" != "true" ]; then
     echo "One account found in wallet. Skipping account creation."
+    get_account_address
     skip_account_setup=1
     return 1
   fi
@@ -279,7 +280,12 @@ joined_network_instructions() {
   echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
   echo ""
   if [[ ${skip_account_setup} -eq 1 ]]; then
-    echo "We skipped creation of a new account as we detected you have a wallet with an account already."
+    if [[ -z ${account_addr} ]]; then
+      echo "No new account was created because your wallet already has multiple accounts."
+    else
+      echo "No new account was made because you already have an account with the address: ${account_addr}"
+    fi
+
     echo ""
     echo "To see network participation status use ${HOME}/voi/bin/get-participation-status <account_address>"
     echo "To go online use ${HOME}/voi/bin/go-online <account_address>"
