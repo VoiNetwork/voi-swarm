@@ -263,20 +263,21 @@ docker_swarm_instructions() {
   echo ""
   echo "Error initializing Docker Swarm."
   echo ""
-  echo "Set VOINETWORK_DOCKER_SWARM_INIT_SETTINGS to the settings you want to use to initialize Docker Swarm and try again."
+  echo "To fix this, set VOINETWORK_DOCKER_SWARM_INIT_SETTINGS to the settings you want to use to initialize Docker Swarm and try again."
   echo "Example: export VOINETWORK_DOCKER_SWARM_INIT_SETTINGS='--advertise-addr 10.0.0.1'"
   abort "Exiting the program."
 }
 
 joined_network_instructions() {
-  echo "IMPORTANT: Utility scripts for managing your setup is available in ${voi_home}/bin"
+  echo "You can find utility commands for managing your setup in ${voi_home}/bin"
 
   if [[ ${is_root} -eq 0 ]]; then
-    echo "Ensure you restart your shell to use them, or type 'newgrp docker' in your existing shell."
+    echo ""
+    echo "Ensure you restart your shell to use them, or type 'newgrp docker' in your existing shell before using."
   fi
 
   echo ""
-  echo "To see a list of useful commands reference:"
+  echo "For a list of useful commands, check out:"
   echo " - Install README.md: https://github.com/VoiNetwork/docker-swarm/blob/main/README.md"
   echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
   echo ""
@@ -484,7 +485,7 @@ fi
 if [[ ${skip_account_setup} -eq 0 ]]; then
   if [[ ${account_status} -eq 1 ]]; then
     display_banner "Welcome to Voi! You are now online!"
-   joined_network_instructions
+    joined_network_instructions
   else
    display_banner "Your account ${account_addr} is currently offline."
    echo "There seems to be an issue with going online. Please seek assistance in the #node-help channel on the Voi Network Discord."
