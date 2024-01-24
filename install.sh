@@ -471,6 +471,7 @@ if [[ ${skip_account_setup} -eq 0 ]]; then
 
   busy_wait_until_balance_is_1_voi
 
+  echo "Enter your password to join the network."
   execute_interactive_docker_command "goal account changeonlinestatus -a ${account_addr}"
 
   account_status=$(execute_docker_command "goal account dump -a ${account_addr}" | jq -r .onl)
