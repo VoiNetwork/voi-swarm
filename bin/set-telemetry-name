@@ -16,8 +16,9 @@ set_telemetry_name() {
     echo "Example: export VOINETWORK_TELEMETRY_NAME='my_custom_name'"
     echo ""
     echo "To skip telemetry sharing, type 'continue' below."
+    # shellcheck disable=SC2162
     read -p "Telemetry name: " VOINETWORK_TELEMETRY_NAME
-    if [[ "${VOINETWORK_TELEMETRY_NAME}" == "continue" ]]; then
+    if [[ ${VOINETWORK_TELEMETRY_NAME} == "continue" ]]; then
       unset VOINETWORK_TELEMETRY_NAME
       return
     else

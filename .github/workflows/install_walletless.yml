@@ -38,4 +38,3 @@ jobs:
         run: |
           container_id=$(docker ps -q -f name=voinetwork_algod)
           docker exec "${container_id}" bash -c "goal node status"
-

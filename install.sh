@@ -8,7 +8,7 @@ is_root=0
 skip_account_setup=0
 
 execute_sudo() {
-  if [ ${is_root} -eq 1 ]; then
+  if [[ ${is_root} -eq 1 ]]; then
     bash -c "$1"
   else
     sudo bash -c "$1"
@@ -16,7 +16,7 @@ execute_sudo() {
 }
 
 abort() {
-  if [ ${docker_swarm_started} -eq 1 ]; then
+  if [[ ${docker_swarm_started} -eq 1 ]]; then
     echo "Shutting down docker swarm"
     echo ""
     execute_sudo 'docker swarm leave --force'
@@ -30,7 +30,7 @@ execute_docker_command_internal() {
   local command=$2
   local options=""
 
-  if [ "$interactive" = "yes" ]; then
+  if [[ $interactive = "yes" ]]; then
     options="-it"
   fi
 
@@ -39,13 +39,13 @@ execute_docker_command_internal() {
 
 execute_interactive_docker_command() {
   local retries=0
-  while [ $retries -lt 10 ]; do
+  while [[ $retries -lt 10 ]]; do
     execute_docker_command_internal "yes" "$1"
     local exit_code=$?
-    if [ ${exit_code} -eq 130 ]; then
+    if [[ ${exit_code} -eq 130 ]]; then
       exit ${exit_code} >&2
     fi
-    if [ ${exit_code} -ne 0 ]; then
+    if [[ ${exit_code} -ne 0 ]]; then
       echo "Error executing command. Please try again or press CTRL-C to exit."
       ((retries++))
     else
@@ -53,7 +53,7 @@ execute_interactive_docker_command() {
     fi
   done
 
-  if [ $retries -eq 10 ]; then
+  if [[ $retries -eq 10 ]]; then
     abort "Command failed after 10 attempts. Exiting the program."
   fi
 }
@@ -65,7 +65,7 @@ execute_docker_command() {
 start_docker_swarm() {
   local docker_swarm
   docker_swarm=$(execute_sudo 'docker info | grep Swarm | cut -d\  -f3')
-  if [ "${docker_swarm}" != "active" ]; then
+  if [[ ${docker_swarm} != "active" ]]; then
     command="docker swarm init"
 
     if [[ -n ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS} ]]; then
@@ -74,6 +74,7 @@ start_docker_swarm() {
 
     execute_sudo "$command"
 
+    # shellcheck disable=SC2181
     if [ $? -ne 0 ]; then
       docker_swarm_instructions
     fi
@@ -112,12 +113,12 @@ verify_node_is_running() {
   local retries=0
   local max_retries=5
 
-  while [ $retries -lt $max_retries ]; do
+  while [[ $retries -lt $max_retries ]]; do
     container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
-    if [ -n "$container_id" ]; then
+    if [[ -n "$container_id" ]]; then
       execute_sudo "docker exec -e account_addr=${account_addr} ${container_id} bash -c \"goal node status\""
       local exit_code=$?
-      if [ $exit_code -eq 0 ]; then
+      if [[ $exit_code -eq 0 ]]; then
         break
       fi
     fi
@@ -127,7 +128,7 @@ verify_node_is_running() {
     ((retries++))
   done
 
-  if [ $retries -eq $max_retries ]; then
+  if [[ $retries -eq $max_retries ]]; then
     abort "Error connecting to node after $max_retries attempts. Exiting the program."
   fi
 }
@@ -136,11 +137,11 @@ get_current_net_round() {
   local retries=0
   local max_retries=5
 
-  while [ $retries -lt $max_retries ]; do
+  while [[ $retries -lt $max_retries ]]; do
     current_net_round=$(curl -s https://testnet-api.voi.nodly.io/v2/status | jq -r '.["last-round"]' )
     exit_code=$?
 
-    if [ $exit_code -eq 0 ] && [ -n "$current_net_round" ]; then
+    if [[ $exit_code -eq 0 ]] && [[ -n $current_net_round ]]; then
       break
     fi
 
@@ -149,7 +150,7 @@ get_current_net_round() {
     ((retries++))
   done
 
-  if [ $retries -eq $max_retries ]; then
+  if [[ $retries -eq $max_retries ]]; then
     abort "Error fetching network status after $max_retries attempts. Please check your internet connection and try again."
   fi
 }
@@ -163,10 +164,10 @@ get_node_status() {
 catchup_node() {
   display_banner "Catching up with the network... This might take some time, and numbers might briefly increase"
   get_node_status
-  while [ "${current_node_round}" -lt "${current_net_round}" ]; do
-    rounds_to_go=$((${current_net_round}-${current_node_round}))
-    if [ ${rounds_to_go} -gt 1 ]; then
-      printf "\rWaiting for catchup: %d blocks to go                     " ${rounds_to_go}
+  while [[ ${current_node_round} -lt ${current_net_round} ]]; do
+    rounds_to_go=$((current_net_round - current_node_round))
+    if [[ ${rounds_to_go} -gt 1 ]]; then
+      printf "\rWaiting for catchup: %d blocks to go                     " "${rounds_to_go}"
     else
       printf "\rWaiting for catchup: One more block to go!                                           "
     fi
@@ -195,7 +196,7 @@ get_address_balance() {
 busy_wait_until_balance_is_1_voi() {
   display_banner "Waiting for balance (account: ${account_addr}) to be 1 Voi"
   get_address_balance
-  while [ "${balance}" -lt "1000000" ]; do
+  while [[ ${balance} -lt "1000000" ]]; do
     echo "Waiting for balance to be 1 Voi at minimum"
     get_address_balance
     sleep 10
@@ -213,18 +214,18 @@ get_account_info() {
   accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
   number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
 
-  if [ "$number_of_accounts" -gt 1 ]; then
+  if [[ $number_of_accounts -gt 1 ]]; then
     echo "More than one account found in wallet. Skipping account creation."
     skip_account_setup=1
     return 1
-  elif [ "$number_of_accounts" -eq 1 ] && [ "$allow_one_account" != "true" ]; then
+  elif [[ $number_of_accounts -eq 1 ]] && [[ $allow_one_account != "true" ]]; then
     echo "One account found in wallet. Skipping account creation."
     get_account_address
     skip_account_setup=1
     return 1
   fi
 
-  account_address=$(echo $accounts_json | jq '.Accounts | keys[0]')
+  account_address=$(echo "$accounts_json" | jq '.Accounts | keys[0]')
   echo "${account_address}"
 }
 
@@ -246,7 +247,7 @@ get_account_address() {
 
 generate_participation_key() {
   start_block=$(execute_interactive_docker_command "goal node status" | grep "Last committed block" | cut -d\  -f4 | tr -d '\r')
-  end_block=$((${start_block} + 2000000))
+  end_block=$((start_block + 2000000))
   execute_interactive_docker_command "goal account addpartkey -a ${account_addr} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
 }
 
@@ -294,7 +295,7 @@ joined_network_instructions() {
 
 add_docker_groups() {
   if [[ is_root -eq 0 ]]; then
-    if [ ! "$(getent group docker)"  ]; then
+    if [[ ! $(getent group docker)  ]]; then
       execute_sudo "groupadd docker"
     fi
     execute_sudo "usermod -aG docker ${USER}"
@@ -315,8 +316,9 @@ set_telemetry_name() {
     echo "Example: export VOINETWORK_TELEMETRY_NAME='my_custom_name'"
     echo ""
     echo "To skip telemetry sharing, type 'continue' below."
+    # shellcheck disable=SC2162
     read -p "Telemetry name: " VOINETWORK_TELEMETRY_NAME
-    if [[ "${VOINETWORK_TELEMETRY_NAME}" == "continue" ]]; then
+    if [[ ${VOINETWORK_TELEMETRY_NAME} == "continue" ]]; then
       unset VOINETWORK_TELEMETRY_NAME
       return
     else
@@ -329,12 +331,12 @@ if [ -z "${BASH_VERSION:-}" ]; then
   abort "Bash is required to interpret this script."
 fi
 
-if [ "$(id -u)" -eq 0 ]; then
+if [[ $(id -u) -eq 0 ]]; then
   is_root=1
 fi
 
 # Get Linux OS distribution
-if [ -f /etc/os-release ]; then
+if [[ -f /etc/os-release ]]; then
   . /etc/os-release
   operating_system_distribution="${ID}"
 else
@@ -362,12 +364,12 @@ case ${operating_system_distribution} in
   "ubuntu")
     execute_sudo "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg"
     execute_sudo "chmod a+r /etc/apt/keyrings/docker.gpg"
-    execute_sudo "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable\" > /etc/apt/sources.list.d/docker.list"
+    execute_sudo "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \""$VERSION_CODENAME\"") stable\" > /etc/apt/sources.list.d/docker.list"
     ;;
   "debian")
     execute_sudo "curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg"
     execute_sudo "chmod a+r /etc/apt/keyrings/docker.gpg"
-    execute_sudo "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable\" > /etc/apt/sources.list.d/docker.list"
+    execute_sudo "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(. /etc/os-release && echo \""$VERSION_CODENAME\"") stable\" > /etc/apt/sources.list.d/docker.list"
     ;;
 esac
 
@@ -377,8 +379,8 @@ execute_sudo "apt-get install -y docker-ce docker-ce-cli containerd.io docker-bu
 
 add_docker_groups
 
-if [ -z "$(docker --version | grep 'Docker version')" ]; then
-  abort "Docker installation failed."
+if ! docker --version | grep -q 'Docker version'; then
+  echo "Docker installation failed."
 fi
 
 ## Install script dependencies
@@ -388,7 +390,7 @@ display_banner "Starting stack"
 
 start_docker_swarm
 
-if [ ! -e /var/lib/voi/algod/data ]; then
+if [[ ! -e /var/lib/voi/algod/data ]]; then
   execute_sudo "mkdir -p /var/lib/voi/algod/data"
 fi
 mkdir -p "${voi_home}"
@@ -449,9 +451,11 @@ else
     echo "* After you've done this, type 'completed' to go on"
     echo "****************************************************************************************************************"
 
+    # shellcheck disable=SC2162
     read -p "Type 'completed' when you're ready to continue: " prompt
-    while [ "${prompt}" != "completed" ]
+    while [[ ${prompt} != "completed" ]]
     do
+      # shellcheck disable=SC2162
       read -p "Type 'completed' to continue: " prompt
     done
   fi
@@ -460,7 +464,7 @@ fi
 # Catchup node before creating participation key and going online
 catchup_node
 
-if [[ "${skip_account_setup}" -eq 0 ]]; then
+if [[ ${skip_account_setup} -eq 0 ]]; then
   display_banner "Joining network"
 
   generate_participation_key
@@ -472,8 +476,8 @@ if [[ "${skip_account_setup}" -eq 0 ]]; then
   account_status=$(execute_docker_command "goal account dump -a ${account_addr}" | jq -r .onl)
 fi
 
-if [[ "${skip_account_setup}" -eq 0 ]]; then
-  if [[ "${account_status}" -eq 1 ]]; then
+if [[ ${skip_account_setup} -eq 0 ]]; then
+  if [[ ${account_status} -eq 1 ]]; then
     display_banner "Welcome to Voi! You are now online!"
    joined_network_instructions
   else

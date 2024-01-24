@@ -7,4 +7,3 @@ if [ -z "${container_id}" ]; then
 fi
 
 docker exec -e account_addr="$1" "${container_id}" bash -c 'diagcfg telemetry'
-
