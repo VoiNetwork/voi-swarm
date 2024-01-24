@@ -401,6 +401,10 @@ tar -xzf "${voi_home}"/docker-swarm.tar.gz -C "${voi_home}" --strip-components=1
 rm "${voi_home}"/docker-swarm.tar.gz
 
 execute_sudo "env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${voi_home}/docker-swarm/compose.yml voinetwork"
+# shellcheck disable=SC2181
+if [[ $? -ne 0 ]]; then
+  abort "Error starting stack. Exiting the program."
+fi
 
 wait_for_stack_to_be_ready
 
