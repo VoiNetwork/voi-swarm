@@ -33,7 +33,7 @@ To set up a new Voi node, run the following command:
 ## Using an Existing Account/Address with Mnemonic
 
 If you have an existing account/address with a mnemonic that you want to use, set the VOINETWORK_IMPORT_ACCOUNT
-environment variable to 1 and run the install script:
+environment variable to 1 and run the installation script:
 
 ```bash
 export VOINETWORK_IMPORT_ACCOUNT=1
@@ -43,7 +43,7 @@ export VOINETWORK_IMPORT_ACCOUNT=1
 ## Installing Without Wallet Setup
 
 If you want to install without including wallet setup, set the VOINETWORK_SKIP_WALLET_SETUP environment variable to 1
-and run the install script:
+and run the installation script:
 
 ```bash
 export VOINETWORK_SKIP_WALLET_SETUP=1
