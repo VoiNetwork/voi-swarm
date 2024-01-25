@@ -30,3 +30,5 @@ set_telemetry_name() {
 set_telemetry_name
 
 bash -c "env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ../docker-swarm/compose.yml voinetwork"
+
+echo "Changes have been applied to the network. Please wait a minute for the changes to take effect."
