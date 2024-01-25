@@ -289,9 +289,20 @@ joined_network_instructions() {
     fi
 
     echo ""
-    echo "To see network participation status use ${HOME}/voi/bin/get-participation-status <account_address>"
-    echo "To go online use ${HOME}/voi/bin/go-online <account_address>"
+    echo "To see network participation status use ${HOME}/voi/bin/get-participation-status ${account_addr}"
+    echo "To go online use ${HOME}/voi/bin/go-online ${account_addr}"
   fi
+
+  # Display information informing the user that the network will catch up in the background if used in non-interactive mode
+  if [[ $1 == "true" ]]; then
+    echo ""
+    echo "The network is now catching up and will continue to do so in the background."
+  fi
+
+  echo ""
+  echo "To easily access commands from ${HOME}/voi/bin, add the following to ${HOME}/.bashrc or ${HOME}/.profile:"
+  echo "export PATH=\"\$PATH:${HOME}/voi/bin\""
+  echo ""
 }
 
 add_docker_groups() {
@@ -415,9 +426,8 @@ verify_node_is_running
 if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1  ]]; then
   display_banner "Wallet setup will be skipped."
 
-  joined_network_instructions
+  joined_network_instructions true
 
-  echo "The network is now catching up and will continue to do so in the background."
   exit 0
 fi
 
@@ -486,6 +496,7 @@ fi
 if [[ ${skip_account_setup} -eq 0 ]]; then
   if [[ ${account_status} -eq 1 ]]; then
     display_banner "Welcome to Voi! You are now online!"
+
     joined_network_instructions
   else
    display_banner "Your account ${account_addr} is currently offline."
