@@ -382,6 +382,7 @@ add_docker_groups
 
 if ! docker --version | grep -q 'Docker version'; then
   echo "Docker installation failed."
+  abort "Exiting the program."
 fi
 
 ## Install script dependencies
