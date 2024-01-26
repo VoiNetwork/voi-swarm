@@ -1,10 +1,26 @@
 #!/bin/bash
 
 container_id=$(docker ps -q -f name=voinetwork_algod)
-if [ -z "${container_id}" ]; then
+if [[ -z ${container_id} ]]; then
     echo "AVM container is not running. Please start it first."
     exit 1
 fi
 
-PID=$(docker inspect --format '{{.State.Pid}}' $container_id)
-nsenter -t $PID -n netstat -na | grep "5011"
+PID=$(docker inspect --format '{{.State.Pid}}' "$container_id")
+
+ip_addresses=$(nsenter -t "$PID" -n netstat -na | grep "5011" | awk '{ print $5} ' | cut -d: -f1)
+
+ip_array=()
+
+for ip in $ip_addresses; do
+    ip_array+=("\"$ip\"")
+done
+
+json_string=$(printf ',%s' "${ip_array[@]}")
+json_string="[${json_string:1}]"
+
+# Send the JSON string to the ip-api. https is not supported on the free plan
+connected_relays=$(curl -s http://ip-api.com/batch --data "$json_string")
+
+echo "You are connected to:"
+echo "$connected_relays" | jq -r '.[] | "\(.query) \(.country) \(.regionName) \(.city)"'
