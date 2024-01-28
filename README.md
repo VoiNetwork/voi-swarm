@@ -155,6 +155,20 @@ Open a bash shell in the AVM container with the following command:
 ~/voi/bin/start-shell
 ```
 
+### Getting basic node status
+
+To retrieve basic health information about your node, execute the following command:
+
+```bash
+~/voi/bin/get-node-status
+```
+
+The `get-node-status` command performs checks using:
+
+- `goal node status` to connect to the running daemon and retrieve basic node information
+- `/health`: This API endpoint checks the reported health of the node. [REST API /health documentation](https://developer.algorand.org/docs/rest-apis/algod/#get-health).
+- `/ready`: This API endpoint checks the reported readiness of the node and if fully caught up. [REST API /ready documentation](https://developer.algorand.org/docs/rest-apis/algod/#get-ready).
+
 ## Debugging
 
 ### Startup state for services in stack

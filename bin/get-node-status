@@ -1,0 +1,34 @@
+#!/bin/bash
+
+container_id=$(docker ps -q -f name=voinetwork_algod)
+if [ -z "${container_id}" ]; then
+    echo "AVM container is not running. Please start it first."
+    exit 1
+fi
+
+declare -A health_checks
+
+if [[ $(docker exec -it "${container_id}" bash -c "goal node status") ]]; then
+    health_checks["Daemon running"]="true"
+else
+    health_checks["Daemon running"]="false"
+fi
+
+if [[ $(docker exec "${container_id}" bash -c "curl -fs http://localhost:8080/health") ]]; then
+    health_checks["Daemon healthy"]="true"
+else
+    health_checks["Daemon healthy"]="false"
+fi
+
+if [[ $(docker exec "${container_id}" bash -c "curl -fs http://localhost:8080/ready") ]]; then
+    health_checks["Daemon ready (and caught up)"]="true"
+else
+    health_checks["Daemon ready (and caught up)"]="false"
+fi
+
+# Print all health checks
+echo "Health checks:"
+echo "**************"
+for check in "${!health_checks[@]}"; do
+  echo "$check: ${health_checks[$check]}"
+done
