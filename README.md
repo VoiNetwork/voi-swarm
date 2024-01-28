@@ -155,7 +155,7 @@ Open a bash shell in the AVM container with the following command:
 ~/voi/bin/start-shell
 ```
 
-### Getting basic node status
+### Getting Basic Node Health
 
 To retrieve basic health information about your node, execute the following command:
 
