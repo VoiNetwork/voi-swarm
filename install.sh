@@ -110,11 +110,12 @@ wait_for_stack_to_be_ready() {
       local number_of_interfaces
       number_of_interfaces=$(execute_sudo "ip -d link show | grep vx | wc -l")
       if [[ number_of_interfaces -eq 1 ]]; then
+        echo "Docker has a network interface that is lingering and preventing startup. We'll attempt to auto-delete it."
         execute_sudo "ip -d link show | grep vx | grep DOWN | xargs -rn1 ip link delete"
         # shellcheck disable=SC2181
         if [[ $? -ne 0 ]]; then
           echo "Docker swarm is unable to start services. https://github.com/moby/libnetwork/issues/1765"
-          abort "Error deleting vx interface. Exiting the program."
+          abort "Exiting the program."
         fi
       elif [[ number_of_interfaces -gt 1 ]]; then
         echo "Docker swarm is unable to start services. https://github.com/moby/libnetwork/issues/1765"
