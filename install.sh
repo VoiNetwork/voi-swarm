@@ -92,14 +92,34 @@ wait_for_stack_to_be_ready() {
       current_state=$(echo "${line}" | jq -r '.CurrentState')
       desired_state=$(echo "${line}" | jq -r '.DesiredState')
 
+      service_error=$(echo "${line}" | jq -r '.Error')
+
       if [[ ${current_state} == Running* ]] && [[ ${desired_state} == "Running" ]]; then
         service_running=true
+        break
+      fi
+
+      if [[ ${service_error} != "" ]]; then
         break
       fi
     done < <(echo "${service_info}")
 
     if [[ ${service_running} == true ]]; then
       break
+    elif [[ ${service_error} == "network sandbox join failed: subnet sandbox"* ]]; then
+      local number_of_interfaces
+      number_of_interfaces=$(execute_sudo "ip -d link show | grep vx | wc -l")
+      if [[ number_of_interfaces -eq 1 ]]; then
+        execute_sudo "ip -d link show | grep vx | grep DOWN | xargs -rn1 ip link delete"
+        # shellcheck disable=SC2181
+        if [[ $? -ne 0 ]]; then
+          echo "Docker swarm is unable to start services. https://github.com/moby/libnetwork/issues/1765"
+          abort "Error deleting vx interface. Exiting the program."
+        fi
+      elif [[ number_of_interfaces -gt 1 ]]; then
+        echo "Docker swarm is unable to start services. https://github.com/moby/libnetwork/issues/1765"
+        abort "Multiple vx interfaces found. Please delete all vx interfaces or reboot the server"
+      fi
     else
       echo "Waiting for stack to be ready..."
       sleep 2
