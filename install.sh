@@ -252,6 +252,7 @@ get_account_info() {
 
 check_if_account_exists() {
   allow_one_account_override="$1"
+
   get_account_info "$allow_one_account_override" > /dev/null
 }
 
@@ -266,10 +267,81 @@ get_account_address() {
   account_addr=$account_address
 }
 
-generate_participation_key() {
-  start_block=$(execute_interactive_docker_command "goal node status" | grep "Last committed block" | cut -d\  -f4 | tr -d '\r')
+get_participation_expiration_eta() {
+  local active_key_last_valid_round=$1
+  local last_committed_block=$2
+  local current_key_blocks_remaining=$((active_key_last_valid_round - last_committed_block))
+  local remaining_seconds
+  local current_timestamp
+  local expiration_timestamp
+  local expiration_date
+
+  remaining_seconds=$(echo "${current_key_blocks_remaining}*2.9" | bc)
+  current_timestamp=$(date +%s)
+  expiration_timestamp=$(echo "${current_timestamp}+${remaining_seconds}" | bc)
+
+  # Convert the new timestamp to a date and time
+  expiration_date=$(date -d "@${expiration_timestamp}" '+%Y-%m-%d %H:%M')
+
+  echo "${expiration_date}"
+}
+
+get_current_keys_info() {
+  execute_docker_command "goal account listpartkeys" | tail -n +2
+}
+
+get_last_committed_block() {
+  execute_docker_command "goal node status" | grep 'Last committed block' | cut -d\  -f4 | tr -d '\r'
+}
+
+generate_new_key() {
+  local start_block
+  local end_block
+
+  start_block=$(get_last_committed_block)
   end_block=$((start_block + 2000000))
+  echo "Generating participation key for account ${account_addr} with start block ${start_block} and end block ${end_block}"
   execute_interactive_docker_command "goal account addpartkey -a ${account_addr} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
+}
+
+generate_participation_key() {
+  local current_keys_info
+  local active_key_last_valid_round
+  local last_committed_block
+
+  display_banner "Generating/Updating participation key"
+
+  current_keys_info=$(get_current_keys_info)
+  active_key_last_valid_round=$(echo "$current_keys_info" | awk '/yes/ {print $NF}')
+  last_committed_block=$(get_last_committed_block)
+
+  if [[ -z ${active_key_last_valid_round} ]]; then
+    generate_new_key
+  elif [[ $((active_key_last_valid_round-last_committed_block)) -le 417104 ]]; then
+    local expiration_date
+    local current_key_prefix
+    local current_key_id
+    local end_block
+
+    expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
+    echo "Current participation key is expected to expire at: ${expiration_date}"
+
+    current_key_prefix=$(echo "$current_keys_info" | awk '/yes/ {print $3}' | tr -d .)
+    current_key_id=$(execute_docker_command "goal account partkeyinfo" | grep "${current_key_prefix}" | awk '{print $3}')
+
+    end_block=$((last_committed_block + 2000000))
+    echo "Current participation key is close to expiring (less than 417,104 blocks / ~14 days). Generating a new key."
+    echo "Generating participation key for account ${account_addr} with end block ${end_block}"
+
+    execute_interactive_docker_command "goal account renewpartkey -a ${account_addr} --roundLastValid ${end_block}"
+    execute_interactive_docker_command "goal account deletepartkey --partkeyid ${current_key_id}"
+  else
+    local expiration_date
+    expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
+
+    echo "Current participation key is expected to expire at: ${expiration_date}"
+    echo "This is above the required threshold of 417,104 blocks / ~14 days."
+  fi
 }
 
 display_banner() {
@@ -324,6 +396,35 @@ joined_network_instructions() {
   echo "To easily access commands from ${HOME}/voi/bin, add the following to ${HOME}/.bashrc or ${HOME}/.profile:"
   echo "export PATH=\"\$PATH:${HOME}/voi/bin\""
   echo ""
+}
+
+join_as_new_user() {
+  display_banner "Joining network"
+
+  generate_participation_key
+
+  busy_wait_until_balance_is_1_voi
+
+  echo "Enter your password to join the network."
+  execute_interactive_docker_command "goal account changeonlinestatus -a ${account_addr}"
+
+  account_status=$(execute_docker_command "goal account dump -a ${account_addr}" | jq -r .onl)
+
+  if [[ ${account_status} -eq 1 ]]; then
+    display_banner "Welcome to Voi! You are now online!"
+  else
+    display_banner "Your account ${account_addr} is currently offline."
+    echo "There seems to be an issue with going online. Please seek assistance in the #node-help channel on the Voi Network Discord."
+    echo "Join us at: https://discord.com/invite/vnFbrJrHeW"
+    abort "Exiting the program."
+  fi
+
+  echo "PLEASE SAVE THIS INFORMATION SAFELY"
+  echo "***********************************"
+  echo "Your Voi address: ${account_addr}"
+  echo "Enter password to get your Voi account recovery mnemonic. Store your mnemonic safely:"
+
+  execute_interactive_docker_command "goal account export -a ${account_addr}"
 }
 
 add_docker_groups() {
@@ -418,7 +519,7 @@ if ! docker --version | grep -q 'Docker version'; then
 fi
 
 ## Install script dependencies
-execute_sudo "apt-get install -y jq"
+execute_sudo "apt-get install -y jq bc"
 
 display_banner "Starting stack"
 
@@ -502,37 +603,10 @@ fi
 catchup_node
 
 if [[ ${skip_account_setup} -eq 0 ]]; then
-  display_banner "Joining network"
-
+  join_as_new_user
+else
   generate_participation_key
 
-  busy_wait_until_balance_is_1_voi
-
-  echo "Enter your password to join the network."
-  execute_interactive_docker_command "goal account changeonlinestatus -a ${account_addr}"
-
-  account_status=$(execute_docker_command "goal account dump -a ${account_addr}" | jq -r .onl)
-fi
-
-if [[ ${skip_account_setup} -eq 0 ]]; then
-  if [[ ${account_status} -eq 1 ]]; then
-    display_banner "Welcome to Voi! You are now online!"
-
-    joined_network_instructions
-  else
-   display_banner "Your account ${account_addr} is currently offline."
-   echo "There seems to be an issue with going online. Please seek assistance in the #node-help channel on the Voi Network Discord."
-   echo "Join us at: https://discord.com/invite/vnFbrJrHeW"
-   abort "Exiting the program."
-  fi
-
-  echo "PLEASE SAVE THIS INFORMATION SAFELY"
-  echo "***********************************"
-  echo "Your Voi address: ${account_addr}"
-  echo "Enter password to get your Voi account recovery mnemonic. Store your mnemonic safely:"
-
-  execute_interactive_docker_command "goal account export -a ${account_addr}"
-else
   display_banner "Welcome to Voi!"
 
   joined_network_instructions
