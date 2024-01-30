@@ -190,6 +190,5 @@ The `get-node-status` command performs checks using:
 ## TODO
 
 - [ ] Add apprise / alarming on scaling events in docker-compose.yml
-- [ ] Add participation key rotation
-- [ ] Add mechanism for updating scripts and compose files (and swarm) on top of existing installation
-- [ ] Adds script for participation key management
+- [ ] Add script for participation key management
+- [ ] Add mechanism for a user to specify notification mechanism for key expiration

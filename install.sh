@@ -297,10 +297,13 @@ get_last_committed_block() {
 generate_new_key() {
   local start_block
   local end_block
+  local expiration_date
 
   start_block=$(get_last_committed_block)
   end_block=$((start_block + 2000000))
+  expiration_date=$(get_participation_expiration_eta "${end_block}" "${start_block}")
   echo "Generating participation key for account ${account_addr} with start block ${start_block} and end block ${end_block}"
+  echo "New key is expected to be valid until: ${expiration_date}"
   execute_interactive_docker_command "goal account addpartkey -a ${account_addr} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
 }
 
@@ -318,29 +321,39 @@ generate_participation_key() {
   if [[ -z ${active_key_last_valid_round} ]]; then
     generate_new_key
   elif [[ $((active_key_last_valid_round-last_committed_block)) -le 417104 ]]; then
-    local expiration_date
+    local existing_expiration_date
+    local new_expiration_date
     local current_key_prefix
     local current_key_id
     local end_block
 
-    expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
-    echo "Current participation key is expected to expire at: ${expiration_date}"
+    end_block=$((last_committed_block + 2000000))
+    existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
+    new_expiration_date=$(get_participation_expiration_eta "${end_block}" "${last_committed_block}")
 
     current_key_prefix=$(echo "$current_keys_info" | awk '/yes/ {print $3}' | tr -d .)
     current_key_id=$(execute_docker_command "goal account partkeyinfo" | grep "${current_key_prefix}" | awk '{print $3}')
 
-    end_block=$((last_committed_block + 2000000))
-    echo "Current participation key is close to expiring (less than 417,104 blocks / ~14 days). Generating a new key."
-    echo "Generating participation key for account ${account_addr} with end block ${end_block}"
+    echo "Current participation key is expected to expire at: ${existing_expiration_date}"
+    echo "Currently the network is at block: ${last_committed_block}"
+    echo "Current participation key expires at block: ${active_key_last_valid_round}"
+    echo ""
+    echo "This is below the required threshold of 417,104 blocks / ~14 days."
+    echo "Generating participation key for account ${account_addr} with end block ${end_block}."
+
+    echo "New key is expected to be valid until: ${new_expiration_date}"
+    echo ""
+    echo "You will be asked to enter your password to activate the new key."
 
     execute_interactive_docker_command "goal account renewpartkey -a ${account_addr} --roundLastValid ${end_block}"
     execute_interactive_docker_command "goal account deletepartkey --partkeyid ${current_key_id}"
   else
-    local expiration_date
-    expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
+    local existing_expiration_date
+    existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
 
-    echo "Current participation key is expected to expire at: ${expiration_date}"
+    echo "Current participation key is expected to expire at: ${existing_expiration_date}"
     echo "This is above the required threshold of 417,104 blocks / ~14 days."
+    echo "No new participation key will be generated."
   fi
 }
 
