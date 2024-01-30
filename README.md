@@ -50,6 +50,17 @@ export VOINETWORK_SKIP_WALLET_SETUP=1
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
 ```
 
+## Updating Participation Key
+
+If your Voi node's participation key is nearing its expiry date (less than 14 days left), you can renew it by running
+the installation script again. This script is programmed to create new participation keys when the current ones are
+close to expiring. So, to keep your Voi node active, make sure your participation key is up-to-date. If it's about to
+expire, rerun the installation script to generate a new key.
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+```
+
 ## Setting a Custom Telemetry Name
 
 To set a custom telemetry name, set the VOINETWORK_TELEMETRY_NAME environment variable to your desired name:
