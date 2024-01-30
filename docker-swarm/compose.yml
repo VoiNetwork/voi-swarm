@@ -1,23 +1,25 @@
 version: "3.8"
 services:
   algod:
-    build: ..
     image: ghcr.io/voinetwork/docker-participation-node:latest
-    volumes:
-      - /var/lib/voi/algod/data:/algod/data/:rw
     environment:
       TELEMETRY_NAME: ${VOINETWORK_TELEMETRY_NAME}
     logging:
       driver: "local"
+    volumes:
+      - /var/lib/voi/algod/data:/algod/data/:rw
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+    networks:
+      - notification
   shepherd:
-    build: ..
     image: containrrr/shepherd
     environment:
       RUN_ONCE_AND_EXIT: "true"
+      ROLLBACK_ON_FAILURE: "true"
+      IMAGE_AUTOCLEAN_LIMIT: "5"
     logging:
       driver: "local"
     volumes:
@@ -28,22 +30,25 @@ services:
         condition: none
       labels:
         - swarm.cronjob.enable=true
-        - swarm.cronjob.schedule=0 0 * * *
+        - swarm.cronjob.schedule=0 16 * * *
         - swarm.cronjob.skip-running=true
       placement:
         constraints:
           - node.role == manager
   scheduler:
-    image: crazymax/swarm-cronjob:latest
+    image: ghcr.io/voinetwork/swarm-cronjob:edge
     logging:
       driver: "local"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - "TZ=Europe/London"
+      - "TZ=UTC"
       - "LOG_LEVEL=info"
       - "LOG_JSON=false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     deploy:
       placement:
         constraints:
           - node.role == manager
+
+networks:
+  notification:
