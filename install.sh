@@ -449,12 +449,21 @@ add_docker_groups() {
   fi
 }
 
+get_telemetry_name() {
+  if [[ -f "/var/lib/voi/algod/data/logging.config" ]]; then
+    VOINETWORK_TELEMETRY_NAME=$(execute_sudo "cat /var/lib/voi/algod/data/logging.config" | jq -r '.Name')
+  fi
+}
+
 set_telemetry_name() {
   if [[ ${headless_install} -eq 1 ]]; then
     ## Allow headless install to skip telemetry name setup in case people bring their own wallets / use CI
     return
   fi
-  if [[ -z ${VOINETWORK_TELEMETRY_NAME} ]]; then
+
+  display_banner "Telemetry"
+
+  if [[ -z ${VOINETWORK_TELEMETRY_NAME} && ! -f "/var/lib/voi/algod/data/logging.config" ]]; then
     echo "Voi uses telemetry to make the network better and reward users with Voi if participating."
     echo ""
     echo "Type your telemetry name below. We'll add 'VOI:' at the start to show you're using this package."
@@ -471,6 +480,10 @@ set_telemetry_name() {
     else
       VOINETWORK_TELEMETRY_NAME="VOI:$VOINETWORK_TELEMETRY_NAME"
     fi
+  elif [[ -n ${VOINETWORK_TELEMETRY_NAME} ]]; then
+    echo "Your telemetry name is already set to '${VOINETWORK_TELEMETRY_NAME}'"
+  else
+    echo "Telemetry is disabled. To enable telemetry, execute the command ${HOME}/voi/bin/set-telemetry-name"
   fi
 }
 
@@ -498,6 +511,8 @@ fi
 if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1 ]] || [[ -n $VOINETWORK_HEADLESS_INSTALL ]]; then
   headless_install=1
 fi
+
+get_telemetry_name
 
 set_telemetry_name
 
