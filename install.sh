@@ -481,7 +481,7 @@ set_telemetry_name() {
       VOINETWORK_TELEMETRY_NAME="VOI:$VOINETWORK_TELEMETRY_NAME"
     fi
   elif [[ -n ${VOINETWORK_TELEMETRY_NAME} ]]; then
-    echo "Your telemetry name is already set to '${VOINETWORK_TELEMETRY_NAME}'"
+    echo "Your telemetry name is already set to '${VOINETWORK_TELEMETRY_NAME}'. To change your telemetry settings, execute the command ${HOME}/voi/bin/set-telemetry-name"
   else
     echo "Telemetry is disabled. To enable telemetry, execute the command ${HOME}/voi/bin/set-telemetry-name"
   fi
