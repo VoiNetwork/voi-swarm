@@ -50,12 +50,56 @@ export VOINETWORK_SKIP_WALLET_SETUP=1
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
 ```
 
-## Updating Participation Key
+## Updating Your Participation Key
 
 If your Voi node's participation key is nearing its expiry date (less than 14 days left), you can renew it by running
 the installation script again. This script is programmed to create new participation keys when the current ones are
 close to expiring. So, to keep your Voi node active, make sure your participation key is up-to-date. If it's about to
 expire, rerun the installation script to generate a new key.
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+```
+
+## Setting up Participation Key Expiry Notifications (Recommended)
+
+Each online account has a participation key that needs to be valid for the account to participate in the Voi network.
+A participation key is valid for a certain number of rounds, which is approximately 14 days. When the participation key
+expires the node runner will no longer be able to propose or vote on blocks. To avoid this situation you need to renew
+the participation key before expiration.
+
+To receive a notification when the participation key is about to expire, you can do the following:
+
+### Copy the example file
+
+Start by copying the example notification.yml file to the voi/docker-swarm directory:
+
+`cp ~/voi/docker-swarm/notification.yml.example ~/voi/docker-swarm/notification.yml`
+
+### Update the notification.yml file
+
+Update the notification.yml file with your preferred notification mechanism by updating the NOTIFICATION_URLS
+environment variable. The notification mechanism can be a webhook, email, push, or any other notification mechanism that
+is available via [Apprise notifications](https://github.com/caronc/apprise?tab=readme-ov-file#supported-notifications)
+
+If you want to use multiple mechanisms, separate them with a comma. For example, to use both Discord and Pushbullet for
+notification, you would set the `NOTIFICATION_URLS` value in the `notification.yml` file  to:
+
+```yaml
+NOTIFICATION_URLS="discord://<webhook_id>/<webhook_token>,pushbullet://<access_token>"
+```
+
+### Updating notification schedule
+
+To modify the notification schedule, adjust the `- swarm.cronjob.schedule=0 16 * * *` label in the copied example file.
+This is by default set to run daily at 4 PM UTC. Adjust this to your preferred time, accounting for your
+timezone's UTC offset. Use a resource like [dateful.com](https://dateful.com/time-zone-converter) for timezone conversion.
+
+The format of the schedule is following the standard [cronjob format](https://en.wikipedia.org/wiki/Cron#Overview).
+
+### Applying notification configuration to the stack
+
+To apply your notification configuration to the stack, rerun the installation script:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
@@ -197,9 +241,3 @@ The `get-node-status` command performs checks using:
 ### Inspect service
 
 `docker inspect voinetwork_algod`
-
-## TODO
-
-- [ ] Add apprise / alarming on scaling events in docker-compose.yml
-- [ ] Add script for participation key management
-- [ ] Add mechanism for a user to specify notification mechanism for key expiration

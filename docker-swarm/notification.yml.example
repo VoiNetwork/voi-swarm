@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  notify:
+    image: mazzolino/apprise-microservice:0.2
+    environment:
+      ## Reference https://github.com/caronc/apprise?tab=readme-ov-file#productivity-based-notifications supported formats and setup
+      NOTIFICATION_URLS: discord://.....,slack://.....,pbul://
+    logging:
+      driver: "local"
+    networks:
+      - notification
+  partkey_checker:
+    image: ghcr.io/voinetwork/docker-swarm-partkey-monitoring:edge
+    logging:
+      driver: "local"
+    volumes:
+      - /var/lib/voi/algod/data/voitest-v1/:/voi/:rw
+    networks:
+      - notification
+    depends_on:
+      - notify
+    deploy:
+      replicas: 0
+      restart_policy:
+        condition: none
+      labels:
+        - swarm.cronjob.enable=true
+        - swarm.cronjob.skip-running=true
+        - swarm.cronjob.schedule=0 16 * * *

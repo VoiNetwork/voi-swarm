@@ -83,6 +83,22 @@ start_docker_swarm() {
   fi
 }
 
+start_stack() {
+  command="env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${voi_home}/docker-swarm/compose.yml"
+
+  if [[ -f "${voi_home}/docker-swarm/notification.yml" ]]; then
+      command+=" -c ${voi_home}/docker-swarm/notification.yml"
+  fi
+
+  command+=" voinetwork"
+  execute_sudo "$command"
+
+  # shellcheck disable=SC2181
+  if [[ $? -ne 0 ]]; then
+    abort "Error starting stack. Exiting the program."
+  fi
+}
+
 wait_for_stack_to_be_ready() {
   while true; do
     service_info=$(execute_sudo 'docker stack ps voinetwork --format json' | grep 'voinetwork_algod')
@@ -563,11 +579,7 @@ curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --outp
 tar -xzf "${voi_home}"/docker-swarm.tar.gz -C "${voi_home}" --strip-components=1
 rm "${voi_home}"/docker-swarm.tar.gz
 
-execute_sudo "env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${voi_home}/docker-swarm/compose.yml voinetwork"
-# shellcheck disable=SC2181
-if [[ $? -ne 0 ]]; then
-  abort "Error starting stack. Exiting the program."
-fi
+start_stack
 
 wait_for_stack_to_be_ready
 

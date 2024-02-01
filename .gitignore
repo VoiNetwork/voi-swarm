@@ -1,0 +1,3 @@
+./.idea/**/*
+
+/docker-swarm/notification.yml
