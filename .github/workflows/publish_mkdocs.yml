@@ -1,8 +1,6 @@
 name: Publish mkdocs to gh-pages
 on:
   push:
-    branches:
-      - main
 permissions:
   contents: write
 jobs:
@@ -25,4 +23,3 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install mkdocs-material
-      - run: mkdocs gh-deploy --force
