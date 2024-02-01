@@ -1,6 +1,4 @@
-# Docker Swarm Voi Participation Node Setup
-
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ea47d627de494a92b25b97eb65930e85)](https://app.codacy.com/gh/VoiNetwork/docker-swarm/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+# Voi Swarm Participation Node Setup
 
 ## Prerequisites
 
@@ -27,7 +25,7 @@ system guidance on installation and setup.
 To set up a new Voi node, run the following command:
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
 ```
 
 ## Using an Existing Account/Address with Mnemonic
@@ -37,7 +35,7 @@ environment variable to 1 and run the installation script:
 
 ```bash
 export VOINETWORK_IMPORT_ACCOUNT=1
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
 ```
 
 ## Installing Without Wallet Setup
@@ -47,7 +45,7 @@ and run the installation script:
 
 ```bash
 export VOINETWORK_SKIP_WALLET_SETUP=1
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
 ```
 
 ## Updating Your Participation Key
@@ -58,7 +56,7 @@ close to expiring. So, to keep your Voi node active, make sure your participatio
 expire, rerun the installation script to generate a new key.
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
 ```
 
 ## Setting up Participation Key Expiry Notifications (Recommended)
@@ -72,9 +70,9 @@ To receive a notification when the participation key is about to expire, you can
 
 ### Copy the Example File
 
-Start by copying the example notification.yml file to the voi/docker-swarm directory:
+Start by copying the example notification.yml file to the voi/docker directory:
 
-`cp ~/voi/docker-swarm/notification.yml.example ~/voi/docker-swarm/notification.yml`
+`cp ~/voi/docker/notification.yml.example ~/voi/docker/notification.yml`
 
 ### Update the notification.yml File
 
@@ -102,7 +100,7 @@ The format of the schedule is following the standard [cronjob format](https://en
 To apply your notification configuration to the stack, rerun the installation script:
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
 ```
 
 ### Testing Your Notification Configuration
@@ -119,7 +117,7 @@ To set a custom telemetry name, set the VOINETWORK_TELEMETRY_NAME environment va
 
 ```bash
 export VOINETWORK_TELEMETRY_NAME="my_custom_telemetry_name"
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
 ```
 
 Custom telemetry name can be combined with other environment variables.
@@ -128,7 +126,7 @@ Custom telemetry name can be combined with other environment variables.
 
 To uninstall, execute the following commands:
 
-- Leave the Docker swarm with `docker swarm leave --force`
+- Leave the Swarm with `docker swarm leave --force`
 - Remove the `voi` directory with `rm -rf /voi/`
 - Remove the `data` directory with `sudo rm -rf /var/lib/voi`
 

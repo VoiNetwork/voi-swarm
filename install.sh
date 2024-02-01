@@ -84,10 +84,10 @@ start_docker_swarm() {
 }
 
 start_stack() {
-  command="env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${voi_home}/docker-swarm/compose.yml"
+  command="env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${voi_home}/docker/compose.yml"
 
-  if [[ -f "${voi_home}/docker-swarm/notification.yml" ]]; then
-      command+=" -c ${voi_home}/docker-swarm/notification.yml"
+  if [[ -f "${voi_home}/docker/notification.yml" ]]; then
+      command+=" -c ${voi_home}/docker/notification.yml"
   fi
 
   command+=" voinetwork"
@@ -400,7 +400,7 @@ joined_network_instructions() {
 
   echo ""
   echo "For a list of useful commands, check out:"
-  echo " - Install README.md: https://github.com/VoiNetwork/docker-swarm/blob/main/README.md"
+  echo " - Install README.md: https://github.com/VoiNetwork/voi-swarm/blob/main/README.md"
   echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
   echo ""
   if [[ ${skip_account_setup} -eq 1 ]]; then
@@ -575,9 +575,9 @@ fi
 mkdir -p "${voi_home}"
 
 display_banner "Fetching the latest Voi Network updates and scripts."
-curl -L https://api.github.com/repos/VoiNetwork/docker-swarm/tarball/main --output "${voi_home}"/docker-swarm.tar.gz
-tar -xzf "${voi_home}"/docker-swarm.tar.gz -C "${voi_home}" --strip-components=1
-rm "${voi_home}"/docker-swarm.tar.gz
+curl -L https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/main --output "${voi_home}"/voi-swarm.tar.gz
+tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
+rm "${voi_home}"/voi-swarm.tar.gz
 
 start_stack
 
