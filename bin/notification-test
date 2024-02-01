@@ -1,0 +1,12 @@
+#!/bin/bash
+
+container_id=$(docker ps -q -f name=voinetwork_notify)
+if [ -z "${container_id}" ]; then
+    echo "notification container is not running. Please start it first."
+    exit 1
+fi
+
+echo "Sending notification"
+docker exec -it "${container_id}" bash -c "curl -sS -X POST --data '{\"title\": \"Voi Participation Key Notification Test\", \"body\": \"Notification test for Voi Network\"}' localhost:5000 >> /dev/null && echo \"Notification sent\""
+
+echo "Note: After making changes to your notification.yml settings file, make sure to rerun the install script."

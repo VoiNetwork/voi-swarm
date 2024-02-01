@@ -70,13 +70,13 @@ the participation key before expiration.
 
 To receive a notification when the participation key is about to expire, you can do the following:
 
-### Copy the example file
+### Copy the Example File
 
 Start by copying the example notification.yml file to the voi/docker-swarm directory:
 
 `cp ~/voi/docker-swarm/notification.yml.example ~/voi/docker-swarm/notification.yml`
 
-### Update the notification.yml file
+### Update the notification.yml File
 
 Update the notification.yml file with your preferred notification mechanism by updating the NOTIFICATION_URLS
 environment variable. The notification mechanism can be a webhook, email, push, or any other notification mechanism that
@@ -89,7 +89,7 @@ notification, you would set the `NOTIFICATION_URLS` value in the `notification.y
 NOTIFICATION_URLS="discord://<webhook_id>/<webhook_token>,pushbullet://<access_token>"
 ```
 
-### Updating notification schedule
+### Updating Notification Schedule
 
 To modify the notification schedule, adjust the `- swarm.cronjob.schedule=0 16 * * *` label in the copied example file.
 This is by default set to run daily at 4 PM UTC. Adjust this to your preferred time, accounting for your
@@ -97,12 +97,20 @@ timezone's UTC offset. Use a resource like [dateful.com](https://dateful.com/tim
 
 The format of the schedule is following the standard [cronjob format](https://en.wikipedia.org/wiki/Cron#Overview).
 
-### Applying notification configuration to the stack
+### Applying Notification Configuration to the Stack
 
 To apply your notification configuration to the stack, rerun the installation script:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/docker-swarm/main/install.sh)"
+```
+
+### Testing Your Notification Configuration
+
+To test your notification configuration, you can manually trigger the notification service by running the following command:
+
+```bash
+~/voi/bin/notification-test
 ```
 
 ## Setting a Custom Telemetry Name
@@ -223,6 +231,14 @@ The `get-node-status` command performs checks using:
 - `goal node status` to connect to the running daemon and retrieve basic node information
 - `/health`: This API endpoint checks the reported health of the node. [REST API /health documentation](https://developer.algorand.org/docs/rest-apis/algod/#get-health).
 - `/ready`: This API endpoint checks the reported readiness of the node and if fully caught up. [REST API /ready documentation](https://developer.algorand.org/docs/rest-apis/algod/#get-ready).
+
+### Testing Notifications
+
+To test notifications execute the following command:
+
+```bash
+~/voi/bin/notification-test
+```
 
 ## Debugging
 
