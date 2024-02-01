@@ -443,7 +443,7 @@ join_as_new_user() {
     display_banner "Welcome to Voi! You are now online!"
   else
     display_banner "Your account ${account_addr} is currently offline."
-    echo "There seems to be an issue with going online. Please seek assistance in the #node-help channel on the Voi Network Discord."
+    echo "There seems to be an issue with going online. Please seek assistance in the #node-runner channel on the Voi Network Discord."
     echo "Join us at: https://discord.com/invite/vnFbrJrHeW"
     abort "Exiting the program."
   fi
@@ -623,7 +623,7 @@ else
     echo "*"
     echo "*    b) Get 1 Voi for free:"
     echo "*       - Go to the Voi Network Discord - https://discord.com/invite/vnFbrJrHeW"
-    echo "*       - Find the #node-runners channel"
+    echo "*       - Open the #voiager-chat channel"
     echo "*       - Type /voi-testnet-faucet ${account_addr}"
     echo "*"
     echo "* After you've done this, type 'completed' to go on"
