@@ -6,7 +6,7 @@
 To operate your node and manage your accounts, you can use the Voi CLI tools. The Voi CLI tools are a set of scripts
 that allow you to manage common blockchain actions. The Voi CLI tools are installed with the Voi Swarm package.
 
-As a participant it's important that you continuously monitor the health of your node, this includes monitoring system
+As a participant, it's important that you continuously monitor the health of your node, this includes monitoring system
 metrics, node health as well as ensuring participation keys are up-to-date.
 
 | Metrics                  | Description                                   | How to Monitor                                                                                                                                       | Feature in Voi Swarm |

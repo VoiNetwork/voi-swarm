@@ -26,7 +26,7 @@ docker inspect voinetwork_algod
 
 ## Testing Notifications
 
-To test notifications execute the following command:
+To test notifications, execute the following command:
 
 ```bash
 ~/voi/bin/notification-test

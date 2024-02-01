@@ -11,7 +11,7 @@ Success criteria for the installation script are:
 > 2. Provide a simple and easy way to onboard new participants.
 > 3. The package should be as cheap as possible to run for individual participants.
 
-To achieve the above the package is an opinionated way to join the network, and may thus not be suitable for
+To achieve this, the package is an opinionated way to join the network, and may thus not be suitable for
 all use cases.
 
 ## Documentation

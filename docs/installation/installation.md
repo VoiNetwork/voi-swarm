@@ -4,7 +4,7 @@
 
 !!! tip
     Start here if you are new to Voi and want to set up a new Voi node.
-    During the process you will be asked for a few details to set up your node, and where we have automated as much as possible.
+    During the process, you will be asked for a few details to set up your node, and where we have automated as much as possible.
 
 To set up a new Voi node, run the following command:
 
@@ -38,7 +38,7 @@ export VOINETWORK_SKIP_WALLET_SETUP=1
     This is an advanced feature and is not required to have telemetry configured.
 
 During installation, you will be prompted to set a custom telemetry name, if however you prefer to set a name through
-the environment you can do so by setting the **VOINETWORK_TELEMETRY_NAME** environment variable to your desired name.
+the environment, you can do so by setting the **VOINETWORK_TELEMETRY_NAME** environment variable to your desired name.
 
 This would typically be done if you are automating the installation process.
 

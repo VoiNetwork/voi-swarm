@@ -12,7 +12,7 @@ Start by copying the example `~/voi/docker/notification.yml.example` file to the
 without the .example extension
 
 ```bash
-cp ~/voi/docker/notification.yml.example ~/voi/docker/notification.yml`
+cp ~/voi/docker/notification.yml.example ~/voi/docker/notification.yml
 ```
 
 ## Adding Your Notification Choices
@@ -22,7 +22,7 @@ environment variable. The notification mechanism can be a webhook, email, push, 
 is available via [Apprise notifications](https://github.com/caronc/apprise?tab=readme-ov-file#supported-notifications)
 
 If you want to use multiple mechanisms, separate them with a comma. For example, to use both Discord and Pushbullet for
-notification, you would set the **NOTIFICATION_URLS** value in the **notification.yml** file  to:
+notification, you would set the **NOTIFICATION_URLS** value in the **notification.yml** file to:
 
 ```yaml
 NOTIFICATION_URLS="discord://<webhook_id>/<webhook_token>,pbul://<access_token>"
@@ -37,7 +37,7 @@ To modify the participation key notification schedule, adjust the labels in the 
 | `swarm.cronjob.schedule` | `0 16 * * *` (default) |
 
 This is by default set to run daily at 4 PM UTC. Adjust this to your preferred time, accounting for your
-timezone's UTC offset. Use a resource like [dateful.com](https://dateful.com/time-zone-converter) for timezone conversion.
+timezones UTC offset. Use a resource like [dateful.com](https://dateful.com/time-zone-converter) for timezone conversion.
 
 The format of the schedule is following the [CRON format](https://pkg.go.dev/github.com/robfig/cron#hdr-CRON_Expression_Format).
 
