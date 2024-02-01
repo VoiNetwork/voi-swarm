@@ -1,0 +1,97 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+site_name: Voi Swarm
+site_description: Create and run a Voi Network Participation Node
+site_url: https://voinetwork.github.io/voi-swarm/
+repo_url: https://github.com/VoiNetwork/voi-swarm
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: en
+  logo: assets/Voi_Logo_White_on_Purple_Background.png
+  favicon: assets/favicon.ico
+  palette:
+    primary: custom
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - content.action.edit
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/VoiNetwork/voi-swarm
+    - icon: fontawesome/brands/discord
+      link: https://discord.com/invite/vnFbrJrHeW
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+    actions:
+      - accept
+      - reject
+      - manage
+  analytics:
+    provider: google
+    property: G-FXJF968XD5
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/emoticon-sad-outline
+          name: This page could be improved
+          data: 0
+          note: >-
+            Thanks for your feedback! Help us improve this page by
+            joining <a href="https://discord.com/invite/vnFbrJrHeW">our Discord</a>.
+
+copyright:
+  <a href="#__consent">Change cookie settings</a>
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+plugins:
+  - search
+  - social
+  - git-revision-date-localized:
+      enabled: true
+      enable_creation_date: true
+  - git-authors
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Installation:
+        - Prerequisites: installation/prerequisites.md
+        - Installation: installation/installation.md
+        - Uninstall: installation/uninstall.md
+  - Updating:
+        - Updating package: updating/swarm-update.md
+        - Telemetry name: updating/telemetry.md
+  - Operating:
+        - Running your node: operating/running-your-node.md
+        - Participation keys: operating/participation-keys.md
+        - Setup notifications: operating/setup-notifications.md
+  - Notification Guides:
+      - Pushbullet: notification-guides/pushbullet.md
+  - CLI Tools: cli-tools.md
+  - Troubleshooting: troubleshooting.md
