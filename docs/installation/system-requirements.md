@@ -7,6 +7,9 @@
 | Debian            | arm64/amd64       |
 | Ubuntu            | arm64/amd64       |
 
+!!! tip
+    Don't have Linux and want to run a node? [Other options are available](../../getting-started/introduction/)
+
 ## Compute Requirements and Recommendations
 
 | Minimum Requirements | Recommended Requirements |

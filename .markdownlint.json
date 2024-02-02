@@ -1,6 +1,6 @@
 {
   "MD013": {
-    "line_length": 256
+    "line_length": 512
   },
   "MD033": {
     "allowed_elements": ["img"]
