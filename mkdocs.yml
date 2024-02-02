@@ -99,5 +99,6 @@ nav:
         - Setup notifications: operating/setup-notifications.md
   - Notification Guides:
       - Pushbullet: notification-guides/pushbullet.md
+  - Provider Guidance: provider-guidance.md
   - CLI Tools: cli-tools.md
   - Troubleshooting: troubleshooting.md
