@@ -81,6 +81,7 @@ extra_css:
 nav:
   - Home: index.md
   - Installation:
+        - System requirements: installation/system-requirements.md
         - Prerequisites: installation/prerequisites.md
         - Installation: installation/installation.md
         - Uninstall: installation/uninstall.md
