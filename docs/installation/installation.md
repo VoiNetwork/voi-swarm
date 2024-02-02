@@ -32,13 +32,14 @@ export VOINETWORK_SKIP_WALLET_SETUP=1
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
 ```
 
-## Setting a Custom Telemetry Name as part of installation (advanced)
+## Setting a Custom Telemetry Name as Part of Installation (advanced)
 
 !!! info
-    This is an advanced feature and is not required to have telemetry configured.
+    This is an advanced feature intended for automation, and is **not required** before telemetry can be used.
 
-During installation, you will be prompted to set a custom telemetry name, if however you prefer to set a name through
-the environment, you can do so by setting the **VOINETWORK_TELEMETRY_NAME** environment variable to your desired name.
+During installation, you will automatically be prompted to set a custom telemetry name if not set already.
+If you prefer to set a name through the environment, you can do so by setting the
+**VOINETWORK_TELEMETRY_NAME** environment variable to your desired name.
 
 This would typically be done if you are automating the installation process.
 
