@@ -14,7 +14,7 @@
 | 4 CPU cores          | 8 CPU cores              |
 | 8 GB RAM             | 16 GB RAM                |
 | 100 GB storage       | 200 GB storage           |
-| 1Mbps network        | 1Gbps network            |
+| 100 Mbps network     | 1 Gbps network           |
 
 !!! note
     The above requirements are based on the assumption that the node will be running on a dedicated machine.
