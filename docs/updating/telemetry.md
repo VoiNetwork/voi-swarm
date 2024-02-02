@@ -5,5 +5,5 @@
 To update your telemetry name after installation, or to opt-out, you can run the following command:
 
 ```bash
-~/voi/bin/update-telemetry-name
+~/voi/bin/set-telemetry-name
 ```
