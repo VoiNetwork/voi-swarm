@@ -62,6 +62,12 @@ execute_docker_command() {
   execute_docker_command_internal "no" "$1"
 }
 
+cleanup_deprecated_files_and_folders() {
+  if [[ -d ${voi_home}/docker-swarm ]]; then
+    rm -rf "${voi_home}/docker-swarm" 2>/dev/null || echo "Failed to delete deprecated folder: ${voi_home}/docker-swarm"
+  fi
+}
+
 start_docker_swarm() {
   local docker_swarm
   docker_swarm=$(execute_sudo 'docker info | grep Swarm | cut -d\  -f3')
@@ -578,6 +584,8 @@ display_banner "Fetching the latest Voi Network updates and scripts."
 curl -L https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/main --output "${voi_home}"/voi-swarm.tar.gz
 tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
 rm "${voi_home}"/voi-swarm.tar.gz
+
+cleanup_deprecated_files_and_folders
 
 start_stack
 
