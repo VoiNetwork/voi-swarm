@@ -42,7 +42,7 @@ You can run a Voi node on a dedicated server, a virtual private server (VPS), or
     we recommend experimenting with a cloud instance if you are familiar with cloud providers, such as AWS, GCP, or Azure.
 
     If you are not familiar with these cloud providers, you can consider a Cloud or VPS provider
-    such as DigitalOcean, Linode, OVHcloud, Hetzner or Vultr - to name a few. We have found that onboarding is
+    such as [DigitalOcean](https://www.digitalocean.com/), [Linode](https://www.linode.com/), [OVHcloud](https://www.ovhcloud.com/), [Hetzner](https://www.hetzner.com/) or [Vultr](https://www.vultr.com/) - to name a few. We have found that onboarding is
     typically very easy and you can get started with just a few clicks.
 
 ### Considerations Before Choosing a Permanent Host
@@ -60,3 +60,11 @@ with larger cloud providers being at the higher end of the scale.
 !!! note
     As a node runner, and to **avoid surprises**, it's important that you are aware of the costs
     and the terms of service of the provider you choose.
+
+### Data Center Location
+
+When choosing a host,
+consider the location of the data center that you will be using
+and whether there is [relay node capacity](https://g.testnet.voi.nodly.io/d/b315a644-1dfa-47cc-ae1e-8cf4f80a72d1/voi-master-dashboard?orgId=1&refresh=10s)
+available nearby in the network.
+Your node will benefit from low latency and high availability if it is located close to a relay node.
