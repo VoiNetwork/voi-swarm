@@ -16,7 +16,9 @@ To set up a new Voi node, run the following command:
 ## Using an Existing Account/Address with Mnemonic
 
 !!! tip inline end
-    For migrating with an existing account or mnemonic to Voi Swarm, follow this option. Post-installation, remember to [update your name and GUID](../../updating/telemetry/#getting-your-telemetry-status) for rewards.
+    For migrating with an existing account or mnemonic to Voi Swarm, follow this option.
+    After installation, [update your name and GUID](../../updating/telemetry/#getting-your-telemetry-status)
+    for health rewards if setting up on a new server.
 
   If you have an existing account/address with a mnemonic that you want to use, set the **VOINETWORK_IMPORT_ACCOUNT**
 environment variable to **1** and run the installation script:
