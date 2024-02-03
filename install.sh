@@ -76,6 +76,8 @@ start_docker_swarm() {
 
     if [[ -n ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS} ]]; then
       command+=" ${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS}"
+    else
+      command+=" --listen-addr lo --advertise-addr 127.0.0.1"
     fi
 
     execute_sudo "$command"
