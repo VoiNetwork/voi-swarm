@@ -1,7 +1,7 @@
 # Keep Your Participation Keys Up-to-Date
 
-To participate in the Voi network, you need to keep your participation key up-to-date. 
-The Participation key is used to sign blocks and participate in the consensus process. 
+To participate in the Voi network, you need to keep your participation key up-to-date.
+The participation key is used to sign blocks and participate in the consensus process.
 If your participation key is not up-to-date, your node will not be able to participate in the consensus process.
 
 To keep your participation key up-to-date, you can run the installation script again. The script will create a new key
