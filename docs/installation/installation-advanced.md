@@ -6,7 +6,7 @@ Most users should use the [standard installation method](./installation.md).
 ## Installing Without Wallet Setup (advanced)
 
 !!! warning
-    For individual wallet control, install Voi without the wallet setup.
+    For separate wallet management, install Voi without the wallet setup.
     This is an advanced feature and not suggested for most users.
     New user setup or importing an existing account is recommended.
 
