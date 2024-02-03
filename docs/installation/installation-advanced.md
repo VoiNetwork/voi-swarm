@@ -6,12 +6,15 @@ Most users should use the [standard installation method](./installation.md).
 ## Installing Without Wallet Setup (advanced)
 
 !!! warning
-    For separate wallet management, install Voi without wallet setup.
-    This advanced feature is not recommended for most users.
-    Instead, opt for new user setup or existing account import.
+    For individual wallet control, install Voi without the wallet setup.
+    This is an advanced feature and not suggested for most users.
+    New user setup or importing an existing account is recommended.
 
-If you want to install without including wallet setup, set the **VOINETWORK_SKIP_WALLET_SETUP** environment variable to
-**1** and run the installation script:
+If you want
+to install Voi without setting up a wallet, and where you manage your keys offline or on
+other systems, use the **VOINETWORK_SKIP_WALLET_SETUP** environment variable.
+
+To skip wallet setup, run the following command:
 
 ```bash
 export VOINETWORK_SKIP_WALLET_SETUP=1
