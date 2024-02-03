@@ -10,7 +10,7 @@
     2. Stop the host-based Voi service
     3. Restart Voi Swarm
 
-    To run this command, you must install Voi Swarm first. Then run the following command:
+    To run this command, you must [install Voi Swarm](../installation/installation/) first. Then run the following command:
 
     ```bash
     ~/voi/bin/migrate-from-d13-setup
@@ -18,7 +18,7 @@
 
 === "Installing on a new server"
 
-    To migrate to a new server, you must first install Voi Swarm on the new server.
+    To migrate to a new server, you must first [install Voi Swarm](../installation/installation/) on the new server.
 
     1. Run the following command on the old server to get the telemetry name and GUID:
 
