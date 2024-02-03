@@ -93,3 +93,25 @@ The `get-node-status` command performs checks using:
 - `goal node status` to connect to the running daemon and retrieve basic node information
 - `/health`: This API endpoint checks the reported health of the node. [REST API /health documentation](https://developer.algorand.org/docs/rest-apis/algod/#get-health).
 - `/ready`: This API endpoint checks the reported readiness of the node and if fully caught up. [REST API /ready documentation](https://developer.algorand.org/docs/rest-apis/algod/#get-ready).
+
+### Set Telemetry Name and GUID
+
+To set telemetry name or to opt-out, execute the following command:
+
+```bash
+~/voi/bin/set-telemetry-name
+```
+
+To set telemetry name and GUID, execute the following command:
+
+```bash
+~/voi/bin/set-telemetry-name <telemetry_name> <telemetry_guid>
+```
+
+### Get Telemetry Status
+
+To get status of your telemetry including enablement, name, and GUID, execute the following command:
+
+```bash
+~/voi/bin/get-telemetry-status
+```
