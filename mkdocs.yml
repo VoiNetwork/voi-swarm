@@ -106,6 +106,6 @@ nav:
   - Notification Guides:
       - Pushbullet: notification-guides/pushbullet.md
   - Provider Guidance: provider-guidance.md
-  - Migrating: migrating.md
+  - Migrating to Voi Swarm: migrating.md
   - CLI Tools: cli-tools.md
   - Troubleshooting: troubleshooting.md
