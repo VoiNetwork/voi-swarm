@@ -17,4 +17,4 @@ repos:
   rev: v0.38.0
   hooks:
       - id: markdownlint-docker
-        args: ["--config", ".markdownlint.json"]
+        args: ["--config", ".markdownlint.json", "--disable", "MD046"]

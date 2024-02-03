@@ -14,6 +14,10 @@ To set up a new Voi node, run the following command:
 
 ## Using an Existing Account/Address with Mnemonic
 
+!!! tip inline end
+    If you are migrating from an existing setup, and want to use the same account/mmenomic with Voi Swarm
+    this is the option for you.
+
 If you have an existing account/address with a mnemonic that you want to use, set the **VOINETWORK_IMPORT_ACCOUNT**
 environment variable to **1** and run the installation script:
 
@@ -21,6 +25,9 @@ environment variable to **1** and run the installation script:
 export VOINETWORK_IMPORT_ACCOUNT=1
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
 ```
+
+???+ info
+    Post-installation steps for migrating from a D13 based setup can be [found here](../migrating.md)
 
 ## Installing Without Wallet Setup
 
