@@ -1,5 +1,6 @@
 # Setting up a new Voi Node
 
+
 ## New to Voi
 
 !!! tip
@@ -15,8 +16,10 @@ To set up a new Voi node, run the following command:
 ## Using an Existing Account/Address with Mnemonic
 
 !!! tip inline end
-    If you are migrating from an existing setup, and want to use the same account/mmenomic with Voi Swarm
+    * If you're migrating from an existing setup and wish to use the same account or mnemonic with Voi Swarm,
     this is the option for you.
+    * If you're interested in [migrating your GUID and telemetry name](../../updating/telemetry/#getting-your-telemetry-status) for the
+    purpose of health rewards, you can do so post-installation.
 
 If you have an existing account/address with a mnemonic that you want to use, set the **VOINETWORK_IMPORT_ACCOUNT**
 environment variable to **1** and run the installation script:
@@ -38,6 +41,8 @@ If you want to install without including wallet setup, set the **VOINETWORK_SKIP
 export VOINETWORK_SKIP_WALLET_SETUP=1
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
 ```
+
+
 
 ## Setting a Custom Telemetry Name as Part of Installation (advanced)
 
