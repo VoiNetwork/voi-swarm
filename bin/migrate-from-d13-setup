@@ -1,0 +1,41 @@
+#!/bin/bash
+is_root=0
+
+execute_sudo() {
+  if [[ ${is_root} -eq 1 ]]; then
+    bash -c "$1"
+  else
+    sudo bash -c "$1"
+  fi
+}
+
+container_id=$(docker ps -q -f name=voinetwork_algod)
+if [ -z "${container_id}" ]; then
+    echo "AVM container is not running. Please start it first."
+    exit 1
+fi
+
+if [[ $(id -u) -eq 0 ]]; then
+  is_root=1
+fi
+
+echo "This script will assist migrating your node from D13 based setups to Voi Swarm, if your node is already running D13 based setup."
+echo "If you are running a D13 based setup on another service follow guidance in the documentation to migrate to Voi Swarm: https://voinetwork.github.io/voi-swarm/"
+echo ""
+if [[ -f /var/lib/algorand/logging.config ]]; then
+  echo "Migrating telemetry configuration"
+  execute_sudo "cp /var/lib/algorand/logging.config /var/lib/voi/algod/data/logging.config"
+  if [[ ${is_root} -eq 0 ]]; then
+    execute_sudo "chgrp docker /var/lib/voi/algod/data/logging.config"
+  fi
+fi
+
+echo "Stopping Voi.service if available"
+execute_sudo "systemctl stop voi"
+execute_sudo "systemctl disable voi"
+echo "If you want to revert to D13 based setup on this host, you can start the service again by running 'systemctl start voi && systemctl enable voi'"
+
+echo "Start Voi Swarm"
+bash -c "env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${HOME}/voi/docker/compose.yml voinetwork"
+
+echo "Changes has been applied to the network. Please wait a minute for the changes to take effect."

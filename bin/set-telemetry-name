@@ -1,10 +1,13 @@
 #!/bin/bash
+is_root=0
 
-container_id=$(docker ps -q -f name=voinetwork_algod)
-if [ -z "${container_id}" ]; then
-    echo "AVM container is not running. Please start it first."
-    exit 1
-fi
+execute_sudo() {
+  if [[ ${is_root} -eq 1 ]]; then
+    bash -c "$1"
+  else
+    sudo bash -c "$1"
+  fi
+}
 
 set_telemetry_name() {
   if [[ -z ${VOINETWORK_TELEMETRY_NAME} ]]; then
@@ -27,8 +30,56 @@ set_telemetry_name() {
   fi
 }
 
-set_telemetry_name
+get_logging_config() {
+  execute_sudo "cat /var/lib/voi/algod/data/logging.config"
+}
 
-bash -c "env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${HOME}/voi/docker/compose.yml voinetwork"
+write_logging_config() {
+  local config_content="$1"
+  local temp_file
+  temp_file=$(mktemp)
 
-echo "Changes has been applied to the network. Please wait a minute for the changes to take effect."
+  echo "${config_content}" > "$temp_file"
+  execute_sudo "mv $temp_file /var/lib/voi/algod/data/logging.config"
+
+  if [[ ${is_root} -eq 0 ]]; then
+    execute_sudo "chgrp docker /var/lib/voi/algod/data/logging.config"
+  fi
+}
+
+update_guid_in_config() {
+  local guid="$1"
+  local logging_config
+  logging_config=$(get_logging_config)
+
+  echo "${logging_config}" | jq --arg guid "${guid}" '.GUID = $guid'
+}
+
+container_id=$(docker ps -q -f name=voinetwork_algod)
+if [ -z "${container_id}" ]; then
+    echo "AVM container is not running. Please start it first."
+    exit 1
+fi
+
+if [[ $(id -u) -eq 0 ]]; then
+  is_root=1
+fi
+
+if [[ $1 && $2 ]]; then
+  telemetry_name="${1//\"}"
+  guid="${2//\"}"
+
+  new_config=$(update_guid_in_config "${guid}")
+  write_logging_config "${new_config}"
+
+  VOINETWORK_TELEMETRY_NAME="${telemetry_name}"
+
+  echo "Telemetry name set to: $telemetry_name, GUID set to: $guid"
+else
+  set_telemetry_name
+fi
+
+echo "${VOINETWORK_TELEMETRY_NAME}"
+bash -c "env VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" docker stack deploy -c ${HOME}/voi/docker/compose.yml voinetwork"
+
+echo "Changes has been applied to the network. Please wait a minute for the changes to take effect. Confirm changes by running 'bin/get-telemetry-status' after a minute."
