@@ -16,7 +16,7 @@
 |----------------------|--------------------------|
 | 4 CPU cores          | 8 CPU cores              |
 | 8 GB RAM             | 16 GB RAM                |
-| 100 GB storage       | 200 GB storage           |
+| 100 GB storage       | 100 GB storage           |
 | 100 Mbps network     | 1 Gbps network           |
 
 !!! note
