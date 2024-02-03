@@ -95,6 +95,7 @@ nav:
         - System requirements: installation/system-requirements.md
         - Prerequisites: installation/prerequisites.md
         - Installation: installation/installation.md
+        - Installation (advanced): installation/installation-advanced.md
         - Uninstall: installation/uninstall.md
   - Updating:
         - Updating package: updating/swarm-update.md

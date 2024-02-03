@@ -534,6 +534,16 @@ if [[ ! (${operating_system_distribution} == "ubuntu" || ${operating_system_dist
   abort "This script is only meant to be run on Debian or Ubuntu."
 fi
 
+if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && -n ${VOINETWORK_IMPORT_ACCOUNT} ]]; then
+  echo "VOINETWORK_IMPORT_ACCOUNT and VOINETWORK_SKIP_WALLET_SETUP are both set. This is not supported at the same time."
+  echo ""
+  echo "To import an existing account, set VOINETWORK_IMPORT_ACCOUNT=1 and unset VOINETWORK_SKIP_WALLET_SETUP."
+  echo ""
+  echo "Your Voi and Via are linked to your account. Wallets are created automatically if needed."
+  echo "Voi Swarm doesn't support wallet import."
+  abort "Exiting the program."
+fi
+
 if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1 ]] || [[ -n $VOINETWORK_HEADLESS_INSTALL ]]; then
   headless_install=1
 fi
