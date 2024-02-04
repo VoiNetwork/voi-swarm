@@ -79,7 +79,6 @@ else
   set_telemetry_name
 fi
 
-echo "${VOINETWORK_TELEMETRY_NAME}"
 bash -c "env VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" docker stack deploy -c ${HOME}/voi/docker/compose.yml voinetwork"
 
 echo "Changes has been applied to the network. Please wait a minute for the changes to take effect. Confirm changes by running 'bin/get-telemetry-status' after a minute."
