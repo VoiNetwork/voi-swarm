@@ -98,7 +98,7 @@ nav:
         - Installation (advanced): installation/installation-advanced.md
         - Uninstall: installation/uninstall.md
   - Updating:
-        - Updating package: updating/swarm-update.md
+        - Updating Voi Swarm: updating/swarm-update.md
         - Telemetry name: updating/telemetry.md
   - Operating:
         - Running your node: operating/running-your-node.md
