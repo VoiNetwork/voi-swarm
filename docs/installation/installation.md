@@ -14,7 +14,7 @@ To set up a new Voi node, run the following command:
 
 ## Using an Existing Account/Address with Mnemonic
 
-For installing with an existing account or mnemonic to Voi Swarm, use this method.
+For installing with an existing account or mnemonic, use this method.
 After installation, [update your name and GUID](../../updating/telemetry/#getting-your-telemetry-status)
 for health rewards if setting up on a new server.
 
