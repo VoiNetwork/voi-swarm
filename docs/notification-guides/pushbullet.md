@@ -43,22 +43,4 @@
     NOTIFICATION_URLS="discord://<webhook_id>/<webhook_token>,pbul://<access_token>"
     ```
 
-## Testing Your Notification Configuration
-
-With your configuration in place it's now time to test it.
-
-First we need to make sure that your changes to notification.yml is picked up by the stack.
-To do this, rerun the installation script:
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
-```
-
-After the script has run and applied changes to the environment we need to send a test notification to make sure
-everything is working as expected.
-
-To do this, run the following command:
-
-```bash
-~/voi/bin/notification-test
-```
+--8<-- "notification-guides/notification-test.md"
