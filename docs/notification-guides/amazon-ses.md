@@ -22,7 +22,7 @@ Familiarity with DNS and Amazon AWS is required, including appropriately securin
 !!! info
     Full configuration options and capabilities are available via [Apprise](https://github.com/caronc/apprise/wiki/Notify_pushbullet)
 
-1. Create an IAM user that has access to SES.
+1. Create an IAM user that has access to SES. The user should have a programmatic access key and secret key.
 2. Attach the [following policy](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/control-user-access.html) to the user:
     ```json
        {
