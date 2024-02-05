@@ -70,6 +70,9 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
   - footnotes
+  - pymdownx.snippets:
+      base_path: "docs"
+      check_paths: true
   - pymdownx.tabbed:
       alternate_style: true
       slugify: !!python/object/apply:pymdownx.slugs.slugify
@@ -105,6 +108,8 @@ nav:
         - Participation keys: operating/participation-keys.md
         - Setup notifications: operating/setup-notifications.md
   - Notification Guides:
+      - Amazon SES: notification-guides/amazon-ses.md
+      - Email: notification-guides/email.md
       - Pushbullet: notification-guides/pushbullet.md
   - Provider Guidance: provider-guidance.md
   - Migrating to Voi Swarm: migrating.md
