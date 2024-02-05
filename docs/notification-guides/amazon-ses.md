@@ -15,7 +15,7 @@ No monthly fees or upfront commitments are required.
 
 ## What To Know Before You Start
 
-Familiarity with DNS and Amazon AWS is required, including appropriately securing your AWS account.
+A solid understanding of DNS and Amazon AWS is required, including knowledge on how to secure your AWS account.
 
 ## Configuring Amazon SES
 
