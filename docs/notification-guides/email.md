@@ -1,7 +1,7 @@
 # Email
 
 !!! info
-Follow guidance on [enabling notifications](../../operating/setup-notifications/) first.
+    Follow guidance on [enabling notifications](../../operating/setup-notifications/) first.
 
 ## What It Is?
 
@@ -26,10 +26,18 @@ have security mechanisms in place that may prevent you from easily sending email
 
 Learn more at [Apprise Notify Email](https://github.com/caronc/apprise/wiki/Notify_email)
 
+### Why Don't You Offer a Free Email Notification Service?
+
+Collecting and storing email addresses, that would be associated with specific Voi accounts
+would require us to comply with data protection laws, which would be a significant burden
+for us to manage.
+The current setup allows you to use your own email provider, and we do not have to manage any personal data.
+
 ## Using Live.com to Send Email
 
-!!! info
+!!! note
       Full configuration options and capabilities are available via [Apprise](https://github.com/caronc/apprise/wiki/Notify_pushbullet)
+        and may be required depending on your email provider and/or SMTP configuration.
 
 1. Create a new email account used only for notifications. This is to ensure that your main email account is not compromised if the notification email account is compromised.
 2. Configure the notification email account to forward emails to your main email account.
