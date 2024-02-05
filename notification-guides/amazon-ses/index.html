@@ -1093,14 +1093,14 @@ No monthly fees or upfront commitments are required.</p>
 <li>Set up Amazon SES for your domain, which includes domain verification and DKIM record setup.
    DKIM verification is automated with Route 53.
 For other DNS providers, manually add the necessary DNS CNAME records for DKIM verification.</li>
-<li>Verify your domain to start sending emails, which can take from minutes and up to 72 hours.</li>
+<li>Verify your domain to start sending emails. This can take from minutes and up to 72 hours.</li>
 <li>
 <p>Copy the example <code>notification.yml.example</code> file to the <code>notification.yml</code> file:</p>
 <div class="highlight"><pre><span></span><code>cp<span class="w"> </span>~/voi/docker/notification.yml.example<span class="w"> </span>~/voi/docker/notification.yml
 </code></pre></div>
 </li>
 <li>
-<p>Update the <strong>NOTIFICATION_URLS</strong> value in <code>notification.yml</code> file with your Email mailto:// link</p>
+<p>Update the <strong>NOTIFICATION_URLS</strong> value in <code>notification.yml</code> file with your ses:// link</p>
 <div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">NOTIFICATION_URLS=&quot;ses://&lt;sender_account&gt;@&lt;sender_domain&gt;/&lt;access_key&gt;/access_secret&gt;/&lt;region&gt;/&lt;recipient_email&gt;/?from=&lt;sender_name&gt;&quot;</span>
 </code></pre></div>
 <p>If the sender name contains whitespaces make sure you substitute them with <code>%20</code> in the <code>from</code> parameter.</p>
