@@ -42,14 +42,14 @@ Familiarity with DNS and Amazon AWS is required, including appropriately securin
 3. Set up Amazon SES for your domain, which includes domain verification and DKIM record setup.
    DKIM verification is automated with Route 53.
 For other DNS providers, manually add the necessary DNS CNAME records for DKIM verification.
-4. Verify your domain to start sending emails, which can take from minutes and up to 72 hours.
+4. Verify your domain to start sending emails. This can take from minutes and up to 72 hours.
 5. Copy the example `notification.yml.example` file to the `notification.yml` file:
 
     ```bash
     cp ~/voi/docker/notification.yml.example ~/voi/docker/notification.yml
     ```
 
-6. Update the **NOTIFICATION_URLS** value in `notification.yml` file with your Email mailto:// link
+6. Update the **NOTIFICATION_URLS** value in `notification.yml` file with your ses:// link
 
     ``` yaml
     NOTIFICATION_URLS="ses://<sender_account>@<sender_domain>/<access_key>/access_secret>/<region>/<recipient_email>/?from=<sender_name>"
