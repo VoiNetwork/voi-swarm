@@ -11,13 +11,11 @@ The Voi CLI tools are installed with the Voi Swarm package.
 As a participant, it's important that you continuously monitor the health of your node, this includes monitoring system
 metrics, node health as well as ensuring participation keys are up-to-date.
 
-| Metrics                  | Description                                   | How to Monitor                                                                                                                                                                                              | Feature in Voi Swarm |
-|--------------------------|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|
-| Compute platform metrics | CPU load, disk usage, network bandwidth, etc. | Use cloud / system monitoring tools, [Voi Checker](https://github.com/crypto-morph/voi-checker)                                                                                                             | :material-minus:     |
-| Node health              | Node status, participation status, etc.       | Use [Voi Checker](https://github.com/crypto-morph/voi-checker), [Voi Proposer Data](https://cswenor.github.io/voi-proposer-data/health.html), [Voi-Node Metrics](https://voi-node-info.boeieruurd.com/)[^1] | :material-minus:     |
-| Participation keys       | Participation key status and expiration       | Use [CLI tools](../cli-tools.md) to check participation status and setup. Voi Swarm offers [notifications on key expiration](../setup-notifications)                                                        | :material-plus:      |
+| Metrics                  | Description                                   | How to Monitor                                                                                                                                                                       | Feature in Voi Swarm |
+|--------------------------|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|
+| Compute platform metrics | CPU load, disk usage, network bandwidth, etc. | Use cloud / system monitoring tools, [Voi Checker](https://github.com/crypto-morph/voi-checker)                                                                                      | :material-minus:     |
+| Node health              | Node status, participation status, etc.       | Use [Voi Checker](https://github.com/crypto-morph/voi-checker), [Voi Proposer Data](https://cswenor.github.io/voi-proposer-data/health.html), [Voi Nodes v2](https://voi-nodes.dev/) | :material-minus:     |
+| Participation keys       | Participation key status and expiration       | Use [CLI tools](../cli-tools.md) to check participation status and setup. Voi Swarm offers [notifications on key expiration](../setup-notifications)                                 | :material-plus:      |
 
 Contributions to improve the health monitoring of the Voi node are welcome.
 Please join the [Voi Network Discord server](https://discord.com/invite/vnFbrJrHeW) to discuss with other community members and contributors. You can also open an issue or a pull request on GitHub.
-
-[^1]: If Voi-Node Metrics doesn't display your node, use Voi Proposer Data. This known issue is being worked on.
