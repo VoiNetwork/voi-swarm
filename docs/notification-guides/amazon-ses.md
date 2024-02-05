@@ -5,7 +5,7 @@
 
 ## What It Is?
 
-[Amazon SES](https://aws.amazon.com/ses/) is a cost-effective email service that offers cost-effective email sending,
+[Amazon SES](https://aws.amazon.com/ses/) is a cost-effective email service that offers email sending,
 at a cost of $0.10 per 1,000 emails.
 No monthly fees or upfront commitments are required.
 
