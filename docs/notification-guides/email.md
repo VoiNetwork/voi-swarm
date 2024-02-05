@@ -36,7 +36,7 @@ The current setup allows you to use your own email provider, and we do not have 
 ## Using Live.com to Send Email
 
 !!! note
-      Full configuration options and capabilities are available via [Apprise](https://github.com/caronc/apprise/wiki/Notify_pushbullet)
+      Full configuration options and capabilities are available via [Apprise](https://github.com/caronc/apprise/wiki/Notify_email)
         and may be required depending on your email provider and/or SMTP configuration.
 
 1. Create a new email account used only for notifications. This is to ensure that your main email account is not compromised if the notification email account is compromised.
