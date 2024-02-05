@@ -1,4 +1,4 @@
-# Email
+# Amazon SES
 
 !!! info
     Follow guidance on [enabling notifications](../../operating/setup-notifications/) first.
