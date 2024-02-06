@@ -547,7 +547,7 @@ detect_existing_host_based_setup() {
 
 migrate_host_based_voi_setup() {
     if [[ ${migrate_host_based_setup} -eq 1 ]]; then
-      display_banner "Migrating from host based setup"
+      display_banner "Migrating from host-based setup"
       VOINETWORK_TELEMETRY_NAME=$(execute_sudo "cat /var/lib/algorand/logging.config" | jq -r '.Name')
       bash -c "env VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" ${voi_home}/bin/migrate-from-host-setup"
     fi
@@ -594,6 +594,7 @@ check_minimum_recommendations() {
     done
   else
     echo "Your system meets the minimum requirements to run Voi Swarm effectively."
+    echo ""
   fi
 }
 
