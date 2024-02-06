@@ -865,9 +865,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#from-d13-based-setups" class="md-nav__link">
+  <a href="#from-host-based-based-setups-including-d13" class="md-nav__link">
     <span class="md-ellipsis">
-      From D13 based setups
+      From host-based based setups (including D13)
     </span>
   </a>
   
@@ -948,9 +948,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#from-d13-based-setups" class="md-nav__link">
+  <a href="#from-host-based-based-setups-including-d13" class="md-nav__link">
     <span class="md-ellipsis">
-      From D13 based setups
+      From host-based based setups (including D13)
     </span>
   </a>
   
@@ -980,7 +980,7 @@
 
 
 <h1 id="migrating-to-voi-swarm">Migrating to Voi Swarm</h1>
-<h2 id="from-d13-based-setups">From D13 based setups</h2>
+<h2 id="from-host-based-based-setups-including-d13">From host-based based setups (including D13)</h2>
 <p>Install Voi Swarm on your server by importing your existing wallet using your mnemonic:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">VOINETWORK_IMPORT_ACCOUNT</span><span class="o">=</span><span class="m">1</span>
 /bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh<span class="k">)</span><span class="s2">&quot;</span>
@@ -988,14 +988,16 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="installing-on-same-server" name="__tabbed_1" type="radio" /><input id="installing-on-a-new-server" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="installing-on-same-server">Installing on same server</label><label for="installing-on-a-new-server">Installing on a new server</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>During the installation, the setup will detect existing D13 based setups on the same host and offer migration automatically.</p>
+<p>During the installation, the setup will detect existing Voi and Algorand based setups on the same host and offer
+migration automatically.</p>
 <p>If you want to migrate manually after installation run this command:</p>
-<div class="highlight"><pre><span></span><code>~/voi/bin/migrate-from-d13-setup
+<div class="highlight"><pre><span></span><code>~/voi/bin/migrate-from-host-setup
 </code></pre></div>
 <p>This command will do the following steps for you:</p>
 <ol>
 <li>Duplicate telemetry settings, including existing telemetry name and GUID, without affecting rewards.</li>
-<li>Stop the host-based Voi service</li>
+<li>Stop the host-based Voi and Algorand services</li>
+<li>Remove the Algorand debian package, to avoid conficts with the Voi Swarm setup</li>
 <li>Restart Voi Swarm</li>
 </ol>
 </div>
