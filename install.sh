@@ -553,6 +553,50 @@ migrate_host_based_voi_setup() {
     fi
 }
 
+check_minimum_recommendations() {
+  if [[ ${headless_install} -eq 1 ]]; then
+    ## Allow headless install to skip telemetry name setup in case people bring their own wallets / use CI
+    return
+  fi
+
+  echo "Checking system requirements.."
+  echo ""
+
+  num_cores=$(lscpu | grep "^CPU(s):" | awk '{print $2}')
+
+  total_memory=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+
+  # Check if the number of cores is less than 4 and less (8 GB * 0.8) memory. Reported memory from
+  # /proc/meminfo prints out accessible memory, not total memory. We use 80% of the total memory as an approximation,
+  # intentionally going too low to allow variability from various cloud providers.
+  if [[ ${num_cores} -lt 4 || ${total_memory} -lt 6710886 ]]; then
+    echo "Voi Swarm recommends at least 4 CPU cores and 8 GB of memory to run effectively."
+    echo "Your system has ${num_cores} CPU cores and $((total_memory / 1024 / 1024)) GB of accessible memory."
+    echo ""
+    echo "If you are unable to meet these requirements, you can still proceed. However, it may not"
+    echo "be as beneficial to the network or to you, as your node won't be able to earn rewards effectively."
+    echo ""
+    echo "If you are running this on a cloud provider, you can consider upgrading your instance to"
+    echo "meet the recommended requirements."
+    echo ""
+    echo "Read more about other options for running a node on:"
+    echo " - https://voinetwork.github.io/voi-swarm/getting-started/introduction/"
+    echo ""
+    echo "Find other ways to contribute to the network by joining the Voi Network Discord:"
+    echo " - https://discord.com/invite/vnFbrJrHeW"
+    echo ""
+    # shellcheck disable=SC2162
+    read -p "Type 'acknowledged' when you're ready to continue: " prompt
+    while [[ ${prompt} != "acknowledged" ]]
+    do
+      # shellcheck disable=SC2162
+      read -p "Type 'acknowledged' to continue: " prompt
+    done
+  else
+    echo "Your system meets the minimum requirements to run Voi Swarm effectively."
+  fi
+}
+
 if [ -z "${BASH_VERSION:-}" ]; then
   abort "Bash is required to interpret this script."
 fi
@@ -589,6 +633,8 @@ if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 
 fi
 
 display_banner "Welcome to Voi Swarm. Let's get started!"
+
+check_minimum_recommendations
 
 get_telemetry_name
 
