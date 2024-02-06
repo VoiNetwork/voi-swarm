@@ -26,4 +26,7 @@ export VOINETWORK_IMPORT_ACCOUNT=1
 ```
 
 ???+ info
-    Post-installation steps for migrating from a D13 based setup can be [found here](../migrating.md)
+    While the installation detects existing D13 based setups on the same host
+    and offers migration automatically,
+    it is important to familiarize yourself with the [migration steps](../../migrating/) in particular
+    if you are [migrating from a different host](../../migrating/#installing-on-a-new-server).

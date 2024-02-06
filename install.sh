@@ -6,6 +6,7 @@ voi_home="${HOME}/voi"
 headless_install=0
 is_root=0
 skip_account_setup=0
+migrate_host_based_setup=0
 
 execute_sudo() {
   if [[ ${is_root} -eq 1 ]]; then
@@ -449,6 +450,11 @@ join_as_new_user() {
 
   account_status=$(execute_docker_command "goal account dump -a ${account_addr}" | jq -r .onl)
 
+  ## This step is late in the process and does require a restart of the service to take effect.
+  ## Container ID from verify_node_running will have to be re-fetched if any use of the node is to be done after this point.
+  ## Intentionally not doing this here to avoid confusion.
+  migrate_host_based_voi_setup
+
   if [[ ${account_status} -eq 1 ]]; then
     display_banner "Welcome to Voi! You are now online!"
   else
@@ -487,6 +493,12 @@ set_telemetry_name() {
     return
   fi
 
+  detect_existing_host_based_voi_setup
+
+  if [[ ${migrate_host_based_setup} -eq 1 ]]; then
+    return
+  fi
+
   display_banner "Telemetry"
 
   if [[ -z ${VOINETWORK_TELEMETRY_NAME} && ! -f "/var/lib/voi/algod/data/logging.config" ]]; then
@@ -511,6 +523,35 @@ set_telemetry_name() {
   else
     echo "Telemetry is disabled. To enable telemetry, execute the command ${HOME}/voi/bin/set-telemetry-name"
   fi
+}
+
+detect_existing_host_based_voi_setup() {
+  if [[ -f /var/lib/algorand/logging.config && ! -f /var/lib/voi/algod/data/logging.config ]]; then
+    echo "An existing Voi installation has been detected on your system."
+    echo "We can migrate your existing telemetry configuration to Voi Swarm."
+    echo "As part of this process, we will also stop the existing service."
+    echo "This is necessary to prevent conflicts and ensure that your node can join Voi Swarm as a healthy node."
+    echo ""
+    echo "Do you want to migrate your existing setup to Voi Swarm? (yes/no)"
+    # shellcheck disable=SC2162
+    read -p "Migrate existing setup: " prompt
+    while [[ ${prompt} != "yes" && ${prompt} != "no" ]]
+      do
+      # shellcheck disable=SC2162
+        read -p "Type either yes or no: " prompt
+    done
+    if [[ ${prompt} == "yes" ]]; then
+      migrate_host_based_setup=1
+    fi
+  fi
+}
+
+migrate_host_based_voi_setup() {
+    if [[ ${migrate_host_based_setup} -eq 1 ]]; then
+      display_banner "Migrating from host based setup"
+      VOINETWORK_TELEMETRY_NAME=$(execute_sudo "cat /var/lib/algorand/logging.config" | jq -r '.Name')
+      bash -c "env VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" ${voi_home}/bin/migrate-from-d13-setup"
+    fi
 }
 
 if [ -z "${BASH_VERSION:-}" ]; then
@@ -547,6 +588,8 @@ fi
 if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1 ]] || [[ -n $VOINETWORK_HEADLESS_INSTALL ]]; then
   headless_install=1
 fi
+
+display_banner "Welcome to Voi Swarm. Let's get started!"
 
 get_telemetry_name
 
@@ -668,6 +711,8 @@ if [[ ${skip_account_setup} -eq 0 ]]; then
   join_as_new_user
 else
   generate_participation_key
+
+  migrate_host_based_voi_setup
 
   display_banner "Welcome to Voi!"
 
