@@ -11,10 +11,9 @@ export VOINETWORK_IMPORT_ACCOUNT=1
 
 === "Installing on same server"
 
-    To migrate your setup on an existing server you must first install Voi Swarn on your server using the
-    [installation instructions](../installation/installation/#using-an-existing-accountaddress-with-mnemonic), after this
-    you can migrate your existing setup by running this command:
+    During the installation, the setup will detect existing D13 based setups on the same host and offer migration automatically.
 
+    If you want to migrate manually after installation run this command:
 
     ```bash
     ~/voi/bin/migrate-from-d13-setup
