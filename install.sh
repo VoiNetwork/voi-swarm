@@ -108,10 +108,11 @@ start_stack() {
   fi
 }
 
+# shellcheck disable=SC2120
 wait_for_stack_to_be_ready() {
   while true; do
-    service_info=$(execute_sudo 'docker stack ps voinetwork --format json' | grep 'voinetwork_algod')
-    service_running=false
+    service_info=$(execute_sudo 'docker stack ps voinetwork --format json')
+    stack_ready=true
 
     while read -r line; do
       current_state=$(echo "${line}" | jq -r '.CurrentState')
@@ -119,36 +120,34 @@ wait_for_stack_to_be_ready() {
 
       service_error=$(echo "${line}" | jq -r '.Error')
 
-      if [[ ${current_state} == Running* ]] && [[ ${desired_state} == "Running" ]]; then
-        service_running=true
-        break
-      fi
-
-      if [[ ${service_error} != "" ]]; then
+      if [[ (${desired_state} == "Ready" || ${desired_state} == "Running") && ${current_state} != Running* ]]; then
+        stack_ready=false
         break
       fi
     done < <(echo "${service_info}")
 
-    if [[ ${service_running} == true ]]; then
-      break
-    elif [[ ${service_error} == "network sandbox join failed: subnet sandbox"* ]]; then
+    if [[ ${stack_ready} == false && -n ${service_error} ]]; then
       local number_of_interfaces
       number_of_interfaces=$(execute_sudo "ip -d link show | grep vx | wc -l")
-      if [[ number_of_interfaces -eq 1 ]]; then
+      if [[ number_of_interfaces -le 2 ]]; then
         echo "Docker has a network interface that is lingering and preventing startup. We'll attempt to auto-delete it."
-        execute_sudo "ip -d link show | grep vx | grep DOWN | xargs -rn1 ip link delete"
+        execute_sudo "ip -d link show | grep vx | grep DOWN | awk '{print $2}' | tr -d ':' | xargs -rn1 ip link delete"
         # shellcheck disable=SC2181
         if [[ $? -ne 0 ]]; then
           echo "Docker swarm is unable to start services. https://github.com/moby/libnetwork/issues/1765"
           abort "Exiting the program."
         fi
-      elif [[ number_of_interfaces -gt 1 ]]; then
+      elif [[ number_of_interfaces -ge 3 ]]; then
         echo "Docker swarm is unable to start services. https://github.com/moby/libnetwork/issues/1765"
         abort "Multiple vx interfaces found. Please delete all vx interfaces or reboot the server"
       fi
-    else
-      echo "Waiting for stack to be ready..."
-      sleep 2
+    fi
+
+    echo "Waiting for stack to be ready..."
+    sleep 2
+
+    if [[ ${stack_ready} == true ]]; then
+      break
     fi
   done
 
@@ -162,7 +161,7 @@ verify_node_is_running() {
   while [[ $retries -lt $max_retries ]]; do
     container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
     if [[ -n "$container_id" ]]; then
-      execute_sudo "docker exec -e account_addr=${account_addr} ${container_id} bash -c \"goal node status\""
+      execute_sudo "docker exec ${container_id} bash -c \"curl -sS http://localhost:8080/health > /dev/null\""
       local exit_code=$?
       if [[ $exit_code -eq 0 ]]; then
         break
