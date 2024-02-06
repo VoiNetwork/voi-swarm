@@ -26,7 +26,7 @@ export VOINETWORK_IMPORT_ACCOUNT=1
 ```
 
 ???+ info
-    While the installation detects existing D13 based setups on the same host
+    While the installation detects existing host-based setups (such as D13) on the same host
     and offers migration automatically,
     it is important to familiarize yourself with the [migration steps](../../migrating/) in particular
     if you are [migrating from a different host](../../migrating/#installing-on-a-new-server).

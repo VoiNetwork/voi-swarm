@@ -492,7 +492,7 @@ set_telemetry_name() {
     return
   fi
 
-  detect_existing_host_based_voi_setup
+  detect_existing_host_based_setup
 
   if [[ ${migrate_host_based_setup} -eq 1 ]]; then
     return
@@ -524,11 +524,11 @@ set_telemetry_name() {
   fi
 }
 
-detect_existing_host_based_voi_setup() {
+detect_existing_host_based_setup() {
   if [[ -f /var/lib/algorand/logging.config && ! -f /var/lib/voi/algod/data/logging.config ]]; then
-    echo "An existing Voi installation has been detected on your system."
+    echo "An existing Voi or Algorand installation has been detected on your system."
     echo "We can migrate your existing telemetry configuration to Voi Swarm."
-    echo "As part of this process, we will also stop the existing service."
+    echo "As part of this process, we will also stop and uninstall the existing service."
     echo "This is necessary to prevent conflicts and ensure that your node can join Voi Swarm as a healthy node."
     echo ""
     echo "Do you want to migrate your existing setup to Voi Swarm? (yes/no)"
@@ -549,7 +549,7 @@ migrate_host_based_voi_setup() {
     if [[ ${migrate_host_based_setup} -eq 1 ]]; then
       display_banner "Migrating from host based setup"
       VOINETWORK_TELEMETRY_NAME=$(execute_sudo "cat /var/lib/algorand/logging.config" | jq -r '.Name')
-      bash -c "env VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" ${voi_home}/bin/migrate-from-d13-setup"
+      bash -c "env VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" ${voi_home}/bin/migrate-from-host-setup"
     fi
 }
 

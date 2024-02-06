@@ -1,6 +1,6 @@
 # Migrating to Voi Swarm
 
-## From D13 based setups
+## From host-based based setups (including D13)
 
 Install Voi Swarm on your server by importing your existing wallet using your mnemonic:
 
@@ -11,18 +11,20 @@ export VOINETWORK_IMPORT_ACCOUNT=1
 
 === "Installing on same server"
 
-    During the installation, the setup will detect existing D13 based setups on the same host and offer migration automatically.
+    During the installation, the setup will detect existing Voi and Algorand based setups on the same host and offer
+    migration automatically.
 
     If you want to migrate manually after installation run this command:
 
     ```bash
-    ~/voi/bin/migrate-from-d13-setup
+    ~/voi/bin/migrate-from-host-setup
     ```
 
     This command will do the following steps for you:
 
     1. Duplicate telemetry settings, including existing telemetry name and GUID, without affecting rewards.
-    2. Stop the host-based Voi service
+    2. Stop the host-based Voi and Algorand services
+    3. Remove the Algorand debian package, to avoid conficts with the Voi Swarm setup
     3. Restart Voi Swarm
 
 === "Installing on a new server"

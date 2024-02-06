@@ -19,8 +19,7 @@ if [[ $(id -u) -eq 0 ]]; then
   is_root=1
 fi
 
-echo "This script will assist migrating your node from D13 based setups to Voi Swarm, if your node is already running D13 based setup."
-echo "If you are running a D13 based setup on another service follow guidance in the documentation to migrate to Voi Swarm: https://voinetwork.github.io/voi-swarm/"
+echo "This script will assist migrating your node from a host-based setups to Voi Swarm, if your node is already running a Voi or Algorand based setup."
 echo ""
 if [[ -f /var/lib/algorand/logging.config ]]; then
   echo "Migrating telemetry configuration"
@@ -30,10 +29,12 @@ if [[ -f /var/lib/algorand/logging.config ]]; then
   fi
 fi
 
-echo "Stopping Voi.service if available"
+echo "Stopping services and uninstalling previous installation"
 execute_sudo "systemctl stop voi"
 execute_sudo "systemctl disable voi"
-echo "If you want to revert to D13 based setup on this host, you can start the service again by running 'systemctl start voi && systemctl enable voi'"
+execute_sudo "systemctl disable algorand"
+execute_sudo "systemctl disable algorand"
+execute_sudo "apt-get remove -y algorand"
 
 echo "Start Voi Swarm"
 bash -c "env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${HOME}/voi/docker/compose.yml voinetwork"
