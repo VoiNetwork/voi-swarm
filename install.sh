@@ -8,6 +8,9 @@ is_root=0
 skip_account_setup=0
 migrate_host_based_setup=0
 
+bold=$(tput bold)
+normal=$(tput sgr0)
+
 execute_sudo() {
   if [[ ${is_root} -eq 1 ]]; then
     bash -c "$1"
@@ -553,7 +556,7 @@ migrate_host_based_voi_setup() {
     fi
 }
 
-check_minimum_recommendations() {
+check_minimum_requirements() {
   if [[ ${headless_install} -eq 1 ]]; then
     ## Allow headless install to skip telemetry name setup in case people bring their own wallets / use CI
     return
@@ -570,23 +573,31 @@ check_minimum_recommendations() {
   # /proc/meminfo prints out accessible memory, not total memory. We use 80% of the total memory as an approximation,
   # intentionally going too low to allow variability from various cloud providers.
   if [[ ${num_cores} -lt 4 || ${total_memory} -lt 6710886 ]]; then
-    echo "Voi Swarm recommends at least 4 CPU cores and 8 GB of memory to run effectively."
-    echo "Your system has ${num_cores} CPU cores and $((total_memory / 1024 / 1024)) GB of accessible memory."
-    echo ""
-    echo "If you are unable to meet these requirements, you can still proceed. However, it may not"
-    echo "be as beneficial to the network or to you, as your node won't be able to earn rewards effectively."
-    echo ""
-    echo "If you are running this on a cloud provider, you can consider upgrading your instance to"
-    echo "meet the recommended requirements."
-    echo ""
-    echo "Read more about other options for running a node on:"
-    echo " - https://voinetwork.github.io/voi-swarm/getting-started/introduction/"
-    echo ""
-    echo "Find other ways to contribute to the network by joining the Voi Network Discord:"
-    echo " - https://discord.com/invite/vnFbrJrHeW"
-    echo ""
+    echo "*************************************************************************************"
+    echo "* ${bold}WARNING: Your system does not meet the minimum requirements to run Voi Swarm effectively.${normal}"
+    echo "*************************************************************************************"
+    echo "*"
+    echo "* Voi Swarm requires at least 4 CPU cores and 8 GB of memory to run effectively."
+    echo "*"
+    echo "* Your system has:"
+    echo "* - CPU cores: ${bold}${num_cores}${normal} CPU cores. ${bold}4${normal} is required."
+    echo "* - Memory: ${bold}$((total_memory / 1024 / 1024))${normal} GB of accessible memory. ${bold}8${normal} GB is required."
+    echo "*"
+    echo "* You can still proceed, however, it may not be as beneficial to the network or to you,"
+    echo "* as your node won't be able to contribute or earn rewards effectively."
+    echo "* You should ${bold}expect poor performance${normal}, and the community may ${bold}not be able to help${normal} you with issues."
+    echo "* "
+    echo "* If you are running this on a cloud provider, you should consider upgrading your instance to"
+    echo "* meet the requirements."
+    echo "* "
+    echo "* Read more about other options for running a node on:"
+    echo "* - https://voinetwork.github.io/voi-swarm/getting-started/introduction/"
+    echo "*"
+    echo "* Find other ways to contribute to the network by joining the Voi Network Discord:"
+    echo "* - https://discord.com/invite/vnFbrJrHeW"
+    echo "*"
     # shellcheck disable=SC2162
-    read -p "Type 'acknowledged' when you're ready to continue: " prompt
+    read -p "Type '${bold}acknowledged${normal}' when you're ready to continue: " prompt
     while [[ ${prompt} != "acknowledged" ]]
     do
       # shellcheck disable=SC2162
@@ -633,9 +644,9 @@ if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 
   headless_install=1
 fi
 
-display_banner "Welcome to Voi Swarm. Let's get started!"
+display_banner "${bold}Welcome to Voi Swarm${normal}. Let's get started!"
 
-check_minimum_recommendations
+check_minimum_requirements
 
 get_telemetry_name
 
