@@ -1,4 +1,4 @@
-# Home
+# Voi Swarm
 
 <img src="assets/Voi_Logo_Purple_on_White_Background.png" alt="swarm-cronjob" width="128px" style="display: block; margin-left: auto; margin-right: auto"/>
 
