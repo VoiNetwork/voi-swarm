@@ -506,7 +506,8 @@ set_telemetry_name() {
   if [[ -z ${VOINETWORK_TELEMETRY_NAME} && ! -f "/var/lib/voi/algod/data/logging.config" ]]; then
     echo "Voi uses telemetry to make the network better and reward users with Voi if participating."
     echo ""
-    echo "Type your telemetry name below. We'll add 'VOI:' at the start to show you're using this package."
+    echo "If you wish to opt-in to telemetry sharing, you can provide a telemetry name below."
+    echo "We'll add 'VOI:' at the start to show you're using this package."
     echo ""
     echo "To use a custom name, set the VOINETWORK_TELEMETRY_NAME variable before running this script."
     echo "Example: export VOINETWORK_TELEMETRY_NAME='my_custom_name'"
