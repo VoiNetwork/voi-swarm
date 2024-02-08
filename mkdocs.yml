@@ -81,17 +81,21 @@ markdown_extensions:
 
 plugins:
   - search
-  - social
+  - social:
+      cards_layout: default/variant
+      cards_layout_options:
+        background_color: "#702AE2"
   - git-revision-date-localized:
       enabled: true
       enable_creation_date: true
   - git-authors
+  - privacy
 
 extra_css:
   - stylesheets/extra.css
 
 nav:
-  - Home: index.md
+  - Voi Swarm: index.md
   - Getting Started:
         - Introduction: getting-started/introduction.md
   - Installation:
