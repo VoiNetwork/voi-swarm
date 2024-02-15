@@ -509,12 +509,14 @@ set_telemetry_name() {
     echo "If you wish to opt-in to telemetry sharing, you can provide a telemetry name below."
     echo "We'll add 'VOI:' at the start to show you're using this package."
     echo ""
+    echo "To skip telemetry sharing, type 'opt-out' below."
+    echo ""
     echo "Visit https://voinetwork.github.io/voi-swarm/getting-started/telemetry/ to learn how to set your own custom name."
     echo ""
-    echo "To skip telemetry sharing, type 'continue' below."
+    echo "Enter your telemetry name below to get started."
     # shellcheck disable=SC2162
     read -p "Telemetry name: " VOINETWORK_TELEMETRY_NAME
-    if [[ ${VOINETWORK_TELEMETRY_NAME} == "continue" ]]; then
+    if [[ ${VOINETWORK_TELEMETRY_NAME} == "opt-out" ]]; then
       unset VOINETWORK_TELEMETRY_NAME
       return
     else
