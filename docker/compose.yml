@@ -30,7 +30,7 @@ services:
         condition: none
       labels:
         - swarm.cronjob.enable=true
-        - swarm.cronjob.schedule=0 16 * * *
+        - swarm.cronjob.schedule=0 */4 * * *
         - swarm.cronjob.skip-running=true
       placement:
         constraints:
