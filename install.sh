@@ -628,7 +628,7 @@ else
 fi
 
 if uname -r | grep -q "Microsoft"; then
-  abort "WSL 1 is not supported. Please run this script on a native Linux installation or WSL 2."
+  abort "WSL 1 is not supported. Please run this script on a native Linux installation (best) or WSL 2 (experimental)."
 fi
 
 if [[ ! (${operating_system_distribution} == "ubuntu" || ${operating_system_distribution} == "debian") ]]; then
