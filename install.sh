@@ -418,9 +418,9 @@ joined_network_instructions() {
   echo ""
   if [[ ${skip_account_setup} -eq 1 ]]; then
     if [[ -z ${account_addr} ]]; then
-      echo "No new account was created because your wallet already has multiple accounts."
+      echo "Account setup skipped. Multiple accounts detected in your wallet."
     else
-      echo "No new account was created because you already have an account with the address: ${account_addr}"
+      echo "Account setup skipped. Detected existing account with address: ${account_addr}"
     fi
 
     echo ""
