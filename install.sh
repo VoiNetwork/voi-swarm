@@ -420,7 +420,7 @@ joined_network_instructions() {
     if [[ -z ${account_addr} ]]; then
       echo "No new account was created because your wallet already has multiple accounts."
     else
-      echo "No new account was made because you already have an account with the address: ${account_addr}"
+      echo "No new account was created because you already have an account with the address: ${account_addr}"
     fi
 
     echo ""
