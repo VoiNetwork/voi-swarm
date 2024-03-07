@@ -412,8 +412,10 @@ joined_network_instructions() {
   fi
 
   echo ""
-  echo "For a list of useful commands, check out:"
-  echo " - Install README.md: https://github.com/VoiNetwork/voi-swarm/blob/main/README.md"
+  echo "For useful information, check out:"
+  echo " - Voi Swarm documentation: https://voinetwork.github.io/voi-swarm/"
+  echo " - Get notified when to renew participation keys: https://voinetwork.github.io/voi-swarm/operating/setup-notifications/"
+  echo " - Voi Swarm CLI Tools: https://voinetwork.github.io/voi-swarm/cli-tools/"
   echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
   echo ""
   if [[ ${skip_account_setup} -eq 1 ]]; then
