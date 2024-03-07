@@ -627,9 +627,8 @@ else
   abort "This script is only meant to be run on Debian or Ubuntu."
 fi
 
-# Check if running on WSL 1 or WSL 2
-if grep -qE "(Microsoft|WSL)" /proc/version &> /dev/null ; then
-  abort "WSL is not supported. Please run this script on a native Linux installation."
+if uname -r | grep -q "Microsoft"; then
+  abort "WSL 1 is not supported. Please run this script on a native Linux installation or WSL 2."
 fi
 
 if [[ ! (${operating_system_distribution} == "ubuntu" || ${operating_system_distribution} == "debian") ]]; then
