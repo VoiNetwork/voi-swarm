@@ -6,7 +6,7 @@ Install Voi Swarm on your server by importing your existing wallet using your mn
 
 ```bash
 export VOINETWORK_IMPORT_ACCOUNT=1
-/bin/bash -c "$(curl -fsSL https://get.voi.network/install)"
+/bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
 === "Installing on same server"

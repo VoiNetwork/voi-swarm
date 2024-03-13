@@ -46,7 +46,7 @@ The format of the schedule is following the [CRON format](https://pkg.go.dev/git
 To apply your notification configuration to the stack, rerun the installation script:
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://get.voi.network/install)"
+/bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
 ## Testing Your Notification Configuration
