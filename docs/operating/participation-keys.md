@@ -8,7 +8,7 @@ To keep your participation key up-to-date, you can run the installation script a
 if your current key is expected to expire within the next 14 days.
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://get.voi.network/install)"
 ```
 
 !!! tip

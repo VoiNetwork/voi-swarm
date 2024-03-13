@@ -18,7 +18,7 @@ To skip wallet setup, run the following command:
 
 ```bash
 export VOINETWORK_SKIP_WALLET_SETUP=1
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://get.voi.network/install)"
 ```
 
 ## Setting a Custom Telemetry Name as Part of Installation (advanced)
@@ -34,7 +34,7 @@ This would typically be done if you are automating the installation process.
 
 ```bash
 export VOINETWORK_TELEMETRY_NAME="my_custom_telemetry_name"
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://get.voi.network/install)"
 ```
 
 A custom telemetry name can be combined with other environment variables.

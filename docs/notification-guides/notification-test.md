@@ -6,7 +6,7 @@ First, we need to make sure that Voi Swarm picks up your changes to notification
 To do this, rerun the installation script:
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://get.voi.network/install)"
 ```
 
 After the script has run and applied changes to the environment, we need to send a test notification to make sure

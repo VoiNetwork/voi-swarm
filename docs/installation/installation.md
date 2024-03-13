@@ -9,7 +9,7 @@ and where we have automated as much as possible.
 To set up a new Voi node, run the following command:
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://get.voi.network/install)"
 ```
 
 ## Using an Existing Account/Address with Mnemonic
@@ -22,7 +22,7 @@ To import your account and set up a new Voi node, run the following command:
 
 ```bash
 export VOINETWORK_IMPORT_ACCOUNT=1
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/VoiNetwork/voi-swarm/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://get.voi.network/install)"
 ```
 
 ???+ info
