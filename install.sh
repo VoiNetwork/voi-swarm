@@ -416,7 +416,6 @@ joined_network_instructions() {
   echo " - Voi Swarm documentation: https://voinetwork.github.io/voi-swarm/"
   echo " - Get notified when to renew participation keys: https://voinetwork.github.io/voi-swarm/operating/setup-notifications/"
   echo " - Voi Swarm CLI Tools: https://voinetwork.github.io/voi-swarm/cli-tools/"
-  echo " - Docker Swarm documentation: https://docs.docker.com/engine/swarm/"
   echo ""
   if [[ ${skip_account_setup} -eq 1 ]]; then
     if [[ -z ${account_addr} ]]; then
@@ -461,6 +460,7 @@ join_as_new_user() {
 
   if [[ ${account_status} -eq 1 ]]; then
     display_banner "Welcome to Voi! You are now online!"
+    joined_network_instructions
   else
     display_banner "Your account ${account_addr} is currently offline."
     echo "There seems to be an issue with going online. Please seek assistance in the #node-runner channel on the Voi Network Discord."
@@ -468,7 +468,7 @@ join_as_new_user() {
     abort "Exiting the program."
   fi
 
-  echo "PLEASE SAVE THIS INFORMATION SAFELY"
+  echo "SAVE THIS INFORMATION SECURELY"
   echo "***********************************"
   echo "Your Voi address: ${account_addr}"
   echo "Enter password to get your Voi account recovery mnemonic. Store your mnemonic safely:"
