@@ -6,4 +6,6 @@ if [ -z "${container_id}" ]; then
     exit 1
 fi
 
+echo "Executing Voi 'goal' wrapper from $(readlink -f "$0")"
+echo "---"
 docker exec -it "${container_id}" bash -c "goal $*"
