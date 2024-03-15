@@ -80,19 +80,30 @@ Open a bash shell in the AVM container with the following command:
 ~/voi/bin/start-shell
 ```
 
-### Getting Basic Node Health
+### Getting Node Health
 
-To retrieve basic health information about your node, execute the following command:
+To retrieve health information about your node, execute the following command:
 
 ```bash
 ~/voi/bin/get-node-status
 ```
 
-The `get-node-status` command performs checks using:
+The `get-node-status` command prints out the following information
 
-- `goal node status` to connect to the running daemon and retrieve basic node information
-- `/health`: This API endpoint checks the reported health of the node. [REST API /health documentation](https://developer.algorand.org/docs/rest-apis/algod/#get-health).
-- `/ready`: This API endpoint checks the reported readiness of the node and if fully caught up. [REST API /ready documentation](https://developer.algorand.org/docs/rest-apis/algod/#get-ready).
+- Running Voi Swarm image identifier
+- AVM version
+- Node health status
+    - High-level service status
+    - Health status and if service is running
+    - If the node is fully caught up with the chain
+- Account status
+    - Address
+    - Balance
+    - Participation key status
+- Telemetry status
+    - Enablement
+    - Name
+    - Short GUID
 
 ### Set Telemetry Name and GUID
 

@@ -12,10 +12,14 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 
 execute_sudo() {
-  if [[ ${is_root} -eq 1 ]]; then
-    bash -c "$1"
+  if sudo -v &> /dev/null; then
+    if [[ $(id -u) -eq 0 ]]; then
+      bash -c "$1"
+    else
+      sudo bash -c "$1"
+    fi
   else
-    sudo bash -c "$1"
+    abort "Your user does not have sudo privileges. Exiting the program."
   fi
 }
 
