@@ -7,6 +7,8 @@ headless_install=0
 is_root=0
 skip_account_setup=0
 migrate_host_based_setup=0
+kmd_token=""
+wallet_password=""
 
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -229,12 +231,43 @@ catchup_node() {
   display_banner "Caught up with the network!"
 }
 
+ask_for_password() {
+  local password
+  local password_repeat
+  while true; do
+    # shellcheck disable=SC2162
+    read -sp "Password: " password
+    echo
+    # shellcheck disable=SC2162
+    read -sp "Repeat password: " password_repeat
+    echo
+    if [[ ${password} == "${password_repeat}" ]]; then
+      wallet_password=${password}
+      break
+    else
+      # shellcheck disable=SC2028
+      echo -e "\n"
+      echo "Passwords do not match. Please try again."
+    fi
+  done
+}
+
 create_wallet() {
   if [[ $(execute_docker_command "goal wallet list | wc -l") -eq 1 ]]; then
     echo "Let's create a new wallet for you. Please provide a password for security."
-    echo "Seeing the wallet's mnemonic is optional. Any Voi will be linked with the account we'll create or import after wallet creation."
 
-    execute_interactive_docker_command "goal wallet new voi"
+    get_kmd_token
+
+    ask_for_password
+
+read -r -d '' json_data <<EOF
+{\"wallet_name\": \"voi\",\"wallet_driver_name\": \"sqlite\", \"wallet_password\": \"${wallet_password}\"}
+EOF
+
+    response_code=$(execute_docker_command "curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H 'X-KMD-API-Token: ${kmd_token}' -d '${json_data}' http://localhost:7833/v1/wallet")
+    if [[ response_code -ne 200 ]]; then
+      abort "Error creating wallet. Exiting the program."
+    fi
   else
     echo "Wallet already exists. Skipping wallet creation."
   fi
@@ -260,7 +293,7 @@ get_account_info() {
   allow_one_account=$1
 
   if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voitest-v1/accountList.json"'; then
-    abort "Account list not found. Exiting the program."
+    return 0
   fi
 
   accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
@@ -386,6 +419,14 @@ generate_participation_key() {
     echo "This is above the required threshold of 417,104 blocks / ~14 days."
     echo "No new participation key will be generated."
   fi
+}
+
+start_kmd() {
+  execute_docker_command "goal kmd start -t 600"
+}
+
+get_kmd_token() {
+  kmd_token=$(execute_docker_command "cat /algod/data/kmd-v0.5/kmd.token")
 }
 
 display_banner() {
@@ -707,7 +748,7 @@ fi
 mkdir -p "${voi_home}"
 
 display_banner "Fetching the latest Voi Network updates and scripts."
-curl -L https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/main --output "${voi_home}"/voi-swarm.tar.gz
+curl -sSL https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/main --output "${voi_home}"/voi-swarm.tar.gz
 tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
 rm "${voi_home}"/voi-swarm.tar.gz
 
@@ -727,12 +768,13 @@ if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 
   exit 0
 fi
 
+start_kmd
+
 display_banner "Initiating setup for Voi wallets and accounts."
 
 create_wallet
 
 if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; then
-
   if ! (check_if_account_exists true); then
     echo "An account already exists. No need to import, skipping this step."
   else
