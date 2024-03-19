@@ -102,7 +102,13 @@ start_docker_swarm() {
 }
 
 start_stack() {
-  command="env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${voi_home}/docker/compose.yml"
+  docker_file="${voi_home}/docker/compose.yml"
+
+  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+    echo "Starting relay node stack"
+    docker_file="${voi_home}/docker/relay.yml"
+  fi
+  command="env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${docker_file}"
 
   if [[ -f "${voi_home}/docker/notification.yml" ]]; then
       command+=" -c ${voi_home}/docker/notification.yml"
@@ -444,7 +450,13 @@ docker_swarm_instructions() {
   echo "To fix this, set VOINETWORK_DOCKER_SWARM_INIT_SETTINGS to the settings you want to use to initialize Docker Swarm and try again."
   echo "Parameters that can be passed to the swarm can be found at: https://docs.docker.com/engine/reference/commandline/swarm_init/"
   echo ""
-  echo "Join #node-resources on Discord (https://discord.com/invite/vnFbrJrHeW) to engage with the community and get help."
+  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+    echo "Troubleshoot on your own, and after troubleshooting join #relay-runners on Discord (https://discord.com/invite/vnFbrJrHeW) to engage with the community and get help."
+    echo "It's crucial to have a strong grasp of technical details, including the ability to execute commands directly on the server, and access and understand cloud resources and logs. Being self-sufficient and having the ability to debug issues independently are key skills for managing this setup."
+    echo "If this is not for you, consider other means to engage with the community and contribute."
+  else
+    echo "Join #node-resources on Discord (https://discord.com/invite/vnFbrJrHeW) to engage with the community and get help by using the Discord ((https://discord.com/invite/vnFbrJrHeW))."
+  fi
   abort "Exiting the program."
 }
 
@@ -469,8 +481,7 @@ joined_network_instructions() {
       echo "Account setup skipped. Detected existing account with address: ${account_addr}"
     fi
 
-    echo ""
-    echo "To see network participation status use ${HOME}/voi/bin/get-node-status"
+    echo "To see network participation status use ${HOME}/voi/bin/get-participation-status ${account_addr}"
     echo "To go online use ${HOME}/voi/bin/go-online ${account_addr}"
   fi
 
@@ -478,6 +489,18 @@ joined_network_instructions() {
   if [[ $1 == "true" ]]; then
     echo ""
     echo "The network is now catching up and will continue to do so in the background."
+  fi
+
+  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+    echo ""
+    display_banner "Relay node setup"
+    echo "Due to the nature of relay nodes, you will not be able to participate in the network on this server."
+    echo ""
+    echo "Few things to be mindful of:"
+    echo " - The relay node will automatically update and restart the services when new versions are available."
+    echo " - Utility commands are available in ${voi_home}/bin, however any that assumes participation will not work."
+    echo " - It is your responsibility to monitor the server and ensure it is running smoothly."
+    echo " - You're responsible for server security, maintenance, updates, access controls, and monitoring."
   fi
 
   echo ""
@@ -622,6 +645,16 @@ check_minimum_requirements() {
     return
   fi
 
+  minimum_cpus=4
+  minimum_memory_bytes=6710886
+  minimum_memory_gigabytes_pretty=8
+
+  if [[ -n ${VOINETWORK_PROFILE} && ${VOINETWORK_PROFILE} == "relay" ]]; then
+    minimum_cpus=8
+    minimum_memory_bytes=15938355
+    minimum_memory_gigabytes_pretty=16
+  fi
+
   echo "Checking system requirements.."
   echo ""
 
@@ -632,7 +665,7 @@ check_minimum_requirements() {
   # Check if the number of cores is less than 4 and less (8 GB * 0.8) memory. Reported memory from
   # /proc/meminfo prints out accessible memory, not total memory. We use 80% of the total memory as an approximation,
   # intentionally going too low to allow variability from various cloud providers.
-  if [[ ${num_cores} -lt 4 || ${total_memory} -lt 6710886 ]]; then
+  if [[ ${num_cores} -lt ${minimum_cpus} || ${total_memory} -lt ${minimum_memory_bytes} ]]; then
     echo "*************************************************************************************"
     echo "* ${bold}WARNING: Your system does not meet the minimum requirements to run Voi Swarm effectively.${normal}"
     echo "*************************************************************************************"
@@ -640,19 +673,29 @@ check_minimum_requirements() {
     echo "* Voi Swarm requires at least 4 CPU cores and 8 GB of memory to run effectively."
     echo "*"
     echo "* Your system has:"
-    echo "* - CPU cores: ${bold}${num_cores}${normal} CPU cores. ${bold}4${normal} is required."
-    echo "* - Memory: ${bold}$((total_memory / 1024 / 1024))${normal} GB of accessible memory. ${bold}8${normal} GB is required."
-    echo "*"
-    echo "* You can still proceed, however, it may not be as beneficial to the network or to you,"
-    echo "* as your node won't be able to contribute or earn rewards effectively."
-    echo "* You should ${bold}expect poor performance${normal}, and the community may ${bold}not be able to help${normal} you with issues."
-    echo "* "
-    echo "* If you are running this on a cloud provider, you should consider upgrading your instance to"
-    echo "* meet the requirements."
-    echo "* "
-    echo "* Read more about other options for running a node on:"
-    echo "* - https://voinetwork.github.io/voi-swarm/getting-started/introduction/"
-    echo "*"
+    echo "* - CPU cores: ${bold}${num_cores}${normal} CPU cores. ${bold}${minimum_cpus}${normal} is required."
+    echo "* - Memory: ${bold}$((total_memory / 1024 / 1024))${normal} GB of accessible memory. ${bold}${minimum_memory_gigabytes_pretty}${normal} GB is required."
+    if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+      echo "*"
+      echo "* You are running a relay node profile. Relay nodes require at least 8 CPU cores and 16 GB of memory."
+      echo "*"
+      echo "* Upgrade your system to meet the minimum requirements to run as a relay node."
+      echo "*"
+      abort "Exiting the program."
+    else
+      echo "*"
+      echo "* You can still proceed, however, it may not be as beneficial to the network or to you,"
+      echo "* as your node won't be able to contribute or earn rewards effectively."
+      echo "* You should ${bold}expect poor performance${normal}, and the community may ${bold}not be able to help${normal} you with issues."
+      echo "* "
+      echo "* If you are running this on a cloud provider, you should consider upgrading your instance to"
+      echo "* meet the requirements."
+      echo "* "
+      echo "* Read more about other options for running a node on:"
+      echo "* - https://voinetwork.github.io/voi-swarm/getting-started/introduction/"
+      echo "*"
+    fi
+
     echo "* Find other ways to contribute to the network by joining the Voi Network Discord:"
     echo "* - https://discord.com/invite/vnFbrJrHeW"
     echo "*"
@@ -685,7 +728,8 @@ else
   abort "This script is only meant to be run on Debian or Ubuntu."
 fi
 
-if uname -r | grep -q "Microsoft"; then
+# shellcheck disable=SC2143
+if [[ $(uname -r | grep -q "Microsoft") ]]; then
   abort "WSL 1 is not supported. Please run this script on a native Linux installation (best) or WSL 2 (experimental)."
 fi
 
@@ -712,9 +756,10 @@ display_banner "${bold}Welcome to Voi Swarm${normal}. Let's get started!"
 
 check_minimum_requirements
 
-get_telemetry_name
-
-set_telemetry_name
+if [[ ${VOINETWORK_PROFILE} != "relay" ]]; then
+  get_telemetry_name
+  set_telemetry_name
+fi
 
 display_banner "Installing Docker"
 
@@ -769,9 +814,11 @@ start_stack
 
 wait_for_stack_to_be_ready
 
-verify_node_is_running
+if [[ ${VOINETWORK_PROFILE} != "relay" ]]; then
+  verify_node_is_running
+fi
 
-if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1  ]]; then
+if [[ ${VOINETWORK_PROFILE} == "relay" || ( -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1 ) ]]; then
   display_banner "Wallet setup will be skipped."
 
   joined_network_instructions true

@@ -1,0 +1,107 @@
+version: "3.9"
+services:
+  relay:
+    image: ghcr.io/voinetwork/docker-relay-node:latest
+    hostname: ${HOSTNAME}
+    volumes:
+      - /var/lib/voi/algod/data:/algod/data/:rw
+    ports:
+      - published: 8080
+        target: 8080
+        protocol: tcp
+        mode: host
+    networks:
+      - notification
+    dns:
+      - "8.8.8.8"
+      - "1.1.1.1"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      endpoint_mode: dnsrr
+  node-exporter:
+    image: ghcr.io/voinetwork/docker-relay-node:latest
+    environment:
+      - GOGC=25
+    ports:
+      - published: 9100
+        target: 8080
+        protocol: tcp
+        mode: host
+    dns:
+      - "8.8.8.8"
+      - "1.1.1.1"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      endpoint_mode: dnsrr
+    entrypoint:
+      - "/node/bin/node_exporter"
+      - "--no-collector.arp"
+      - "--no-collector.bcache"
+      - "--no-collector.bonding"
+      - "--no-collector.buddyinfo"
+      - "--no-collector.conntrack"
+      - "--no-collector.drbd"
+      - "--no-collector.edac"
+      - "--no-collector.entropy"
+      - "--no-collector.hwmon"
+      - "--no-collector.infiniband"
+      - "--no-collector.interrupts"
+      - "--no-collector.ipvs"
+      - "--no-collector.ksmd"
+      - "--no-collector.logind"
+      - "--no-collector.mdadm"
+      - "--no-collector.meminfo_numa"
+      - "--no-collector.mountstats"
+      - "--no-collector.nfs"
+      - "--no-collector.nfsd"
+      - "--no-collector.qdisc"
+      - "--no-collector.runit"
+      - "--no-collector.supervisord"
+      - "--no-collector.systemd"
+      - "--no-collector.tcpstat"
+      - "--no-collector.timex"
+      - "--no-collector.wifi"
+      - "--no-collector.xfs"
+      - "--no-collector.zfs"
+      - "--web.listen-address=:8080"
+  shepherd:
+    image: containrrr/shepherd
+    environment:
+      RUN_ONCE_AND_EXIT: "true"
+      ROLLBACK_ON_FAILURE: "true"
+      IMAGE_AUTOCLEAN_LIMIT: "5"
+    logging:
+      driver: "local"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      replicas: 0
+      restart_policy:
+        condition: none
+      labels:
+        - swarm.cronjob.enable=true
+        - swarm.cronjob.schedule=0 */4 * * *
+        - swarm.cronjob.skip-running=true
+      placement:
+        constraints:
+          - node.role == manager
+  scheduler:
+    image: ghcr.io/voinetwork/swarm-cronjob:edge
+    logging:
+      driver: "local"
+    environment:
+      - "TZ=UTC"
+      - "LOG_LEVEL=info"
+      - "LOG_JSON=false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+networks:
+  notification:
