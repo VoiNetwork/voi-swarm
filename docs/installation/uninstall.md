@@ -17,7 +17,7 @@ To uninstall, execute the following commands:
 - Remove the **~/voi** directory
 
     ```bash
-    rm -rf /voi/
+    rm -rf ~/voi/
     ```
 
 - Remove the **/var/lib/voi** directory
