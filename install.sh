@@ -432,7 +432,7 @@ get_kmd_token() {
 display_banner() {
   echo
   echo "********************************************************************************"
-  echo "* $1"
+  echo "* ${bold}$1${normal}"
   echo "********************************************************************************"
   echo
 }
@@ -470,7 +470,7 @@ joined_network_instructions() {
     fi
 
     echo ""
-    echo "To see network participation status use ${HOME}/voi/bin/get-participation-status ${account_addr}"
+    echo "To see network participation status use ${HOME}/voi/bin/get-node-status"
     echo "To go online use ${HOME}/voi/bin/go-online ${account_addr}"
   fi
 
@@ -484,6 +484,17 @@ joined_network_instructions() {
   echo "To easily access commands from ${HOME}/voi/bin, add the following to ${HOME}/.bashrc or ${HOME}/.profile:"
   echo "export PATH=\"\$PATH:${HOME}/voi/bin\""
   echo ""
+
+  if [[ ${skip_account_setup} -eq 0 ]]; then
+    echo "${bold}*********************************** READ THIS! ***********************************${normal}"
+    echo "After joining the network, it might take up to 2 hours for your server to appear on telemetry"
+    echo "tracking services. Initially, you can identify your server using the 12-digit short GUID shown by"
+    echo "the command ${voi_home}/bin/get-node-status."
+    echo ""
+    echo "At first, your node's health scores ${bold}will be low${normal}. ${bold}This is normal.${normal}"
+    echo "After running your node for 5-7 days, you should see the health score increase."
+    echo ""
+  fi
 }
 
 join_as_new_user() {
