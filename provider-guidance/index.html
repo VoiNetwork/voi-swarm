@@ -871,6 +871,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#hetzner" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hetzner
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#melbicome" class="md-nav__link">
+    <span class="md-ellipsis">
+      Melbicome
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1007,6 +1025,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#hetzner" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hetzner
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#melbicome" class="md-nav__link">
+    <span class="md-ellipsis">
+      Melbicome
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1051,17 +1087,31 @@ It is not exhaustive, and you should consult your provider's documentation for m
 <h3 id="ovhcloud">OVHcloud</h3>
 <p>These steps are based on the OVHcloud documentation. The steps are similar to many other providers.</p>
 <ol>
-<li><a href="https://help.ovhcloud.com/csm/en-ca-dedicated-servers-creating-ssh-keys?id=kb_article_view&amp;sysparm_article=KB0043376">Creating your SSH keys</a></li>
-<li><a href="https://help.ovhcloud.com/csm/en-gb-dedicated-servers-getting-started-dedicated-server?id=kb_article_view&amp;sysparm_article=KB0043475">Installing your server</a></li>
-<li><a href="https://help.ovhcloud.com/csm/en-gb-dedicated-servers-securing-server?id=kb_article_view&amp;sysparm_article=KB0043969">Securing your server</a></li>
-<li>Lastly <a href="../installation/installation/">install Voi Swarm</a></li>
+<li>You will need to <a href="https://help.ovhcloud.com/csm/en-ca-dedicated-servers-creating-ssh-keys?id=kb_article_view&amp;sysparm_article=KB0043376">generate an SSH keys</a>.</li>
+<li><a href="https://help.ovhcloud.com/csm/en-gb-dedicated-servers-getting-started-dedicated-server?id=kb_article_view&amp;sysparm_article=KB0043475">Install a new server</a> in OVHcloud using Ubuntu 22.04 LTS.</li>
+<li>You will need to <a href="https://help.ovhcloud.com/csm/en-gb-dedicated-servers-securing-server?id=kb_article_view&amp;sysparm_article=KB0043969">secure your server</a>.</li>
+<li>Finally, you will need to <a href="../installation/installation/">install Voi Swarm</a>.</li>
 </ol>
 <h3 id="contabo">Contabo</h3>
 <ol>
-<li>You will need to <a href="https://contabo.com/blog/how-to-use-ssh-keys-with-your-server/">generate SSH keys</a>.</li>
-<li><a href="https://help.contabo.com/support/solutions/articles/103000271913-how-do-i-install-my-contabo-server-">Install a new server</a> in Contabo using Ubuntu 22.04.</li>
+<li>You will need to <a href="https://contabo.com/blog/how-to-use-ssh-keys-with-your-server/">generate an SSH key</a>.</li>
+<li><a href="https://help.contabo.com/support/solutions/articles/103000271913-how-do-i-install-my-contabo-server-">Install a new server</a> in Contabo using Ubuntu 22.04 LTS.</li>
 <li>You will need to <a href="https://contabo.com/blog/best-practices-for-securing-remote-connections-to-your-vps/">secure your server</a>.</li>
-<li>Finally, you will need to <a href="https://voinetwork.github.io/voi-swarm/installation/installation/">install Voi Swarm</a></li>
+<li>Finally, you will need to <a href="https://voinetwork.github.io/voi-swarm/installation/installation/">install Voi Swarm</a>.</li>
+</ol>
+<h3 id="hetzner">Hetzner</h3>
+<ol>
+<li>You will need to <a href="https://community.hetzner.com/tutorials/howto-ssh-key">generate an SSH key</a>.</li>
+<li><a href="https://docs.hetzner.com/cloud/servers/getting-started/creating-a-server/">Install a new server</a> in Hetzner using Ubuntu 22.04 LTS.</li>
+<li>You will need to <a href="https://community.hetzner.com/tutorials/securing-ssh">secure your server</a>.</li>
+<li>Finally, you will need to <a href="https://voinetwork.github.io/voi-swarm/installation/installation/">install Voi Swarm</a>.</li>
+</ol>
+<h3 id="melbicome">Melbicome</h3>
+<ol>
+<li>You will need to <a href="https://webdock.io/en/docs/webdock-control-panel/shell-users-and-sudo/set-up-an-ssh-key">generate an SSH key</a>.</li>
+<li><a href="https://www.melbicom.net/virtualserver/">Install a new server</a> in Melbicom using Ubuntu 22.04 LTS.</li>
+<li>You will need to <a href="https://www.liquidweb.com/blog/secure-server/">secure your server</a>.</li>
+<li>Finally, you will need to <a href="https://voinetwork.github.io/voi-swarm/installation/installation/">install Voi Swarm</a>.</li>
 </ol>
 
 
@@ -1085,7 +1135,7 @@ It is not exhaustive, and you should consult your provider's documentation for m
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 21, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 22, 2024</span>
   </span>
 
     
