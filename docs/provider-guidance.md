@@ -26,7 +26,7 @@ Step-by-step guides for some popular providers are provided below.
 
 === "Hetzner"
 
-      1. You will need to [generate an SSH key](https://community.hetzner.com/tutorials/howto-ssh-key).
+      1. [Create an SSH key](https://community.hetzner.com/tutorials/howto-ssh-key) if needed. You can use an existing key during server creation at Hetzner by uploading the public key in their console.
       2. [Install a new server](https://docs.hetzner.com/cloud/servers/getting-started/creating-a-server/) in Hetzner using Ubuntu 22.04 LTS.
       3. You will need to [secure your server](https://community.hetzner.com/tutorials/securing-ssh).
       4. Finally, you will need to [install Voi Swarm](https://voinetwork.github.io/voi-swarm/installation/installation/).
