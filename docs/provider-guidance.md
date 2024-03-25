@@ -3,17 +3,18 @@
 This guidance covers basic steps that are typical for smaller cloud / VPS providers.
 It is not exhaustive, and you should consult your provider's documentation for more detailed information.
 
+## Before You Start
 Before choosing a provider,
 it is [important to understand the system requirements](../installation/system-requirements/) as they
 will help you make the best decision for your node.
 
-## General steps
+## Steps to Follow
 
-1. Create SSH keys to authenticate with your server. With many providers, you can upload your public key
-   to ensure secure password less server access.
-2. Create a new server with your chosen operating system. The community frequently uses Ubuntu 22.04 LTS.
-3. Secure your server by following best practices. This includes permissions, software updates and setting up firewalls.
-4. [Install Voi Swarm](../installation/installation/)
+1. **Create SSH keys**: This will authenticate you with your server.
+   Some providers allow you to upload your public key for secure, passwordless access.
+2. **Create a new server**: Spin up a new server with your chosen operating system. The community frequently uses Ubuntu 22.04 LTS.
+3. **Secure your server**: Follow best practices for  permissions, software updates and firewalls.
+4. **Install Voi Swarm**: [Follow the installation guide](../installation/installation/)
 
 Step-by-step guides for some popular providers are provided below.
 
