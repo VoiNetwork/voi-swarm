@@ -115,6 +115,10 @@ nav:
       - Amazon SES: notification-guides/amazon-ses.md
       - Email: notification-guides/email.md
       - Pushbullet: notification-guides/pushbullet.md
+  - Accessing your account:
+      - Introduction: accessing-your-account/introduction.md
+      - Kibisis: accessing-your-account/kibisis.md
+      - A-Wallet: accessing-your-account/a-wallet.md
   - Provider Guidance: provider-guidance.md
   - Migrating to Voi Swarm: migrating.md
   - CLI Tools: cli-tools.md
