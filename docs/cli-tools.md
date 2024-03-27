@@ -24,6 +24,10 @@ Retrieve the mnemonic of an existing account with the following command:
 ~/voi/bin/get-account-mnemonic <account_address>
 ```
 
+!!! warning
+    Make sure to write down or back up the 25 word seed phrase that appears. This phrase will be needed to recover your 
+    assets. Here are some ways to [protect your seed phrase](https://coinmarketcap.com/academy/article/how-to-protect-your-seed-phrase)
+
 ### Importing an Account
 
 Import an existing account with the following command:
@@ -31,6 +35,9 @@ Import an existing account with the following command:
 ```bash
 ~/voi/bin/import-account
 ```
+
+!!! note
+    This is for if you made a wallet on a different terminal or a 3rd party wallet provider. *i.e Kibisi or A-Wallet*
 
 ### Generating Participation Key
 
@@ -40,12 +47,23 @@ Generate a participation key for an existing account with the following command:
 ~/voi/bin/generate-participation-key <account_address>
 ```
 
+!!! note
+    Your participation key will expire after 90 days and will need to be regenerated.
+
 ### Checking Participation Status
 
 Check the participation status of an existing account with the following command:
 
 ```bash
 ~/voi/bin/get-participation-status <account_address>
+```
+
+### Regenerating Participation Key
+
+After 2 million blocks or 90 days you will need to regenerate a new participation key with the following command:
+
+```bash
+`/bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"`
 ```
 
 ### Going Online
