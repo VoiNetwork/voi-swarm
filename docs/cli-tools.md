@@ -25,8 +25,8 @@ Retrieve the mnemonic of an existing account with the following command:
 ```
 
 !!! warning
-    Make sure to write down or back up the 25 word seed phrase that appears. This phrase will be needed to recover your 
-    assets. Here are some ways to [protect your seed phrase](https://coinmarketcap.com/academy/article/how-to-protect-your-seed-phrase)
+    Remember to save or write down the 25-word seed phrase that shows up. If you lose it, you will lose access to your account,
+    including any Voi and Via tokens you have. Here's how to [keep your seed phrase safe](https://coinmarketcap.com/academy/article/how-to-protect-your-seed-phrase).
 
 ### Importing an Account
 

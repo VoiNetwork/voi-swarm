@@ -3,8 +3,8 @@
 ## Removing Your Installation
 
 !!! danger
-    Make sure to [keep your account mnemonics](../../cli-tools/#retrieving-account-mnemonic) in a safe place. If you lose them, you will lose access to your account,
-    including any Voi and Via tokens you have.
+    Make sure to [keep your account mnemonics](../../cli-tools/#retrieving-account-mnemonic) in a safe place.
+    If you lose it, you will lose access to your account, including any Voi and Via tokens you have.
 
 To uninstall, execute the following commands:
 
