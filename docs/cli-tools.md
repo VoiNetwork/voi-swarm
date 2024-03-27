@@ -48,7 +48,7 @@ Generate a participation key for an existing account with the following command:
 ```
 
 !!! note
-    Your participation key will expire after 90 days and will need to be regenerated.
+    Your participation key will expire in an estimated 60 days and will need to be regenerated.
 
 ### Checking Participation Status
 
