@@ -105,7 +105,6 @@ start_stack() {
   docker_file="${voi_home}/docker/compose.yml"
 
   if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
-    echo "Starting relay node stack"
     docker_file="${voi_home}/docker/relay.yml"
   fi
   command="env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${docker_file}"
@@ -767,6 +766,37 @@ set_profile() {
   display_banner "Setting up Voi Swarm using profile: ${VOINETWORK_PROFILE}"
 }
 
+preserve_autoupdate() {
+    echo "Preserving autoupdate settings..."
+    if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+      docker_filename="${voi_home}/docker/relay.yml"
+    else
+      docker_filename="${voi_home}/docker/compose.yml"
+    fi
+
+    autoupdate_state=$(awk -F'=' '/swarm.cronjob.enable=/ {print $2}' "${HOME}"/voi/docker/compose.yml)
+
+    if [[ ${autoupdate_state} == "false" ]]; then
+      sed -i -E "s/(swarm.cronjob.enable=).*/\1false" "${docker_filename}"
+    fi
+}
+
+add_update_jitter() {
+  echo "Add jitter to autoupdate schedule..."
+  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+    schedule_filename="${voi_home}/docker/relay.yml"
+  else
+    schedule_filename="${voi_home}/docker/compose.yml"
+  fi
+
+  random_minute=$(( RANDOM % 60 ))
+  # Generate a random number between 0 and 2, and add +1 to shift the range to 1-3
+  random_hour=$(( RANDOM % 3 + 1 ))
+
+  new_cron_schedule="swarm.cronjob.schedule=${random_minute} */${random_hour} * * *"
+  sed -i -E "s|(swarm.cronjob.schedule=).*|\1${new_cron_schedule}|" "${schedule_filename}"
+}
+
 if [ -z "${BASH_VERSION:-}" ]; then
   abort "Bash is required to interpret this script."
 fi
@@ -867,6 +897,8 @@ tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
 rm "${voi_home}"/voi-swarm.tar.gz
 
 cleanup_deprecated_files_and_folders
+
+add_update_jitter
 
 start_stack
 

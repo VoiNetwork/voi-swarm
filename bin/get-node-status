@@ -97,6 +97,8 @@ echo "Voi Swarm Docker status:"
 echo "**************"
 swarm_running_image=$(docker inspect --format='{{.Image}}' "${container_id}" | cut -d':' -f2)
 echo "Running container image (sha256): ${swarm_running_image}"
+echo "Auto-update enabled: $(awk -F'=' '/swarm.cronjob.enable=/ {print $2}' "${HOME}"/voi/docker/compose.yml)"
+echo "Auto-update schedule (cron format): $(awk -F'=' '/swarm.cronjob.schedule=/ {print $2}' "${HOME}"/voi/docker/compose.yml)"
 echo ""
 
 echo "AVM version:"

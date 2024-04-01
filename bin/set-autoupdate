@@ -1,0 +1,28 @@
+#!/bin/bash
+
+echo "Enable/Disable autoupdate for your node"
+echo ""
+echo "To enable autoupdate use: set-autoupdate true"
+echo "To disable autoupdate use: set-autoupdate false"
+echo ""
+
+if [[ -z $1 ]]; then
+  echo "Please provide a value for autoupdate"
+  exit 1
+fi
+
+if [[ $1 != "true" && $1 != "false" ]]; then
+  echo "Invalid value for autoupdate. Please use 'true' or 'false'."
+  exit 1
+fi
+
+VOINETWORK_PROFILE=$(cat "${HOME}/voi/profile")
+
+if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+  docker_filename="${HOME}/voi/docker/relay.yml"
+else
+  docker_filename="${HOME}/voi/docker/compose.yml"
+fi
+
+echo "Setting autoupdate to $1 in ${docker_filename}"
+sed -i -E "s|(swarm.cronjob.enable=).*|\1$1|" "${docker_filename}"
