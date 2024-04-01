@@ -1,0 +1,75 @@
+version: "3.9"
+services:
+  relay:
+    image: ghcr.io/voinetwork/docker-relay-node:latest
+    hostname: ${VOINETWORK_RELAY_NAME}
+    volumes:
+      - /var/lib/voi/algod/data:/algod/data/:rw
+    ports:
+      - published: 5011
+        target: 8080
+        protocol: tcp
+        mode: host
+    networks:
+      - notification
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+  node-exporter:
+    image: ghcr.io/voinetwork/docker-relay-node:latest
+    hostname: ${VOINETWORK_RELAY_NAME}
+    environment:
+      - GOGC=25
+    volumes:
+      - /var/lib/voi/algod/metrics:/algod/metrics/:rw
+    ports:
+      - published: 9100
+        target: 8080
+        protocol: tcp
+        mode: host
+    networks:
+      - notification
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    entrypoint:
+      - "/node/bin/start-metrics"
+  shepherd:
+    image: containrrr/shepherd
+    environment:
+      RUN_ONCE_AND_EXIT: "true"
+      ROLLBACK_ON_FAILURE: "true"
+      IMAGE_AUTOCLEAN_LIMIT: "5"
+    logging:
+      driver: "local"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      replicas: 0
+      restart_policy:
+        condition: none
+      labels:
+        - swarm.cronjob.enable=false
+        - swarm.cronjob.schedule=0 */4 * * *
+        - swarm.cronjob.skip-running=true
+      placement:
+        constraints:
+          - node.role == manager
+  scheduler:
+    image: ghcr.io/voinetwork/swarm-cronjob:edge
+    logging:
+      driver: "local"
+    environment:
+      - "TZ=UTC"
+      - "LOG_LEVEL=info"
+      - "LOG_JSON=false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+networks:
+  notification:
