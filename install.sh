@@ -767,7 +767,6 @@ set_profile() {
 }
 
 preserve_autoupdate() {
-    echo "Preserving autoupdate settings..."
     if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
       docker_filename="${voi_home}/docker/relay.yml"
     else
@@ -782,7 +781,6 @@ preserve_autoupdate() {
 }
 
 add_update_jitter() {
-  echo "Add jitter to autoupdate schedule..."
   if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
     schedule_filename="${voi_home}/docker/relay.yml"
   else
