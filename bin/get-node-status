@@ -1,15 +1,12 @@
 #!/bin/bash
 
+is_root=0
+
 execute_sudo() {
-  if sudo -v &> /dev/null; then
-    if [[ $(id -u) -eq 0 ]]; then
-      bash -c "$*"
-    else
-      sudo bash -c "$*"
-    fi
+  if [[ ${is_root} -eq 1 ]]; then
+    bash -c "$*"
   else
-    echo "The user does not have sudo privileges. Exiting the program."
-    exit 1
+    sudo bash -c "$*"
   fi
 }
 
@@ -71,6 +68,15 @@ container_id=$(docker ps -q -f name=voinetwork_algod)
 if [ -z "${container_id}" ]; then
     echo "AVM container is not running. Please start it first."
     exit 1
+fi
+
+if [[ $(id -u) -eq 0 ]]; then
+  is_root=1
+else
+  echo "Checking for sudo access, you may be prompted for your password."
+  if ! sudo -v &> /dev/null; then
+    abort "User does not have sudo access. Please run this script as a user with sudo access."
+  fi
 fi
 
 declare -A health_checks

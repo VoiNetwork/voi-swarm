@@ -17,6 +17,11 @@ fi
 
 if [[ $(id -u) -eq 0 ]]; then
   is_root=1
+else
+  echo "Checking for sudo access, you may be prompted for your password."
+  if ! sudo -v &> /dev/null; then
+    abort "User does not have sudo access. Please run this script as a user with sudo access."
+  fi
 fi
 
 echo "This script will assist migrating your node from a host-based setups to Voi Swarm, if your node is already running a Voi or Algorand based setup."

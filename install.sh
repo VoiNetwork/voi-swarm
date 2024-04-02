@@ -804,6 +804,11 @@ fi
 
 if [[ $(id -u) -eq 0 ]]; then
   is_root=1
+else
+  echo "Checking for sudo access, you may be prompted for your password."
+  if ! sudo -v &> /dev/null; then
+    abort "User does not have sudo access. Please run this script as a user with sudo access."
+  fi
 fi
 
 # Get Linux OS distribution
