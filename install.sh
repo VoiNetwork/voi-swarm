@@ -502,8 +502,11 @@ joined_network_instructions() {
   fi
 
   echo ""
-  echo "To easily access commands from ${HOME}/voi/bin, add the following to ${HOME}/.bashrc or ${HOME}/.profile:"
-  echo "export PATH=\"\$PATH:${HOME}/voi/bin\""
+  echo "To easily access commands from ${voi_home}/bin, add the following to ${HOME}/.bashrc or ${HOME}/.profile:"
+  echo "  export PATH=\"\$PATH:${voi_home}/bin\""
+  echo ""
+  echo "To add to your ~/.bashrc, run:"
+  echo "  echo 'export PATH=\"\$PATH:${voi_home}/bin\"' >> ~/.bashrc && source ~/.bashrc"
   echo ""
 
   if [[ ${skip_account_setup} -eq 0 && ${VOINETWORK_PROFILE} != "relay" ]]; then
