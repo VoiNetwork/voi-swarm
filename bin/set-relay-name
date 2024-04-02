@@ -12,4 +12,4 @@ set_relay_name() {
 set_relay_name
 ## Add check to only use if relay profile is running
 
-bash -c "env VOINETWORK_RELAY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" docker stack deploy -c ${HOME}/voi/docker/relay.yml voinetwork"
+bash -c "env VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" docker stack deploy -c ${HOME}/voi/docker/relay.yml voinetwork"
