@@ -794,7 +794,7 @@ add_update_jitter() {
   # Generate a random number between 0 and 2, and add +1 to shift the range to 1-3
   random_hour=$(( RANDOM % 3 + 1 ))
 
-  new_cron_schedule="swarm.cronjob.schedule=${random_minute} */${random_hour} * * *"
+  new_cron_schedule="${random_minute} */${random_hour} * * *"
   sed -i -E "s|(swarm.cronjob.schedule=).*|\1${new_cron_schedule}|" "${schedule_filename}"
 }
 

@@ -34,6 +34,12 @@ get_account_info() {
 get_participation_expiration_eta() {
   local active_key_last_valid_round=$1
   local last_committed_block=$2
+
+  if ! [[ $1 =~ ^[0-9]+$ ]] || ! [[ $2 =~ ^[0-9]+$ ]]; then
+    echo "Both arguments must be integers. Exiting."
+    exit 1
+  fi
+
   local current_key_blocks_remaining=$((active_key_last_valid_round - last_committed_block))
   local remaining_seconds
   local current_timestamp
@@ -57,6 +63,12 @@ display_participation_key_information() {
       last_committed_block=$(get_last_committed_block)
 
       active_key_last_valid_round=$(docker exec -it "${container_id}" bash -c 'goal account listpartkeys' | awk '$1=="yes" {print $6}' | tr -cd '[:digit:]')
+
+      if [[ -z "${active_key_last_valid_round}" ]]; then
+        echo "Participation status: No active participation key found."
+        return 1
+      fi
+
       existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
 
       echo "Participation status: $(docker exec -it "${container_id}" bash -c 'goal account dump -a '"${account_address}"' | jq -r '\''if (.onl == 1) then "online" else "offline" end'\''')"
