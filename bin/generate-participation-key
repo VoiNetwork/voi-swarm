@@ -1,4 +1,11 @@
 #!/bin/bash
+echo ""
+echo "Tip:"
+echo "    To get the latest updates, including updating participation key if needed, rerun the installer."
+echo "    If your current participation key expires within ~14 days the installer will automatically offer to generate a new key."
+echo "    To rerun the installer execute:"
+echo '      /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"'
+echo ""
 
 container_id=$(docker ps -q -f name=voinetwork_algod)
 if [ -z "${container_id}" ]; then
