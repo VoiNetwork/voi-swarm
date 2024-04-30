@@ -64,7 +64,7 @@ After 2 million blocks or in an estimated 60 days, you will need
 to regenerate a new participation key with the following command:
 
 ```bash
-`/bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"`
+/bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
 ### Going Online
