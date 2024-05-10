@@ -5,6 +5,17 @@ Welcome to the documentation for Voi Swarm. Delighted to have you here :tophat:
 Voi Swarm provides a straightforward entry to the Voi network. However, its opinionated design may not fit all use cases.
 Before you get started with running a node, it's important to evaluate options and understand the requirements.
 
+## What is Voi?
+
+Voi is a community-owned and operated L1 blockchain and ecosystem.
+
+Voi stands out
+by uniquely allocating a majority of the ecosystem’s resources to those who directly add value to the network.
+It fosters decentralization, promotes self-governance, encourages community investment,
+and simplifies the user experience to facilitate mainstream usage.
+
+To learn more about Voi, visit the [Voi documentation website](https://docs.voi.network).
+
 ## What Node Running Options Are Available?
 
 | Method                                                                | Perfect for                                                                                          | Platform          |

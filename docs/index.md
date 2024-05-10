@@ -6,7 +6,7 @@
 
 ## What is Voi Swarm?
 
-Voi Swarm is a set of scripts and configurations that allows a user to easily join the Voi network as
+Voi Swarm is a set of scripts and configurations that allows a user to easily join the [Voi network](https://docs.voi.network) as
 a participant.
 
 Tenets for the Voi Swarm package are:
