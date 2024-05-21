@@ -34,6 +34,7 @@ jobs:
         run: |
           last_log_line=$(docker service logs voinetwork_scheduler | tail -n 1)
           if [[ "$last_log_line" != *"Add cronjob with schedule"* ]]; then
-            echo "Scheduler logs do not contain the expected message."
+            echo "Scheduler logs do not contain the expected message:"
+            echo ${last_log_line}
             exit 1
           fi
