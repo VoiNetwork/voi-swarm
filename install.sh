@@ -9,6 +9,7 @@ skip_account_setup=0
 migrate_host_based_setup=0
 kmd_token=""
 wallet_password=""
+new_user_setup=0
 
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -388,6 +389,9 @@ generate_participation_key() {
   last_committed_block=$(get_last_committed_block)
 
   if [[ -z ${active_key_last_valid_round} ]]; then
+    if [[ ${new_user_setup} -eq 0 ]]; then
+      return 1
+    fi
     generate_new_key
   elif [[ $((active_key_last_valid_round-last_committed_block)) -le 417104 ]]; then
     local existing_expiration_date
@@ -522,6 +526,7 @@ joined_network_instructions() {
 }
 
 join_as_new_user() {
+  new_user_setup=1
   display_banner "Joining network"
 
   generate_participation_key
@@ -976,6 +981,17 @@ if [[ ${skip_account_setup} -eq 0 ]]; then
   join_as_new_user
 else
   generate_participation_key
+  participation_key_generation_status=$?
+  ## Catch cases where an install was aborted / user didn't succeed in going online
+  ## This can happen where there are no part keys present on the machine, or where there's multiple part keys but
+  ## no key is active.
+  if [[ ${participation_key_generation_status} -eq 1 ]]; then
+    display_banner "Restarting participation key generation"
+    echo "Wallet and account detected, but no active participation keys found."
+    echo "This could be due to a failed setup or a previous setup that was aborted."
+
+    join_as_new_user
+  fi
 
   migrate_host_based_voi_setup
 
