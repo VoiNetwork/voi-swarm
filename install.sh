@@ -323,7 +323,7 @@ get_account_info() {
 check_if_account_exists() {
   allow_one_account_override="$1"
 
-  get_account_info "$allow_one_account_override" > /dev/null
+  get_account_info "$allow_one_account_override"
 }
 
 get_account_address() {
