@@ -824,9 +824,15 @@ else
   abort "This script is only meant to be run on Debian or Ubuntu."
 fi
 
+# Detect if running in a container; this method is not foolproof
 # shellcheck disable=SC2143
-if [[ $(uname -r | grep -q "Microsoft") ]]; then
-  abort "WSL 1 is not supported. Please run this script on a native Linux installation (best) or WSL 2 (experimental)."
+if [[ -f /.dockerenv ]]; then
+  abort "This script is not meant to be run in a container."
+fi
+
+# shellcheck disable=SC2143
+if [[ $(uname -r | grep -i "microsoft") ]]; then
+  abort "Windows Subsystem for Linux is not supported. Please run this script on a native Linux installation."
 fi
 
 if [[ ! (${operating_system_distribution} == "ubuntu" || ${operating_system_distribution} == "debian") ]]; then
