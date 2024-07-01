@@ -59,12 +59,6 @@ get_participation_expiration_eta() {
   echo "${expiration_date}"
 }
 
-get_account_participation_keys() {
-  local account_address=$1
-  docker exec -it "${container_id}" bash -c "goal account listpartkeys -a ${account_address}"
-
-}
-
 display_account_information() {
   local account_address=$1
   local account_details

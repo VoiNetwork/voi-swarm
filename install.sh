@@ -7,7 +7,6 @@ headless_install=0
 is_root=0
 skip_account_setup=0
 migrate_host_based_setup=0
-kmd_token=""
 wallet_password=""
 new_user_setup=0
 
@@ -260,9 +259,10 @@ ask_for_password() {
 
 create_wallet() {
   if [[ $(execute_docker_command "goal wallet list | wc -l") -eq 1 ]]; then
+    local kmd_token
     echo "Let's create a new wallet for you. Please provide a password for security."
 
-    get_kmd_token
+    kmd_token=$(get_kmd_token)
 
     ask_for_password
 
@@ -279,17 +279,20 @@ EOF
   fi
 }
 
-get_address_balance() {
-    balance=$(execute_docker_command "goal account balance -a ${account_addr}")
-    balance=${balance//[!0-9]/}
+get_account_balance() {
+  local balance
+  balance=$(execute_docker_command "goal account balance -a $1")
+  balance=${balance//[!0-9]/}
+  echo "$balance"
 }
 
 busy_wait_until_balance_is_1_voi() {
+  local balance
   display_banner "Waiting for balance (account: ${account_addr}) to be 1 Voi"
-  get_address_balance
+  balance=$(get_account_balance "${account_addr}")
   while [[ ${balance} -lt "1000000" ]]; do
     echo "Waiting for balance to be 1 Voi at minimum"
-    get_address_balance
+    balance=$(get_account_balance "${account_addr}")
     sleep 10
   done
   display_banner "Account has balance of 1 Voi or greater!"
@@ -327,6 +330,7 @@ check_if_account_exists() {
 }
 
 get_account_address() {
+  local account_address
   account_address=$(get_account_info true)
   account_address=${account_address//\"/}
 
@@ -356,15 +360,32 @@ get_participation_expiration_eta() {
   echo "${expiration_date}"
 }
 
-get_current_keys_info() {
-  execute_docker_command "goal account listpartkeys" | tail -n +2
+get_current_account_keys_info() {
+  execute_docker_command "goal account listpartkeys -a $1"
 }
 
 get_last_committed_block() {
   execute_docker_command "goal node status" | grep 'Last committed block' | cut -d\  -f4 | tr -d '\r'
 }
 
+get_account_addresses() {
+  if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voitest-v1/accountList.json"'; then
+    abort "Account list not found. Exiting the program."
+  fi
+
+  accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
+  number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
+
+  if [[ $number_of_accounts -eq 0 ]]; then
+    return 1
+  fi
+
+  account_addresses=$(echo "$accounts_json" | jq -r '.Accounts | keys[]')
+  echo "${account_addresses}"
+}
+
 generate_new_key() {
+  local address
   local start_block
   local end_block
   local expiration_date
@@ -372,62 +393,89 @@ generate_new_key() {
   start_block=$(get_last_committed_block)
   end_block=$((start_block + 2000000))
   expiration_date=$(get_participation_expiration_eta "${end_block}" "${start_block}")
-  echo "Generating participation key for account ${account_addr} with start block ${start_block} and end block ${end_block}"
+  address=$1
+  echo "Generating participation key for account ${address} with start block ${start_block} and end block ${end_block}"
   echo "New key is expected to be valid until: ${expiration_date}"
-  execute_interactive_docker_command "goal account addpartkey -a ${account_addr} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
+  execute_interactive_docker_command "goal account addpartkey -a ${address} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
 }
 
 generate_participation_key() {
-  local current_keys_info
-  local active_key_last_valid_round
-  local last_committed_block
-
   display_banner "Generating/Updating participation key"
 
-  current_keys_info=$(get_current_keys_info)
-  active_key_last_valid_round=$(echo "$current_keys_info" | awk '/yes/ {print $NF}')
-  last_committed_block=$(get_last_committed_block)
+  account_addresses=$(get_account_addresses)
+  account_addresses_length=$(echo "${account_addresses}" | wc -w)
 
-  if [[ -z ${active_key_last_valid_round} ]]; then
-    if [[ ${new_user_setup} -eq 0 ]]; then
-      return 1
+  for account in ${account_addresses}; do
+    local active_key_last_valid_round
+    local last_committed_block
+
+    active_key_last_valid_round=$(docker exec -it "${container_id}" bash -c 'goal account listpartkeys' | awk -v addr="${account}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $6}' | tr -cd '[:digit:]')
+
+    last_committed_block=$(get_last_committed_block)
+
+    if [[ -z ${active_key_last_valid_round} ]]; then
+      if [[ ${new_user_setup} -eq 0 && account_addresses_length -le 1 ]]; then
+        return 1
+      fi
+
+      local balance
+      balance=$(get_account_balance "${account}")
+
+      if [[ ${account_addresses_length} -eq 1 ]]; then
+        generate_new_key "${account}"
+      else
+        if [[ ${balance} -ge 1000 ]]; then
+          echo "Balance is equal/above 1,000 microVoi. Generating participation key for account ${account}"
+          generate_new_key "${account}"
+
+          change_account_online_status "${account}"
+          account_status=$(execute_docker_command "goal account dump -a ${account}" | jq -r .onl)
+          if [[ ${account_status} -eq 1 ]]; then
+            echo "Account ${account} is now online!"
+          else
+            echo "Account ${account} is currently offline."
+          fi
+        else
+          echo "Balance is below 1,000 microVoi. Skipping participation key generation for account ${account}"
+        fi
+      fi
+    elif [[ $((active_key_last_valid_round-last_committed_block)) -le 417104 ]]; then
+      local existing_expiration_date
+      local new_expiration_date
+      local current_key_prefix
+      local current_key_id
+      local end_block
+
+      end_block=$((last_committed_block + 2000000))
+      existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
+      new_expiration_date=$(get_participation_expiration_eta "${end_block}" "${last_committed_block}")
+
+      current_key_prefix=$(docker exec -it "${container_id}" bash -c 'goal account listpartkeys' | awk -v addr="${account_address}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $3}' | tr -cd '[:digit:]')
+      current_key_id=$(execute_docker_command "goal account partkeyinfo" | grep "${current_key_prefix}" | awk '{print $3}')
+
+      echo "Current participation key for account ${account} is expected to expire at: ${existing_expiration_date}"
+      echo "Currently the network is at block: ${last_committed_block}"
+      echo "Current participation key expires at block: ${active_key_last_valid_round}"
+      echo ""
+      echo "This is below the required threshold of 417,104 blocks / ~14 days."
+      echo "Generating participation key for account ${account} with end block ${end_block}."
+
+      echo "New key is expected to be valid until: ${new_expiration_date}"
+      echo ""
+      echo "You will be asked to enter your password to activate the new key."
+
+      execute_interactive_docker_command "goal account renewpartkey -a ${account} --roundLastValid ${end_block}"
+      execute_interactive_docker_command "goal account deletepartkey --partkeyid ${current_key_id}"
+    else
+      local existing_expiration_date
+      existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
+
+      echo "Current participation key for account ${account} is expected to expire at: ${existing_expiration_date}"
+      echo "This is above the required threshold of 417,104 blocks / ~14 days."
+      echo "No new participation key will be generated."
+      echo ""
     fi
-    generate_new_key
-  elif [[ $((active_key_last_valid_round-last_committed_block)) -le 417104 ]]; then
-    local existing_expiration_date
-    local new_expiration_date
-    local current_key_prefix
-    local current_key_id
-    local end_block
-
-    end_block=$((last_committed_block + 2000000))
-    existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
-    new_expiration_date=$(get_participation_expiration_eta "${end_block}" "${last_committed_block}")
-
-    current_key_prefix=$(echo "$current_keys_info" | awk '/yes/ {print $3}' | tr -d .)
-    current_key_id=$(execute_docker_command "goal account partkeyinfo" | grep "${current_key_prefix}" | awk '{print $3}')
-
-    echo "Current participation key is expected to expire at: ${existing_expiration_date}"
-    echo "Currently the network is at block: ${last_committed_block}"
-    echo "Current participation key expires at block: ${active_key_last_valid_round}"
-    echo ""
-    echo "This is below the required threshold of 417,104 blocks / ~14 days."
-    echo "Generating participation key for account ${account_addr} with end block ${end_block}."
-
-    echo "New key is expected to be valid until: ${new_expiration_date}"
-    echo ""
-    echo "You will be asked to enter your password to activate the new key."
-
-    execute_interactive_docker_command "goal account renewpartkey -a ${account_addr} --roundLastValid ${end_block}"
-    execute_interactive_docker_command "goal account deletepartkey --partkeyid ${current_key_id}"
-  else
-    local existing_expiration_date
-    existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
-
-    echo "Current participation key is expected to expire at: ${existing_expiration_date}"
-    echo "This is above the required threshold of 417,104 blocks / ~14 days."
-    echo "No new participation key will be generated."
-  fi
+  done
 }
 
 start_kmd() {
@@ -435,7 +483,15 @@ start_kmd() {
 }
 
 get_kmd_token() {
+  local kmd_token
   kmd_token=$(execute_docker_command "cat /algod/data/kmd-v0.5/kmd.token")
+  echo ${kmd_token}
+}
+
+get_algod_token() {
+  local algod_token
+  algod_token=$(execute_sudo 'cat /var/lib/voi/algod/data/algod.token')
+  echo ${algod_token}
 }
 
 display_banner() {
@@ -525,6 +581,13 @@ joined_network_instructions() {
   fi
 }
 
+change_account_online_status() {
+  local account
+  account=$1
+  echo "Enter your password to join the network for account ${account}."
+  execute_interactive_docker_command "goal account changeonlinestatus -a ${account}"
+}
+
 join_as_new_user() {
   new_user_setup=1
   display_banner "Joining network"
@@ -533,10 +596,9 @@ join_as_new_user() {
 
   busy_wait_until_balance_is_1_voi
 
-  echo "Enter your password to join the network."
-  execute_interactive_docker_command "goal account changeonlinestatus -a ${account_addr}"
+  change_account_online_status "${account}"
 
-  account_status=$(execute_docker_command "goal account dump -a ${account_addr}" | jq -r .onl)
+  account_status=$(execute_docker_command "goal account dump -a ${account}" | jq -r .onl)
 
   ## This step is late in the process and does require a restart of the service to take effect.
   ## Container ID from verify_node_running will have to be re-fetched if any use of the node is to be done after this point.
@@ -781,7 +843,7 @@ preserve_autoupdate() {
       docker_filename="${voi_home}/docker/compose.yml"
     fi
 
-    autoupdate_state=$(awk -F'=' '/swarm.cronjob.enable=/ {print $2}' "${HOME}"/voi/docker/compose.yml)
+    autoupdate_state=$(awk -F'=' '/swarm.cronjob.enable=/ {print $2}' "${docker_filename}")
 
     if [[ ${autoupdate_state} == "false" ]]; then
       sed -i -E "s/(swarm.cronjob.enable=).*/\1false" "${docker_filename}"
