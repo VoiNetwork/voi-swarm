@@ -10,11 +10,15 @@ execute_sudo() {
   fi
 }
 
+get_algod_token() {
+  algod_token=$(execute_sudo 'cat /var/lib/voi/algod/data/algod.token')
+}
+
 get_last_committed_block() {
   docker exec -it "${container_id}" bash -c "goal node status | grep 'Last committed block' | cut -d' ' -f4 | tr -cd '[:digit:]'"
 }
 
-get_account_info() {
+get_accounts() {
   if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voitest-v1/accountList.json"'; then
     abort "Account list not found. Exiting the program."
   fi
@@ -22,13 +26,12 @@ get_account_info() {
   accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
   number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
 
-  if [[ ! $number_of_accounts -eq 1 ]]; then
-    echo "More than one account, or zero, found in wallet."
+  if [[ $number_of_accounts -eq 0 ]]; then
     return 1
   fi
 
-  account_address=$(echo "$accounts_json" | jq -r '.Accounts | keys[0]')
-  echo "${account_address}"
+  account_addresses=$(echo "$accounts_json" | jq -r '.Accounts | keys[]')
+  echo "${account_addresses}"
 }
 
 get_participation_expiration_eta() {
@@ -56,24 +59,40 @@ get_participation_expiration_eta() {
   echo "${expiration_date}"
 }
 
-display_participation_key_information() {
-      local existing_expiration_date
-      local active_key_last_valid_round
-      local last_committed_block
-      last_committed_block=$(get_last_committed_block)
+get_account_participation_keys() {
+  local account_address=$1
+  docker exec -it "${container_id}" bash -c "goal account listpartkeys -a ${account_address}"
 
-      active_key_last_valid_round=$(docker exec -it "${container_id}" bash -c 'goal account listpartkeys' | awk '$1=="yes" {print $6}' | tr -cd '[:digit:]')
+}
 
-      if [[ -z "${active_key_last_valid_round}" ]]; then
-        echo "Participation status: No active participation key found."
-        return 1
-      fi
+display_account_information() {
+  local account_address=$1
+  local account_details
+  account_details=$(docker exec -it "${container_id}" bash -c "curl -X GET -H 'Content-Type: application/json' -H 'X-Algo-API-Token: ${algod_token}' http://localhost:8080/v2/accounts/${account_address}")
 
-      existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
+  echo "Address: ${account_address}"
+  echo "Balance: $(echo "${account_details}" | jq -r '.amount') microVoi"
 
-      echo "Participation status: $(docker exec -it "${container_id}" bash -c 'goal account dump -a '"${account_address}"' | jq -r '\''if (.onl == 1) then "online" else "offline" end'\''')"
-      echo "Participation key expires at block: ${active_key_last_valid_round} (last committed: ${last_committed_block})"
-      echo "Participation key expected to expire at: ${existing_expiration_date}"
+  local existing_expiration_date
+  local active_key_last_valid_round
+  local last_committed_block
+  last_committed_block=$(get_last_committed_block)
+
+  ## This is a workaround to get the last valid round of the active participation key that is installed on the system.
+  ## If using REST API we will get key for last online transaction, which is valid for other usecases
+  #active_key_last_valid_round=$(docker exec -it "${container_id}" bash -c 'goal account listpartkeys' | awk '$1=="yes" {print $6}' | tr -cd '[:digit:]')
+  active_key_last_valid_round=$(docker exec -it "${container_id}" bash -c 'goal account listpartkeys' | awk -v addr="${account_address}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $6}' | tr -cd '[:digit:]')
+
+  if [[ -z "${active_key_last_valid_round}" ]]; then
+    echo "Participation status: No active participation key found."
+    return 1
+  fi
+
+  existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
+
+  echo "Participation status: $(docker exec -it "${container_id}" bash -c 'goal account dump -a '"${account_address}"' | jq -r '\''if (.onl == 1) then "online" else "offline" end'\''')"
+  echo "Participation key expires at block: ${active_key_last_valid_round} (last committed: ${last_committed_block})"
+  echo "Participation key expected to expire at: ${existing_expiration_date}"
 }
 
 container_id=$(docker ps -q -f name=voinetwork_algod)
@@ -111,6 +130,8 @@ else
     health_checks["Daemon ready (and caught up)"]="false"
 fi
 
+get_algod_token
+
 echo "Voi Swarm Docker status:"
 echo "**************"
 swarm_running_image=$(docker inspect --format='{{.Image}}' "${container_id}" | cut -d':' -f2)
@@ -122,7 +143,6 @@ echo ""
 echo "AVM version:"
 echo "**************"
 algod_version=$(docker exec -it "${container_id}" bash -c 'goal version -v')
-account_address=$(get_account_info)
 echo "${algod_version}"
 echo ""
 
@@ -135,11 +155,17 @@ echo ""
 
 echo "Account status:"
 echo "**************"
-echo "Address: ${account_address}"
-echo "Balance: $(docker exec -it "${container_id}" bash -c 'goal account balance -a '"${account_address}"'')"
-display_participation_key_information
+account_addresses=$(get_accounts)
+if [[ $? -eq 1 ]]; then
+  echo "No accounts were found."
+  echo ""
+else
+  for account in ${account_addresses}; do
+    display_account_information "${account}"
+    echo ""
+  done
+fi
 
-echo ""
 echo "Telemetry status:"
 echo "**************"
 echo "Enabled: $(execute_sudo "cat /var/lib/voi/algod/data/logging.config | jq -r .Enable")"
