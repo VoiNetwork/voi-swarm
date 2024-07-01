@@ -156,7 +156,7 @@ echo ""
 echo "Account status:"
 echo "**************"
 account_addresses=$(get_accounts)
-if [[ $? -eq 0 ]]; then
+if [[ $? -eq 1 ]]; then
   echo "No accounts were found."
   echo ""
 else
