@@ -3,6 +3,8 @@ services:
   relay:
     image: ghcr.io/voinetwork/docker-relay-node:latest
     hostname: ${VOINETWORK_TELEMETRY_NAME}
+    logging:
+      driver: "local"
     volumes:
       - /var/lib/voi/algod/data:/algod/data/:rw
     ports:
@@ -21,6 +23,8 @@ services:
     hostname: ${VOINETWORK_TELEMETRY_NAME}
     environment:
       - GOGC=25
+    logging:
+      driver: "local"
     volumes:
       - /var/lib/voi/algod/metrics:/algod/metrics/:rw
     ports:
