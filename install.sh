@@ -485,13 +485,13 @@ start_kmd() {
 get_kmd_token() {
   local kmd_token
   kmd_token=$(execute_docker_command "cat /algod/data/kmd-v0.5/kmd.token")
-  echo ${kmd_token}
+  echo "${kmd_token}"
 }
 
 get_algod_token() {
   local algod_token
   algod_token=$(execute_sudo 'cat /var/lib/voi/algod/data/algod.token')
-  echo ${algod_token}
+  echo "${algod_token}"
 }
 
 display_banner() {
@@ -1024,10 +1024,12 @@ else
     echo "*"
     echo "*    OR"
     echo "*"
-    echo "*    b) Get 1 Voi for free:"
+    echo "*    b) Get 2000 Voi for free:"
     echo "*       - Go to the Voi Network Discord - https://discord.com/invite/vnFbrJrHeW"
     echo "*       - Open the #voiager-chat channel"
-    echo "*       - Type /voi-testnet-faucet ${account_addr}"
+    echo "*       - Type /"
+    echo "*       - Select faucet"
+    echo "*       - Paste your Voi address: ${account_addr}"
     echo "*"
     echo "* After you've done this, type 'completed' to go on"
     echo "****************************************************************************************************************"
