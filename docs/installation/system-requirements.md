@@ -10,11 +10,23 @@
 !!! tip
     Don't have Linux and want to run a node? [Other options are available](../../getting-started/introduction/)
 
-## Compute Requirements and Recommendations
+!!! Note
+There is Difference between cpu and vcpu make sure you check with VPS provider before making a purchase
+
+## Compute Requirements and Recommendations (These are for physical CPU core's)
 
 | Minimum Requirements | Recommended Requirements |
 |----------------------|--------------------------|
 | 4 CPU cores          | 8 CPU cores              |
+| 8 GB RAM             | 16 GB RAM                |
+| 100 GB storage       | 100 GB storage           |
+| 100 Mbps network     | 1 Gbps network           |
+
+## Compute Requirements and Recommendations (These are for virtual CPU core's)
+
+| Minimum Requirements | Recommended Requirements |
+|----------------------|--------------------------|
+| 8 CPU cores          | 16 CPU cores              |
 | 8 GB RAM             | 16 GB RAM                |
 | 100 GB storage       | 100 GB storage           |
 | 100 Mbps network     | 1 Gbps network           |
