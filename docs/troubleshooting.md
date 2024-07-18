@@ -3,7 +3,7 @@
 ## Startup State for Services in Stack
 
 ```bash
-docker stack ps --no-trunc voinetwork`
+docker stack ps --no-trunc voinetwork
 ```
 
 ## Replication State for Services in a Stack
