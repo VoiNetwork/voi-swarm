@@ -14,7 +14,7 @@
 
 | Minimum Requirements | Recommended Requirements |
 |----------------------|--------------------------|
-| 4 CPU cores          | 8 CPU cores              |
+| 8 vCPU / 4 CPU cores | 16 vCPU / 8 CPU cores    |
 | 8 GB RAM             | 16 GB RAM                |
 | 100 GB storage       | 100 GB storage           |
 | 100 Mbps network     | 1 Gbps network           |
