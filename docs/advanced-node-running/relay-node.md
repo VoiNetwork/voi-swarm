@@ -31,3 +31,15 @@ To setup a new relay node execute the following command:
 export VOINETWORK_PROFILE=relay
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
+
+## Peer limits
+
+The default maximum number of incoming peers is 90. To change this limit, run the following command:
+
+```bash
+~/voi/bin/set-peer-limit <new_limit>
+```
+
+!!! warning
+    The maximum number of incoming peers should not exceed what your node can handle.
+    If you fail network performance test you may be removed from the network.
