@@ -46,6 +46,8 @@ if [ -z "${CONTAINER_ID}" ]; then
     exit 1
 fi
 
-echo "Executing Voi 'goal' wrapper from $(readlink -f "$0")"
-echo "---"
-docker exec -it "${CONTAINER_ID}" bash -c "goal $*"
+if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+  echo "Note: Many commands are not supported when using a relay node, and commands may not work as expected."
+fi
+
+docker exec -it "${CONTAINER_ID}" bash -c "/node/bin/goal $*"
