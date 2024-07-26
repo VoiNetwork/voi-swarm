@@ -35,5 +35,30 @@ function util_validate_running_container() {
   fi
 }
 
+function util_update_profile_setting() {
+  local setting_name="$1"
+  local new_value="$2"
+  local profile_file="${HOME}/voi/.profile"
+
+  if grep -q "^export ${setting_name}=" "$profile_file"; then
+    # Update the existing setting
+    sed -i '' "s/^export ${setting_name}=.*/export ${setting_name}=${new_value}/" "$profile_file"
+  else
+    # Add the new setting if it doesn't exist
+    echo "export ${setting_name}=${new_value}" >> "$profile_file"
+  fi
+}
+
+## TODO: Add support for multiple docker files, such as when using notification services
+function util_start_stack() {
+  local composeFile
+  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+    composeFile="${HOME}/voi/docker/relay.yml"
+  else
+    composeFile="${HOME}/voi/docker/compose.yml"
+  fi
+  bash -c "source ${HOME}/voi/.profile && docker stack deploy -c ${composeFile} voinetwork"
+}
+
 util_get_profile
 util_get_container_id

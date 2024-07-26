@@ -1,0 +1,22 @@
+#!/bin/bash
+
+source "${HOME}/voi/bin/.helpers/util.sh"
+
+function validate_supported_node_type() {
+  if [[ ${VOINETWORK_PROFILE} != "relay" ]]; then
+    util_abort "This operation is only supported for relay nodes. Exiting the program."
+  fi
+}
+
+validate_supported_node_type
+
+if [ -z "$1" ]; then
+    echo "Please provide an incoming peer limit"
+    echo "Example: set-peer-limit <limit>"
+    exit 1
+fi
+
+util_update_profile_setting "VOINETWORK_INCOMING_CONNECTIONS_LIMIT" "$1"
+echo "Incoming peer limit set to $1"
+
+util_start_stack
