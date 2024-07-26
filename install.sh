@@ -645,12 +645,21 @@ get_telemetry_name() {
   fi
 }
 
-set_relay_name() {
-  if [[ -f "${voi_home}/relay-name.env" ]]; then
-    VOINETWORK_TELEMETRY_NAME=$(grep telemetry-name "${voi_home}/relay-name.env" | cut -d'=' -f2)
-    return
-  fi
+update_profile_setting() {
+  local setting_name="$1"
+  local new_value="$2"
+  local profile_file="${HOME}/voi/.profile"
 
+  if grep -q "^export ${setting_name}=" "$profile_file"; then
+    # Update the existing setting
+    sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${new_value}/" "$profile_file"
+  else
+    # Add the new setting if it doesn't exist
+    echo "export ${setting_name}=${new_value}" >> "$profile_file"
+  fi
+}
+
+set_relay_name() {
   echo "If you are operating a relay node you need to set a relay name in accordance with the naming convention."
   echo "The relay name should be in the format: <two-characters-representing-you>-<provider-code>-<iso-3166-alpha2-country-code>-<supported-iata-airport-code>-<your-chosen-three-digit-identifier>"
   echo ""
@@ -664,9 +673,7 @@ set_relay_name() {
       read -p "Please enter a relay name: " VOINETWORK_TELEMETRY_NAME
   done
 
-  # This is quite rudimentary, but it's a start. We can add more validation and better structure later. Remember to clean
-  # up the file as a migration when this is done.
-  echo "telemetry-name=${VOINETWORK_TELEMETRY_NAME}" >> "${voi_home}"/relay-name.env
+  update_profile_setting "VOINETWORK_TELEMETRY_NAME" "${VOINETWORK_TELEMETRY_NAME}"
 }
 
 set_telemetry_name() {

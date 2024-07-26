@@ -10,16 +10,19 @@ function validate_supported_node_type() {
 
 validate_supported_node_type
 
-set_relay_name() {
+if [ -z "$1" ]; then
     echo "If you are operating a relay node you need to set a relay name in accordance with the naming convention."
     echo "The relay name should be in the format: <two-characters-representing-you>-<provider-code>-<iso-3166-alpha2-country-code>-<supported-iata-airport-code>-<your-chosen-three-digit-identifier>"
     echo ""
     echo "Supported IATA airport codes can be found here: https://github.com/grafana/grafana/blob/main/public/gazetteer/airports.geojson"
-    # shellcheck disable=SC2162
-    read -p "Relay name: " VOINETWORK_TELEMETRY_NAME
-}
+    echo ""
+    echo "Example: set-relay-name <name>"
+    exit 1
+fi
 
-set_relay_name
 ## Add check to only use if relay profile is running
 
-bash -c "env VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" docker stack deploy -c ${HOME}/voi/docker/relay.yml voinetwork"
+util_update_profile_setting "VOINETWORK_TELEMETRY_NAME" "$1"
+echo "Relay name set to $1"
+
+util_start_stack
