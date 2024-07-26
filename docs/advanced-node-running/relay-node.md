@@ -1,4 +1,4 @@
-# Introduction
+# Running a Relay Node
 
 !!! abstract
     This guide is for advanced users who want to run a relay node on the Voi network.
