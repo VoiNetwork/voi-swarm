@@ -1,6 +1,5 @@
 #!/bin/bash
 
-VOINETWORK_PROFILE=""
 CONTAINER_ID=""
 
 function abort() {
@@ -10,8 +9,8 @@ function abort() {
 
 function get_profile() {
     local voi_home="${HOME}/voi"
-    if [ -f "${voi_home}/profile" ]; then
-      VOINETWORK_PROFILE=$(cat "${voi_home}/profile")
+    if [ -f "${voi_home}/.profile" ]; then
+      source "${voi_home}/.profile"
     else
       abort "Profile not found. Exiting the program."
     fi

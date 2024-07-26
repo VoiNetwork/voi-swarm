@@ -76,6 +76,9 @@ cleanup_deprecated_files_and_folders() {
   if [[ -d ${voi_home}/docker-swarm ]]; then
     rm -rf "${voi_home}/docker-swarm" 2>/dev/null || echo "Failed to delete deprecated folder: ${voi_home}/docker-swarm"
   fi
+  if [[ -f ${voi_home}/profile ]]; then
+    rm -rf "${voi_home}/profile" 2>/dev/null || echo "Failed to delete deprecated file: ${voi_home}/profile"
+  fi
 }
 
 start_docker_swarm() {
@@ -816,21 +819,14 @@ check_minimum_requirements() {
 set_profile() {
   mkdir -p "${voi_home}"
 
-  # Check if ${voi_home}/profile exists
-  if [[ -f "${voi_home}/profile" ]]; then
-      # If it does exist, read the value and save it in the environment variable VOINETWORK_PROFILE
-      VOINETWORK_PROFILE=$(cat "${voi_home}/profile")
-      export VOINETWORK_PROFILE
+  if [[ -f "${voi_home}/.profile" ]]; then
+      source "${voi_home}/.profile"
   else
-      # If the file does not exist, check if VOINETWORK_PROFILE is set
       if [[ -z ${VOINETWORK_PROFILE} ]]; then
-          # If VOINETWORK_PROFILE is not set, write "participation" to the file for the default profile
+          # If VOINETWORK_PROFILE is not set, use default "participation" to profile
           VOINETWORK_PROFILE="participation"
-          echo "participation" > "${voi_home}/profile"
-      else
-          # If VOINETWORK_PROFILE is set, write its value to the file
-          echo "${VOINETWORK_PROFILE}" > "${voi_home}/profile"
       fi
+      echo "export VOINETWORK_PROFILE=${VOINETWORK_PROFILE}" > "${voi_home}/.profile"
   fi
 
   display_banner "Setting up Voi Swarm using profile: ${VOINETWORK_PROFILE}"
