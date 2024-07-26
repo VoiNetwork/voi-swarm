@@ -12,33 +12,16 @@
 
 ## Compute Requirements and Recommendations
 
-=== "Participation nodes"
+| Minimum Requirements | Recommended Requirements |
+|----------------------|--------------------------|
+| 8 vCPU / 4 CPU cores | 16 vCPU / 8 CPU cores    |
+| 8 GB RAM             | 16 GB RAM                |
+| 100 GB storage       | 100 GB storage           |
+| 100 Mbps network     | 1 Gbps network           |
 
-    | Minimum Requirements | Recommended Requirements |
-    |----------------------|--------------------------|
-    | 8 vCPU / 4 CPU cores | 16 vCPU / 8 CPU cores    |
-    | 8 GB RAM             | 16 GB RAM                |
-    | 100 GB storage       | 100 GB storage           |
-    | 100 Mbps network     | 1 Gbps network           |
-
-    !!! note
-        The above requirements are based on the assumption that the node will be running on a dedicated machine.
-        If you are running other services on the same machine, you may need to adjust the requirements accordingly.
-
-=== "Relay nodes"
-
-    | Minimum Requirements  | Recommended Requirements |
-    |-----------------------|--------------------------|
-    | 8 CPU cores           | 12 CPU cores             |
-    | 16 GB RAM             | 16 GB RAM                |
-    | 100 GB storage        | 100 GB storage           |
-    | 1 Gbps network        | 1 Gbps network           |
-    | 30 TB egress traffic  | 40 TB egress traffic     |
-    | 30 TB ingress traffic | 40 TB ingress traffic    |
-
-    !!! note
-        The above requirements are based on well-performing hosting providers. If you are unable to use a dedicated hosting
-        provider, running a relay is not for you.
+!!! note
+    The above requirements are based on the assumption that the node will be running on a dedicated machine.
+    If you are running other services on the same machine, you may need to adjust the requirements accordingly.
 
 ## Why These Requirements?
 

@@ -25,4 +25,21 @@ To learn more about Voi, visit the [Voi documentation website](https://docs.voi.
 | [D13 guide](https://d13.co/posts/set-up-voi-participation-node/)      | Understanding the setup process and with more control (advanced use case, and no longer recommended) | Linux             |
 | Roll your own                                                         | You have a specific use case that doesn't fit the above options.                                     | Any               |
 
-## What Relay Node Running Options are Available?
+<div class="grid cards" markdown>
+
+- :material-clock-fast:{ .lg .middle } __Set up in 5 minutes__
+
+    ---
+
+    Install Voi Swarm and be up and running in minutes.
+
+    [:octicons-arrow-right-24: Getting started](../../installation/system-requirements/)
+
+- :material-airplane:{ .lg .middle } __Advanced use-cases__
+
+    ---
+
+    Run relay nodes easily using Voi Swarm.
+
+    [:octicons-arrow-right-24: Getting started](../../advanced-node-running/relay-node/)
+</div>
