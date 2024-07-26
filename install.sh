@@ -510,9 +510,10 @@ docker_swarm_instructions() {
   echo "Parameters that can be passed to the swarm can be found at: https://docs.docker.com/engine/reference/commandline/swarm_init/"
   echo ""
   if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
-    echo "Troubleshoot on your own, and after troubleshooting join #relay-runners on Discord (https://discord.com/invite/vnFbrJrHeW) to engage with the community and get help."
-    echo "It's crucial to have a strong grasp of technical details, including the ability to execute commands directly on the server, and access and understand cloud resources and logs. Being self-sufficient and having the ability to debug issues independently are key skills for managing this setup."
-    echo "If this is not for you, consider other means to engage with the community and contribute."
+    echo "If you encounter issues, please troubleshoot on your own first."
+    echo "If you need further assistance, join #relay-runners on Discord (https://discord.com/invite/vnFbrJrHeW) to engage with the community and get help after describing all troubleshooting steps performed."
+    echo "Having a strong grasp of technical details, including the ability to execute commands directly on the server, and understanding cloud resources and logs, is required for managing this setup."
+    echo "If you prefer other ways to engage with the community and contribute, consider exploring different options."
   else
     echo "Join #node-resources on Discord (https://discord.com/invite/vnFbrJrHeW) to engage with the community and get help by using the Discord ((https://discord.com/invite/vnFbrJrHeW))."
   fi
@@ -555,10 +556,9 @@ joined_network_instructions() {
     display_banner "Relay node setup"
     echo "Due to the nature of relay nodes, you will not be able to participate in the consensus network on this server."
     echo ""
-    echo "Few things to be mindful of:"
-    echo " - *BETA*: Utility commands are available in ${voi_home}/bin, however any that assumes participation will not work."
-    echo " - It is your responsibility to monitor the server and ensure it is running smoothly."
-    echo " - You're responsible for server security, maintenance, updates, access controls, and monitoring."
+    echo "By running this software you acknowledge the following:"
+    echo " - It is your responsibility to monitor the software and how it is performing."
+    echo " - You are responsible for operating the software and server, this includes, but is not limited to security, maintenance, updates, access controls, and monitoring."
   fi
 
   echo ""
