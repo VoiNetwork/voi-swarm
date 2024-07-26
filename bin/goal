@@ -46,8 +46,5 @@ if [ -z "${CONTAINER_ID}" ]; then
     exit 1
 fi
 
-if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
-  echo "Note: Many commands are not supported when using a relay node, and commands may not work as expected."
-fi
-
-docker exec -it "${CONTAINER_ID}" bash -c "/node/bin/goal $*"
+# shellcheck disable=SC2068
+docker exec -it "${CONTAINER_ID}" /node/bin/goal -d /algod/data $@
