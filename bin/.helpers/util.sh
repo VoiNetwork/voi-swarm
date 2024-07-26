@@ -42,7 +42,7 @@ function util_update_profile_setting() {
 
   if grep -q "^export ${setting_name}=" "$profile_file"; then
     # Update the existing setting
-    sed -i '' "s/^export ${setting_name}=.*/export ${setting_name}=${new_value}/" "$profile_file"
+    sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${new_value}/" "$profile_file"
   else
     # Add the new setting if it doesn't exist
     echo "export ${setting_name}=${new_value}" >> "$profile_file"
