@@ -649,8 +649,8 @@ set_relay_name() {
   fi
 
   echo "If you are operating a relay node you need to set a relay name in accordance with the naming convention."
-  echo "The relay name should be in the format: <your initials>-<provider-code>-<iso-3166-alpha2-country-code>-<supported-iata-airport-code>-<your-chosen-identifier>"
-  echo "Example: hs-htz-us-iad-002"
+  echo "The relay name should be in the format: <two-characters-representing-you>-<provider-code>-<iso-3166-alpha2-country-code>-<supported-iata-airport-code>-<your-chosen-three-digit-identifier>"
+  echo ""
   echo "Supported IATA airport codes can be found here: https://github.com/grafana/grafana/blob/main/public/gazetteer/airports.geojson"
   # shellcheck disable=SC2162
   read -p "Relay name: " VOINETWORK_TELEMETRY_NAME
