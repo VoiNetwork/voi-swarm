@@ -1,5 +1,34 @@
 #!/bin/bash
 
+VOINETWORK_PROFILE=""
+
+function abort() {
+  echo "$1"
+  exit 1
+}
+
+function get_profile() {
+    local voi_home="${HOME}/voi"
+    if [ -f "${voi_home}/profile" ]; then
+      VOINETWORK_PROFILE=$(cat "${voi_home}/profile")
+    else
+      abort "Profile not found. Exiting the program."
+    fi
+
+    if [ -z "${VOINETWORK_PROFILE}" ]; then
+      abort "Profile not found. Exiting the program."
+    fi
+}
+
+function validate_supported_node_type() {
+  if [[ ${VOINETWORK_PROFILE} != "participation" && ${VOINETWORK_PROFILE} != "relay" ]]; then
+    abort "This operation is only supported for participation and relay nodes. Exiting the program."
+  fi
+}
+
+get_profile
+validate_supported_node_type
+
 echo "Enable/Disable autoupdate for your node"
 echo ""
 echo "To enable autoupdate use: set-autoupdate true"
@@ -15,8 +44,6 @@ if [[ $1 != "true" && $1 != "false" ]]; then
   echo "Invalid value for autoupdate. Please use 'true' or 'false'."
   exit 1
 fi
-
-VOINETWORK_PROFILE=$(cat "${HOME}/voi/profile")
 
 if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
   docker_filename="${HOME}/voi/docker/relay.yml"

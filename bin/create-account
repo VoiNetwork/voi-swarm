@@ -1,9 +1,49 @@
 #!/bin/bash
 
-container_id=$(docker ps -q -f name=voinetwork_algod)
-if [ -z "${container_id}" ]; then
+VOINETWORK_PROFILE=""
+CONTAINER_ID=""
+
+function abort() {
+  echo "$1"
+  exit 1
+}
+
+function get_profile() {
+    local voi_home="${HOME}/voi"
+    if [ -f "${voi_home}/profile" ]; then
+      VOINETWORK_PROFILE=$(cat "${voi_home}/profile")
+    else
+      abort "Profile not found. Exiting the program."
+    fi
+
+    if [ -z "${VOINETWORK_PROFILE}" ]; then
+      abort "Profile not found. Exiting the program."
+    fi
+}
+
+function get_container_id() {
+  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+    CONTAINER_ID=$(docker ps -q -f name=voinetwork_relay)
+  elif [[ ${VOINETWORK_PROFILE} == "participation" ]]; then
+    CONTAINER_ID=$(docker ps -q -f name=voinetwork_algod)
+  else
+    abort "Invalid profile. Exiting the program."
+  fi
+}
+
+function validate_supported_node_type() {
+  if [[ ${VOINETWORK_PROFILE} != "participation" ]]; then
+    abort "This operation is only supported for participation nodes. Exiting the program."
+  fi
+}
+
+get_profile
+get_container_id
+validate_supported_node_type
+
+if [ -z "${CONTAINER_ID}" ]; then
     echo "AVM container is not running. Please start it first."
     exit 1
 fi
 
-docker exec -it "${container_id}" goal account new
+docker exec -it "${CONTAINER_ID}" goal account new

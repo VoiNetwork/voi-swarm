@@ -1,5 +1,34 @@
 #!/bin/bash
 
+VOINETWORK_PROFILE=""
+
+function abort() {
+  echo "$1"
+  exit 1
+}
+
+function get_profile() {
+    local voi_home="${HOME}/voi"
+    if [ -f "${voi_home}/profile" ]; then
+      VOINETWORK_PROFILE=$(cat "${voi_home}/profile")
+    else
+      abort "Profile not found. Exiting the program."
+    fi
+
+    if [ -z "${VOINETWORK_PROFILE}" ]; then
+      abort "Profile not found. Exiting the program."
+    fi
+}
+
+function validate_supported_node_type() {
+  if [[ ${VOINETWORK_PROFILE} != "relay" ]]; then
+    abort "This operation is only supported for relay nodes. Exiting the program."
+  fi
+}
+
+get_profile
+validate_supported_node_type
+
 set_relay_name() {
     echo "If you are operating a relay node you need to set a relay name in accordance with the naming convention."
     echo "The relay name should be in the format: <your initials>-<provider-code>-<iso-3166-alpha2-country-code>-<supported-iata-airport-code>-<your-chosen-identifier>"

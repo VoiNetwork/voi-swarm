@@ -1,14 +1,56 @@
 #!/bin/bash
+
 echo ""
 echo "Tip:"
 echo "    To get the latest updates, including updating participation key if needed, rerun the installer."
 echo "    If your current participation key expires within ~14 days the installer will automatically offer to generate a new key."
 echo "    To rerun the installer execute:"
+# shellcheck disable=SC2016
 echo '      /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"'
 echo ""
 
-container_id=$(docker ps -q -f name=voinetwork_algod)
-if [ -z "${container_id}" ]; then
+VOINETWORK_PROFILE=""
+CONTAINER_ID=""
+
+function abort() {
+  echo "$1"
+  exit 1
+}
+
+function get_profile() {
+    local voi_home="${HOME}/voi"
+    if [ -f "${voi_home}/profile" ]; then
+      VOINETWORK_PROFILE=$(cat "${voi_home}/profile")
+    else
+      abort "Profile not found. Exiting the program."
+    fi
+
+    if [ -z "${VOINETWORK_PROFILE}" ]; then
+      abort "Profile not found. Exiting the program."
+    fi
+}
+
+function get_container_id() {
+  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+    CONTAINER_ID=$(docker ps -q -f name=voinetwork_relay)
+  elif [[ ${VOINETWORK_PROFILE} == "participation" ]]; then
+    CONTAINER_ID=$(docker ps -q -f name=voinetwork_algod)
+  else
+    abort "Invalid profile. Exiting the program."
+  fi
+}
+
+function validate_supported_node_type() {
+  if [[ ${VOINETWORK_PROFILE} != "participation" ]]; then
+    abort "This operation is only supported for participation nodes. Exiting the program."
+  fi
+}
+
+get_profile
+get_container_id
+validate_supported_node_type
+
+if [ -z "${CONTAINER_ID}" ]; then
     echo "AVM container is not running. Please start it first."
     exit 1
 fi
@@ -19,4 +61,4 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-docker exec -e account_addr="$1" -it "${container_id}" bash -c 'start=$(goal node status | grep "Last committed block:" | cut -d\  -f4) && duration=${duration:-2000000} && end=$((start + duration)) && goal account addpartkey -a ${account_addr} --roundFirstValid $start --roundLastValid $end'
+docker exec -e account_addr="$1" -it "${CONTAINER_ID}" bash -c 'start=$(goal node status | grep "Last committed block:" | cut -d\  -f4) && duration=${duration:-2000000} && end=$((start + duration)) && goal account addpartkey -a ${account_addr} --roundFirstValid $start --roundLastValid $end'
