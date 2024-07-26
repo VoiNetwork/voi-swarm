@@ -26,6 +26,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://voinetwork.github.io/voi-swarm/advanced-node-running/relay-node/</loc>
+         <lastmod>2024-07-26</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://voinetwork.github.io/voi-swarm/getting-started/introduction/</loc>
          <lastmod>2024-07-26</lastmod>
          <changefreq>daily</changefreq>

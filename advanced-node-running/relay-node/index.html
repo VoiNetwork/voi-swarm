@@ -10,26 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://voinetwork.github.io/voi-swarm/">
+        <link rel="canonical" href="https://voinetwork.github.io/voi-swarm/advanced-node-running/relay-node/">
       
       
+        <link rel="prev" href="../../migrating/">
       
-        <link rel="next" href="getting-started/introduction/">
+      
+        <link rel="next" href="../../cli-tools/">
       
       
-      <link rel="icon" href="assets/favicon.ico">
+      <link rel="icon" href="../../assets/favicon.ico">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.30">
     
     
       
-        <title>Voi Swarm</title>
+        <title>Relay Node - Voi Swarm</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.3cba04c6.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3cba04c6.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -43,14 +45,14 @@
         
         
         
-        <link rel="stylesheet" href="assets/external/fonts.googleapis.com/css.49ea35f2.css">
+        <link rel="stylesheet" href="../../assets/external/fonts.googleapis.com/css.49ea35f2.css">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -69,11 +71,11 @@
       
         <meta  property="og:type"  content="website" >
       
-        <meta  property="og:title"  content="Voi Swarm" >
+        <meta  property="og:title"  content="Relay Node - Voi Swarm" >
       
         <meta  property="og:description"  content="Create and run a Voi Network Participation Node" >
       
-        <meta  property="og:image"  content="https://voinetwork.github.io/voi-swarm/assets/images/social/index.png" >
+        <meta  property="og:image"  content="https://voinetwork.github.io/voi-swarm/assets/images/social/advanced-node-running/relay-node.png" >
       
         <meta  property="og:image:type"  content="image/png" >
       
@@ -81,15 +83,15 @@
       
         <meta  property="og:image:height"  content="630" >
       
-        <meta  property="og:url"  content="https://voinetwork.github.io/voi-swarm/" >
+        <meta  property="og:url"  content="https://voinetwork.github.io/voi-swarm/advanced-node-running/relay-node/" >
       
         <meta  name="twitter:card"  content="summary_large_image" >
       
-        <meta  name="twitter:title"  content="Voi Swarm" >
+        <meta  name="twitter:title"  content="Relay Node - Voi Swarm" >
       
         <meta  name="twitter:description"  content="Create and run a Voi Network Participation Node" >
       
-        <meta  name="twitter:image"  content="https://voinetwork.github.io/voi-swarm/assets/images/social/index.png" >
+        <meta  name="twitter:image"  content="https://voinetwork.github.io/voi-swarm/assets/images/social/advanced-node-running/relay-node.png" >
       
     
     
@@ -110,7 +112,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#voi-swarm" class="md-skip">
+        <a href="#introduction" class="md-skip">
           Skip to content
         </a>
       
@@ -126,9 +128,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Voi Swarm" class="md-header__button md-logo" aria-label="Voi Swarm" data-md-component="logo">
+    <a href="../.." title="Voi Swarm" class="md-header__button md-logo" aria-label="Voi Swarm" data-md-component="logo">
       
-  <img src="assets/Voi_Logo_White_on_Purple_Background.png" alt="logo">
+  <img src="../../assets/Voi_Logo_White_on_Purple_Background.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -145,7 +147,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Voi Swarm
+              Relay Node
             
           </span>
         </div>
@@ -234,9 +236,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Voi Swarm" class="md-nav__button md-logo" aria-label="Voi Swarm" data-md-component="logo">
+    <a href="../.." title="Voi Swarm" class="md-nav__button md-logo" aria-label="Voi Swarm" data-md-component="logo">
       
-  <img src="assets/Voi_Logo_White_on_Purple_Background.png" alt="logo">
+  <img src="../../assets/Voi_Logo_White_on_Purple_Background.png" alt="logo">
 
     </a>
     Voi Swarm
@@ -260,30 +262,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Voi Swarm
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -292,53 +274,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#what-is-voi-swarm" class="md-nav__link">
-    <span class="md-ellipsis">
-      What is Voi Swarm?
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Features
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
-    <span class="md-ellipsis">
-      License
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -385,7 +320,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting-started/introduction/" class="md-nav__link">
+      <a href="../../getting-started/introduction/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -448,7 +383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/system-requirements/" class="md-nav__link">
+      <a href="../../installation/system-requirements/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -469,7 +404,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/prerequisites/" class="md-nav__link">
+      <a href="../../installation/prerequisites/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -490,7 +425,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/installation/" class="md-nav__link">
+      <a href="../../installation/installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -511,7 +446,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/installation-advanced/" class="md-nav__link">
+      <a href="../../installation/installation-advanced/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -532,7 +467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/uninstall/" class="md-nav__link">
+      <a href="../../installation/uninstall/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -595,7 +530,7 @@
   
   
     <li class="md-nav__item">
-      <a href="updating/swarm-update/" class="md-nav__link">
+      <a href="../../updating/swarm-update/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -616,7 +551,7 @@
   
   
     <li class="md-nav__item">
-      <a href="updating/telemetry/" class="md-nav__link">
+      <a href="../../updating/telemetry/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -679,7 +614,7 @@
   
   
     <li class="md-nav__item">
-      <a href="operating/running-your-node/" class="md-nav__link">
+      <a href="../../operating/running-your-node/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -700,7 +635,7 @@
   
   
     <li class="md-nav__item">
-      <a href="operating/participation-keys/" class="md-nav__link">
+      <a href="../../operating/participation-keys/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -721,7 +656,7 @@
   
   
     <li class="md-nav__item">
-      <a href="operating/setup-notifications/" class="md-nav__link">
+      <a href="../../operating/setup-notifications/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -784,7 +719,7 @@
   
   
     <li class="md-nav__item">
-      <a href="notification-guides/amazon-ses/" class="md-nav__link">
+      <a href="../../notification-guides/amazon-ses/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -805,7 +740,7 @@
   
   
     <li class="md-nav__item">
-      <a href="notification-guides/email/" class="md-nav__link">
+      <a href="../../notification-guides/email/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -826,7 +761,7 @@
   
   
     <li class="md-nav__item">
-      <a href="notification-guides/pushbullet/" class="md-nav__link">
+      <a href="../../notification-guides/pushbullet/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -854,7 +789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="provider-guidance/" class="md-nav__link">
+      <a href="../../provider-guidance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -874,7 +809,7 @@
   
   
     <li class="md-nav__item">
-      <a href="migrating/" class="md-nav__link">
+      <a href="../../migrating/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -891,17 +826,19 @@
       
   
   
+    
   
   
+  
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
         
           
           <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
@@ -915,7 +852,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             Advanced Node Running
@@ -926,10 +863,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="advanced-node-running/relay-node/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Relay Node
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -938,6 +895,44 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      System Requirements
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -957,7 +952,7 @@
   
   
     <li class="md-nav__item">
-      <a href="cli-tools/" class="md-nav__link">
+      <a href="../../cli-tools/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -977,7 +972,7 @@
   
   
     <li class="md-nav__item">
-      <a href="troubleshooting/" class="md-nav__link">
+      <a href="../../troubleshooting/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1017,27 +1012,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-voi-swarm" class="md-nav__link">
+  <a href="#system-requirements" class="md-nav__link">
     <span class="md-ellipsis">
-      What is Voi Swarm?
+      System Requirements
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
-      Features
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
-    <span class="md-ellipsis">
-      License
+      Installation
     </span>
   </a>
   
@@ -1058,7 +1044,7 @@
                   
 
   
-    <a href="https://github.com/VoiNetwork/voi-swarm/edit/main/docs/index.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/VoiNetwork/voi-swarm/edit/main/docs/advanced-node-running/relay-node.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
     </a>
@@ -1066,33 +1052,59 @@
   
 
 
-<h1 id="voi-swarm">Voi Swarm</h1>
-<p><img src="assets/Voi_Logo_Purple_on_White_Background.png" alt="swarm-cronjob" width="128px" style="display: block; margin-left: auto; margin-right: auto"/></p>
-<hr />
-<h2 id="what-is-voi-swarm">What is Voi Swarm?</h2>
-<p>Voi Swarm is a set of scripts and configurations that allows a user to easily join the <a href="https://docs.voi.network">Voi network</a> as
-a participant.</p>
-<p>Tenets for the Voi Swarm package are:</p>
-<blockquote>
-<ol>
-<li>Offer easy ways for users to operate and maintain their nodes as healthy participants in the Voi network.</li>
-<li>Provide a simple and easy way to onboard new participants.</li>
-<li>The package should be as cheap as possible to run for individual participants.</li>
-</ol>
-</blockquote>
-<p>To achieve this, the package is an opinionated way to join the network, and may thus not be suitable for
-all use cases.</p>
-<h2 id="features">Features</h2>
-<ul>
-<li><strong>Effortless Installation</strong>: Deploy a Voi node on Linux with a single command.</li>
-<li><strong>Rapid Deployment</strong>: Built for swift setup and onboarding.</li>
-<li><strong>Automatic Updates</strong>: Seamless application of Docker image updates.</li>
-<li><strong>Health Monitoring</strong>: System auto-restarts the node if needed.</li>
-<li><strong>Optional Notification</strong>: Get notified when actions are required.</li>
-<li><strong>Economical</strong>: Supports arm64 and amd64 (x86_64).</li>
-</ul>
-<h2 id="license">License</h2>
-<p>This project is licensed under AGPL-3.0.</p>
+<h1 id="introduction">Introduction</h1>
+<div class="admonition abstract">
+<p class="admonition-title">Abstract</p>
+<p>This guide is for advanced users who want to run a relay node on the Voi network.
+If you are starting out on Voi you should <a href="../../installation/system-requirements/">start running a participation node</a> first.</p>
+</div>
+<p>Relay running is a critical part of the Voi network. It helps to relay transactions and blocks between the network participating nodes.</p>
+<p>Running a relay is a permission-based process, and you need to <a href="https://docs.voi.network/node-runners/become-a-relay-runner/">apply for permission</a></p>
+<h2 id="system-requirements">System Requirements</h2>
+<table>
+<thead>
+<tr>
+<th>Minimum Requirements</th>
+<th>Recommended Requirements</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8 CPU cores</td>
+<td>12 CPU cores</td>
+</tr>
+<tr>
+<td>16 GB RAM</td>
+<td>16 GB RAM</td>
+</tr>
+<tr>
+<td>100 GB storage</td>
+<td>100 GB storage</td>
+</tr>
+<tr>
+<td>1 Gbps network</td>
+<td>1 Gbps network</td>
+</tr>
+<tr>
+<td>30 TB egress traffic</td>
+<td>40 TB egress traffic</td>
+</tr>
+<tr>
+<td>30 TB ingress traffic</td>
+<td>40 TB ingress traffic</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above requirements are based on well-performing hosting providers. If you are unable to use a dedicated hosting
+provider, running a relay is not for you, as you will fail the weekly tests and be removed from the network.</p>
+</div>
+<h2 id="installation">Installation</h2>
+<p>To setup a new relay node execute the following command:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">VOINETWORK_PROFILE</span><span class="o">=</span>relay
+/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://get.voi.network/swarm<span class="k">)</span><span class="s2">&quot;</span>
+</code></pre></div>
 
 
 
@@ -1115,7 +1127,7 @@ all use cases.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">May 10, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 26, 2024</span>
   </span>
 
     
@@ -1125,7 +1137,7 @@ all use cases.</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 1, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 26, 2024</span>
   </span>
 
     
@@ -1351,10 +1363,10 @@ all use cases.</p>
       </div>
       <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.instant.progress", "content.action.edit", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "content.action.edit", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
       
     
   </body>
