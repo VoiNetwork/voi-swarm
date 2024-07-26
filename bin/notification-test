@@ -1,24 +1,8 @@
 #!/bin/bash
 
+source "${HOME}/voi/bin/.helpers/util.sh"
+
 CONTAINER_ID=""
-
-function abort() {
-  echo "$1"
-  exit 1
-}
-
-function get_profile() {
-    local voi_home="${HOME}/voi"
-    if [ -f "${voi_home}/.profile" ]; then
-      source "${voi_home}/.profile"
-    else
-      abort "Profile not found. Exiting the program."
-    fi
-
-    if [ -z "${VOINETWORK_PROFILE}" ]; then
-      abort "Profile not found. Exiting the program."
-    fi
-}
 
 function get_container_id() {
   CONTAINER_ID=$(docker ps -q -f name=voinetwork_algod)
@@ -26,12 +10,10 @@ function get_container_id() {
 
 function validate_supported_node_type() {
   if [[ ${VOINETWORK_PROFILE} != "participation" ]]; then
-    abort "This operation is only supported for participation nodes. Exiting the program."
+    util_abort "This operation is only supported for participation nodes. Exiting the program."
   fi
 }
 
-get_profile
-get_container_id
 validate_supported_node_type
 
 if [ -z "${CONTAINER_ID}" ]; then

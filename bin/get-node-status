@@ -1,44 +1,15 @@
 #!/bin/bash
 
-CONTAINER_ID=""
-
-function abort() {
-  echo "$1"
-  exit 1
-}
-
-function get_profile() {
-    local voi_home="${HOME}/voi"
-    if [ -f "${voi_home}/.profile" ]; then
-      source "${voi_home}/.profile"
-    else
-      abort "Profile not found. Exiting the program."
-    fi
-
-    if [ -z "${VOINETWORK_PROFILE}" ]; then
-      abort "Profile not found. Exiting the program."
-    fi
-}
-
-function get_CONTAINER_ID() {
-  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
-    CONTAINER_ID=$(docker ps -q -f name=voinetwork_relay)
-  elif [[ ${VOINETWORK_PROFILE} == "participation" ]]; then
-    CONTAINER_ID=$(docker ps -q -f name=voinetwork_algod)
-  else
-    abort "Invalid profile. Exiting the program."
-  fi
-}
+source "${HOME}/voi/bin/.helpers/util.sh"
 
 function validate_supported_node_type() {
   if [[ ${VOINETWORK_PROFILE} != "participation" ]]; then
-    abort "This operation is only supported for participation nodes. Exiting the program."
+    util_abort "This operation is only supported for participation nodes. Exiting the program."
   fi
 }
 
-get_profile
-get_CONTAINER_ID
 validate_supported_node_type
+util_validate_running_container
 
 is_root=0
 
@@ -60,7 +31,7 @@ get_last_committed_block() {
 
 get_accounts() {
   if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voitest-v1/accountList.json"'; then
-    abort "Account list not found. Exiting the program."
+    util_abort "Account list not found. Exiting the program."
   fi
 
   accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
@@ -139,7 +110,7 @@ if [[ $(id -u) -eq 0 ]]; then
 else
   echo "Checking for sudo access, you may be prompted for your password."
   if ! sudo -v &> /dev/null; then
-    abort "User does not have sudo access. Please run this script as a user with sudo access."
+    util_abort "User does not have sudo access. Please run this script as a user with sudo access."
   fi
 fi
 

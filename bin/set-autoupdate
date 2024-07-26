@@ -1,30 +1,13 @@
 #!/bin/bash
 
-function abort() {
-  echo "$1"
-  exit 1
-}
-
-function get_profile() {
-    local voi_home="${HOME}/voi"
-    if [ -f "${voi_home}/.profile" ]; then
-      source "${voi_home}/.profile"
-    else
-      abort "Profile not found. Exiting the program."
-    fi
-
-    if [ -z "${VOINETWORK_PROFILE}" ]; then
-      abort "Profile not found. Exiting the program."
-    fi
-}
+source "${HOME}/voi/bin/.helpers/util.sh"
 
 function validate_supported_node_type() {
   if [[ ${VOINETWORK_PROFILE} != "participation" && ${VOINETWORK_PROFILE} != "relay" ]]; then
-    abort "This operation is only supported for participation and relay nodes. Exiting the program."
+    util_abort "This operation is only supported for participation and relay nodes. Exiting the program."
   fi
 }
 
-get_profile
 validate_supported_node_type
 
 echo "Enable/Disable autoupdate for your node"
