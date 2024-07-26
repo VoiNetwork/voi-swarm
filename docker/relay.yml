@@ -3,6 +3,8 @@ services:
   relay:
     image: ghcr.io/voinetwork/voi-node:latest
     hostname: ${VOINETWORK_TELEMETRY_NAME}
+    environment:
+      VOINETWORK_INCOMING_CONNECTIONS_LIMIT: ${VOINETWORK_INCOMING_CONNECTIONS_LIMIT}
     logging:
       driver: "local"
     volumes:
