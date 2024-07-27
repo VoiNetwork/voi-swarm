@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 site_name: Voi Swarm
-site_description: Create and run a Voi Network Participation Node
+site_description: Join the Voi Network by running a node
 site_url: https://voinetwork.github.io/voi-swarm/
 repo_url: https://github.com/VoiNetwork/voi-swarm
 edit_uri: edit/main/docs/
