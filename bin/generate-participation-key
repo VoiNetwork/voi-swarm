@@ -2,6 +2,9 @@
 
 source "${HOME}/voi/bin/.helpers/util.sh"
 
+util_validate_supported_node_type "participation"
+util_validate_running_container
+
 echo ""
 echo "Tip:"
 echo "    To get the latest updates, including updating participation key if needed, rerun the installer."
@@ -10,9 +13,6 @@ echo "    To rerun the installer execute:"
 # shellcheck disable=SC2016
 echo '      /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"'
 echo ""
-
-util_validate_supported_node_type "participation"
-util_validate_running_container
 
 if [ -z "$1" ]; then
     echo "Please provide an account address as a parameter."
