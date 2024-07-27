@@ -2,7 +2,7 @@
 
 ## About
 
-This repository contains the installation script and configuration files for setting up a Voi participation node on a
+This repository contains the installation script and configuration files for setting up a Voi node on a
 Linux system.
 
 Success criteria for the installation script are:
