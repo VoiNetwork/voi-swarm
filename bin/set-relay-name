@@ -14,8 +14,6 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-## Add check to only use if relay profile is running
-
 util_update_profile_setting "VOINETWORK_TELEMETRY_NAME" "$1"
 echo "Relay name set to $1"
 
