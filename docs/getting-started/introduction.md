@@ -1,5 +1,24 @@
 # Introduction
 
+<div class="grid cards" markdown>
+
+  - :material-clock-fast:{ .lg .middle } __Set up in 5 minutes__
+
+    ---
+
+    Install Voi Swarm and be up and running in minutes.
+
+    [:octicons-arrow-right-24: Get started!](../../installation/system-requirements/)
+
+  - :material-airplane:{ .lg .middle } __Advanced use-cases__
+
+    ---
+
+    Contribute core infrastructure to the Voi network.
+
+    [:octicons-arrow-right-24:  Run a relay node!](../../advanced-node-running/relay-node/)
+</div>
+
 Welcome to the documentation for Voi Swarm. Delighted to have you here :tophat:
 
 Voi Swarm provides a straightforward entry to the Voi network. However, its opinionated design may not fit all use cases.
@@ -24,22 +43,3 @@ To learn more about Voi, visit the [Voi documentation website](https://docs.voi.
 | [Austs One Click Node](https://github.com/AustP/austs-one-click-node) | You want to explore what Voi is about, and with an easy graphical interface and with no commitment.  | Windows/Linux/Mac |
 | [D13 guide](https://d13.co/posts/set-up-voi-participation-node/)      | Understanding the setup process and with more control (advanced use case, and no longer recommended) | Linux             |
 | Roll your own                                                         | You have a specific use case that doesn't fit the above options.                                     | Any               |
-
-<div class="grid cards" markdown>
-
-- :material-clock-fast:{ .lg .middle } __Set up in 5 minutes__
-
-    ---
-
-    Install Voi Swarm and be up and running in minutes.
-
-    [:octicons-arrow-right-24: Getting started](../../installation/system-requirements/)
-
-- :material-airplane:{ .lg .middle } __Advanced use-cases__
-
-    ---
-
-    Run relay nodes easily using Voi Swarm.
-
-    [:octicons-arrow-right-24: Getting started](../../advanced-node-running/relay-node/)
-</div>
