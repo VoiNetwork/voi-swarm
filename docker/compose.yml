@@ -4,6 +4,7 @@ services:
     image: ghcr.io/voinetwork/docker-participation-node:latest
     environment:
       TELEMETRY_NAME: ${VOINETWORK_TELEMETRY_NAME}
+      VOINETWORK_PROFILE: ${VOINETWORK_PROFILE}
     logging:
       driver: "local"
     volumes:

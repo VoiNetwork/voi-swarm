@@ -2,7 +2,7 @@
 
 source "${HOME}/voi/bin/.helpers/util.sh"
 
-util_validate_supported_node_type "participation" "relay"
+util_validate_supported_node_type "participation" "relay" "developer"
 
 echo "Enable/Disable autoupdate for your node"
 echo ""
@@ -22,6 +22,8 @@ fi
 
 if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
   docker_filename="${HOME}/voi/docker/relay.yml"
+elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
+  docker_filename="${HOME}/voi/docker/developer.yml"
 else
   docker_filename="${HOME}/voi/docker/compose.yml"
 fi

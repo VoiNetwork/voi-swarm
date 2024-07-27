@@ -16,6 +16,8 @@ function util_get_profile() {
 function util_get_container_id() {
   if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
     CONTAINER_ID=$(docker ps -q -f name=voinetwork_relay)
+  elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
+    CONTAINER_ID=$(docker ps -q -f name=voinetwork_developer)
   elif [[ ${VOINETWORK_PROFILE} == "participation" ]]; then
     CONTAINER_ID=$(docker ps -q -f name=voinetwork_algod)
   else
@@ -54,6 +56,8 @@ function util_start_stack() {
   local composeFile
   if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
     composeFile="${HOME}/voi/docker/relay.yml"
+  elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
+    composeFile="${HOME}/voi/docker/developer.yml"
   else
     composeFile="${HOME}/voi/docker/compose.yml"
   fi

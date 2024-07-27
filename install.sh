@@ -109,8 +109,10 @@ start_stack() {
 
   if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
     docker_file="${voi_home}/docker/relay.yml"
+  elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
+    docker_file="${voi_home}/docker/developer.yml"
   fi
-  command="env VOINETWORK_TELEMETRY_NAME=$VOINETWORK_TELEMETRY_NAME docker stack deploy -c ${docker_file}"
+  command="source ${voi_home}/.profile && docker stack deploy -c ${docker_file}"
 
   if [[ -f "${voi_home}/docker/notification.yml" ]]; then
       command+=" -c ${voi_home}/docker/notification.yml"
@@ -554,10 +556,10 @@ joined_network_instructions() {
     echo "The network is now catching up and will continue to do so in the background."
   fi
 
-  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+  if [[ ${VOINETWORK_PROFILE} != "participation" ]]; then
     echo ""
-    display_banner "Relay node setup"
-    echo "Due to the nature of relay nodes, you will not be able to participate in the consensus network on this server."
+    display_banner "Node setup"
+    echo "Due to the nature of ${VOINETWORK_PROFILE} nodes, you will not be able to participate in the consensus network on this server."
     echo ""
     echo "By running this software you acknowledge the following:"
     echo " - It is your responsibility to monitor the software and how it is performing."
@@ -572,7 +574,7 @@ joined_network_instructions() {
   echo "  echo 'export PATH=\"\$PATH:${voi_home}/bin\"' >> ~/.bashrc && source ~/.bashrc"
   echo ""
 
-  if [[ ${skip_account_setup} -eq 0 && ${VOINETWORK_PROFILE} != "relay" ]]; then
+  if [[ ${skip_account_setup} -eq 0 && ${VOINETWORK_PROFILE} == "participation" ]]; then
     echo "${bold}*********************************** READ THIS! ***********************************${normal}"
     echo "After joining the network, it might take up to 2 hours for your server to appear on telemetry"
     echo "tracking services. Initially, you can identify your server using the 12-digit short GUID shown by"
@@ -636,7 +638,7 @@ add_docker_groups() {
 }
 
 get_telemetry_name() {
-  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+  if [[ ${VOINETWORK_PROFILE} != "participation" ]] ; then
     return
   fi
 
@@ -682,8 +684,10 @@ set_telemetry_name() {
     return
   fi
 
-  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
+  if [[ ${VOINETWORK_PROFILE} == "relay" && -z ${VOINETWORK_TELEMETRY_NAME} ]]; then
     set_relay_name
+    return
+  elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
     return
   fi
 
@@ -751,7 +755,7 @@ migrate_host_based_voi_setup() {
 }
 
 check_minimum_requirements() {
-  if [[ ${headless_install} -eq 1 ]]; then
+  if [[ ${headless_install} -eq 1 || ${VOINETWORK_PROFILE} == "developer" ]]; then
     ## Allow headless install to skip telemetry name setup in case people bring their own wallets / use CI
     return
   fi
@@ -842,6 +846,8 @@ set_profile() {
 preserve_autoupdate() {
     if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
       docker_filename="${voi_home}/docker/relay.yml"
+    elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
+      docker_filename="${voi_home}/docker/developer.yml"
     else
       docker_filename="${voi_home}/docker/compose.yml"
     fi
@@ -986,11 +992,11 @@ start_stack
 
 wait_for_stack_to_be_ready
 
-if [[ ${VOINETWORK_PROFILE} != "relay" ]]; then
+if [[ ${VOINETWORK_PROFILE} == "participation" ]]; then
   verify_node_is_running
 fi
 
-if [[ ${VOINETWORK_PROFILE} == "relay" || ( -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1 ) ]]; then
+if [[ ${VOINETWORK_PROFILE} == "relay" || ${VOINETWORK_PROFILE} == "developer" || ( -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1 ) ]]; then
   display_banner "Wallet setup will be skipped."
 
   joined_network_instructions true

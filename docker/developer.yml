@@ -1,11 +1,10 @@
 version: "3.9"
 services:
-  relay:
+  developer:
     image: ghcr.io/voinetwork/voi-node:latest
     hostname: ${VOINETWORK_TELEMETRY_NAME}
     environment:
       VOINETWORK_PROFILE: ${VOINETWORK_PROFILE}
-      VOINETWORK_INCOMING_CONNECTIONS_LIMIT: ${VOINETWORK_INCOMING_CONNECTIONS_LIMIT}
     logging:
       driver: "local"
     volumes:
@@ -58,7 +57,7 @@ services:
       restart_policy:
         condition: none
       labels:
-        - swarm.cronjob.enable=true
+        - swarm.cronjob.enable=false
         - swarm.cronjob.schedule=0 */4 * * *
         - swarm.cronjob.skip-running=true
       placement:
