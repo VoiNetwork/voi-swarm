@@ -2,13 +2,7 @@
 
 source "${HOME}/voi/bin/.helpers/util.sh"
 
-function validate_supported_node_type() {
-  if [[ ${VOINETWORK_PROFILE} != "participation" ]]; then
-    util_abort "This operation is only supported for participation nodes. Exiting the program."
-  fi
-}
-
-validate_supported_node_type
+util_validate_supported_node_type "participation"
 
 is_root=0
 

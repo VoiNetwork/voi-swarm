@@ -11,13 +11,7 @@ echo "    To rerun the installer execute:"
 echo '      /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"'
 echo ""
 
-function validate_supported_node_type() {
-  if [[ ${VOINETWORK_PROFILE} != "participation" ]]; then
-    util_abort "This operation is only supported for participation nodes. Exiting the program."
-  fi
-}
-
-validate_supported_node_type
+util_validate_supported_node_type "participation"
 util_validate_running_container
 
 if [ -z "$1" ]; then

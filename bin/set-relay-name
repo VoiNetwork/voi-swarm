@@ -2,13 +2,7 @@
 
 source "${HOME}/voi/bin/.helpers/util.sh"
 
-function validate_supported_node_type() {
-  if [[ ${VOINETWORK_PROFILE} != "relay" ]]; then
-    util_abort "This operation is only supported for relay nodes. Exiting the program."
-  fi
-}
-
-validate_supported_node_type
+util_validate_supported_node_type "relay"
 
 if [ -z "$1" ]; then
     echo "If you are operating a relay node you need to set a relay name in accordance with the naming convention."

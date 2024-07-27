@@ -60,5 +60,21 @@ function util_start_stack() {
   bash -c "source ${HOME}/voi/.profile && docker stack deploy -c ${composeFile} voinetwork"
 }
 
+function util_validate_supported_node_type() {
+  local valid_profiles=("$@")
+  local is_valid=false
+
+  for profile in "${valid_profiles[@]}"; do
+    if [[ ${VOINETWORK_PROFILE} == "$profile" ]]; then
+      is_valid=true
+      break
+    fi
+  done
+
+  if [ "$is_valid" = false ]; then
+    util_abort "This operation is only supported for the following profiles: ${valid_profiles[*]}. Exiting the program."
+  fi
+}
+
 util_get_profile
 util_get_container_id
