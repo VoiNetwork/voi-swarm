@@ -2,7 +2,7 @@
 
 source "${HOME}/voi/bin/.helpers/util.sh"
 
-util_validate_supported_node_type "participation" "relay" "developer"
+util_validate_supported_node_type "participation" "relay" "developer" "archiver"
 util_validate_running_container
 
 # shellcheck disable=SC2068

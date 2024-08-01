@@ -105,13 +105,23 @@ start_docker_swarm() {
 }
 
 start_stack() {
-  docker_file="${voi_home}/docker/compose.yml"
-
-  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
-    docker_file="${voi_home}/docker/relay.yml"
-  elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
-    docker_file="${voi_home}/docker/developer.yml"
-  fi
+  case ${VOINETWORK_PROFILE} in
+    "relay")
+      docker_file="${voi_home}/docker/relay.yml"
+      ;;
+    "archiver")
+      docker_file="${voi_home}/docker/archiver.yml"
+      ;;
+    "developer")
+      docker_file="${voi_home}/docker/developer.yml"
+      ;;
+    "participation")
+      docker_file="${voi_home}/docker/compose.yml"
+      ;;
+    *)
+      abort "Invalid profile. Exiting the program."
+      ;;
+  esac
   command="source ${voi_home}/.profile && docker stack deploy -c ${docker_file}"
 
   if [[ -f "${voi_home}/docker/notification.yml" ]]; then
@@ -687,7 +697,7 @@ set_telemetry_name() {
   if [[ ${VOINETWORK_PROFILE} == "relay" && -z ${VOINETWORK_TELEMETRY_NAME} ]]; then
     set_relay_name
     return
-  elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
+  elif [[ ${VOINETWORK_PROFILE} == "developer" || ${VOINETWORK_PROFILE} == "archiver" ]]; then
     return
   fi
 
@@ -755,7 +765,7 @@ migrate_host_based_voi_setup() {
 }
 
 check_minimum_requirements() {
-  if [[ ${headless_install} -eq 1 || ${VOINETWORK_PROFILE} == "developer" ]]; then
+  if [[ ${headless_install} -eq 1 || ${VOINETWORK_PROFILE} == "developer" || ${VOINETWORK_PROFILE} == "archiver" ]]; then
     ## Allow headless install to skip telemetry name setup in case people bring their own wallets / use CI
     return
   fi
@@ -848,6 +858,8 @@ preserve_autoupdate() {
       docker_filename="${voi_home}/docker/relay.yml"
     elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
       docker_filename="${voi_home}/docker/developer.yml"
+    elif [[ ${VOINETWORK_PROFILE} == "archiver" ]]; then
+      docker_filename="${voi_home}/docker/archiver.yml"
     else
       docker_filename="${voi_home}/docker/compose.yml"
     fi
@@ -860,11 +872,20 @@ preserve_autoupdate() {
 }
 
 add_update_jitter() {
-  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
-    schedule_filename="${voi_home}/docker/relay.yml"
-  else
-    schedule_filename="${voi_home}/docker/compose.yml"
-  fi
+  case ${VOINETWORK_PROFILE} in
+    "relay")
+      schedule_filename="${voi_home}/docker/relay.yml"
+      ;;
+    "developer")
+      schedule_filename="${voi_home}/docker/developer.yml"
+      ;;
+    "archiver")
+      schedule_filename="${voi_home}/docker/archiver.yml"
+      ;;
+    *)
+      schedule_filename="${voi_home}/docker/compose.yml"
+      ;;
+  esac
 
   random_minute=$(( RANDOM % 60 ))
   # Generate a random number between 0 and 2, and add +1 to shift the range to 1-3
@@ -996,7 +1017,7 @@ if [[ ${VOINETWORK_PROFILE} == "participation" ]]; then
   verify_node_is_running
 fi
 
-if [[ ${VOINETWORK_PROFILE} == "relay" || ${VOINETWORK_PROFILE} == "developer" || ( -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1 ) ]]; then
+if [[ ${VOINETWORK_PROFILE} != "participation" || ( -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 1 ) ]]; then
   display_banner "Wallet setup will be skipped."
 
   joined_network_instructions true

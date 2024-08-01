@@ -14,15 +14,23 @@ function util_get_profile() {
 }
 
 function util_get_container_id() {
-  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
-    CONTAINER_ID=$(docker ps -q -f name=voinetwork_relay)
-  elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
-    CONTAINER_ID=$(docker ps -q -f name=voinetwork_developer)
-  elif [[ ${VOINETWORK_PROFILE} == "participation" ]]; then
-    CONTAINER_ID=$(docker ps -q -f name=voinetwork_algod)
-  else
-    util_abort "Invalid profile. Exiting the program."
-  fi
+  case ${VOINETWORK_PROFILE} in
+    "relay")
+      CONTAINER_ID=$(docker ps -q -f name=voinetwork_relay)
+      ;;
+    "developer")
+      CONTAINER_ID=$(docker ps -q -f name=voinetwork_developer)
+      ;;
+    "archiver")
+      CONTAINER_ID=$(docker ps -q -f name=voinetwork_archiver)
+      ;;
+    "participation")
+      CONTAINER_ID=$(docker ps -q -f name=voinetwork_algod)
+      ;;
+    *)
+      util_abort "Invalid profile. Exiting the program."
+      ;;
+  esac
 }
 
 function util_abort() {
@@ -54,13 +62,23 @@ function util_update_profile_setting() {
 ## TODO: Add support for multiple docker files, such as when using notification services
 function util_start_stack() {
   local composeFile
-  if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
-    composeFile="${HOME}/voi/docker/relay.yml"
-  elif [[ ${VOINETWORK_PROFILE} == "developer" ]]; then
-    composeFile="${HOME}/voi/docker/developer.yml"
-  else
-    composeFile="${HOME}/voi/docker/compose.yml"
-  fi
+  case ${VOINETWORK_PROFILE} in
+    "relay")
+      composeFile="${HOME}/voi/docker/relay.yml"
+      ;;
+    "developer")
+      composeFile="${HOME}/voi/docker/developer.yml"
+      ;;
+    "archiver")
+      composeFile="${HOME}/voi/docker/archiver.yml"
+      ;;
+    "participation")
+      composeFile="${HOME}/voi/docker/compose.yml"
+      ;;
+    *)
+      util_abort "Invalid profile. Exiting the program."
+      ;;
+  esac
   bash -c "source ${HOME}/voi/.profile && docker stack deploy -c ${composeFile} voinetwork"
 }
 
