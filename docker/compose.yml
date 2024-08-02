@@ -5,6 +5,8 @@ services:
     environment:
       TELEMETRY_NAME: ${VOINETWORK_TELEMETRY_NAME}
       VOINETWORK_PROFILE: ${VOINETWORK_PROFILE}
+      VOINETWORK_NETWORK: ${VOINETWORK_NETWORK}
+      VOINETWORK_GENESIS: ${VOINETWORK_GENESIS}
     logging:
       driver: "local"
     volumes:
