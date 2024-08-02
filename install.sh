@@ -663,12 +663,23 @@ update_profile_setting() {
   local profile_file="${HOME}/voi/.profile"
 
   if grep -q "^export ${setting_name}=" "$profile_file"; then
-    # Update the existing setting
-    sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${new_value}/" "$profile_file"
+    escaped_value=$(printf '%s\n' "$new_value" | sed 's/[\/&]/\\&/g')
+    sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${escaped_value}/" "$profile_file"
   else
     # Add the new setting if it doesn't exist
     echo "export ${setting_name}=${new_value}" >> "$profile_file"
   fi
+}
+
+clone_environment_settings_to_profile() {
+  local var
+  for var in $(env); do
+    if [[ $var == VOINETWORK_* && $var != VOINETWORK_PROFILE=* ]]; then
+      name=$(echo "$var" | cut -d'=' -f1)
+      value=$(echo "$var" | cut -d'=' -f2-)
+      update_profile_setting "$name" "$value"
+    fi
+  done
 }
 
 set_relay_name() {
@@ -948,6 +959,7 @@ fi
 
 display_banner "${bold}Welcome to Voi Swarm${normal}. Let's get started!"
 
+clone_environment_settings_to_profile
 set_profile
 
 check_minimum_requirements
