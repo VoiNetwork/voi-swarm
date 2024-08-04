@@ -47,8 +47,10 @@ Generate a participation key for an existing account with the following command:
 ~/voi/bin/generate-participation-key <account_address>
 ```
 
+After generation, you will need to take the account online with the new key.
+
 !!! note
-    Your participation key will expire in an estimated 60 days and will need to be regenerated.
+    We recommend rerunning the installer with `/bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"`, this process will automatically take care of generation as well as taking the new key online.
 
 ### Checking Participation Status
 
