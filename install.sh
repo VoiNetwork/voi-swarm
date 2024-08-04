@@ -738,6 +738,7 @@ set_telemetry_name() {
       return
     else
       VOINETWORK_TELEMETRY_NAME="VOI:$VOINETWORK_TELEMETRY_NAME"
+      update_profile_setting "VOINETWORK_TELEMETRY_NAME" "${VOINETWORK_TELEMETRY_NAME}"
     fi
   elif [[ -n ${VOINETWORK_TELEMETRY_NAME} ]]; then
     echo "Your telemetry name is already set to '${VOINETWORK_TELEMETRY_NAME}'. To change your telemetry settings, execute the command ${HOME}/voi/bin/set-telemetry-name"
