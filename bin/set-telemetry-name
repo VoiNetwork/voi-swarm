@@ -20,8 +20,6 @@ set_telemetry_name() {
     echo ""
     echo "Type your telemetry name below. We'll add 'VOI:' at the start to show you're using this package."
     echo ""
-    echo "To use a custom name, set the VOINETWORK_TELEMETRY_NAME variable before running this script."
-    echo "Example: export VOINETWORK_TELEMETRY_NAME='my_custom_name'"
     echo ""
     echo "To skip telemetry sharing, type 'continue' below."
     # shellcheck disable=SC2162
@@ -74,6 +72,8 @@ else
   fi
 fi
 
+unset VOINETWORK_TELEMETRY_NAME
+
 if [[ $1 && $2 ]]; then
   telemetry_name="${1//\"}"
   guid="${2//\"}"
@@ -88,6 +88,17 @@ else
   set_telemetry_name
 fi
 
-bash -c "env VOINETWORK_TELEMETRY_NAME=\"${VOINETWORK_TELEMETRY_NAME}\" docker stack deploy -c ${HOME}/voi/docker/compose.yml voinetwork"
+if [[ -z ${VOINETWORK_TELEMETRY_NAME} ]]; then
+  echo "Telemetry sharing skipped."
+
+  if grep -q "^export VOINETWORK_TELEMETRY_NAME=" ~/voi/.profile; then
+    sed -i '/^export VOINETWORK_TELEMETRY_NAME=/d' ~/voi/.profile
+  fi
+
+  util_start_stack
+else
+  util_update_profile_setting "VOINETWORK_TELEMETRY_NAME" "${VOINETWORK_TELEMETRY_NAME}"
+  util_start_stack
+fi
 
 echo "Changes has been applied to the network. Please wait a minute for the changes to take effect. Confirm changes by running '${HOME}/voi/bin/get-telemetry-status' after a minute."
