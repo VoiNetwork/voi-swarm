@@ -80,9 +80,11 @@ cleanup_deprecated_files_and_folders() {
     rm -rf "${voi_home}/profile" 2>/dev/null || echo "Failed to delete deprecated file: ${voi_home}/profile"
   fi
 
-  if grep -q "^export VOINETWORK_IMPORT_ACCOUNT=" "${voi_home}/.profile"; then
-    sed -i '/^export VOINETWORK_IMPORT_ACCOUNT=/d' "${voi_home}/.profile"
-    unset VOINETWORK_IMPORT_ACCOUNT
+  if [[ -f ${voi_home}/.profile ]]; then
+    if grep -q "^export VOINETWORK_IMPORT_ACCOUNT=" "${voi_home}/.profile"; then
+      sed -i '/^export VOINETWORK_IMPORT_ACCOUNT=/d' "${voi_home}/.profile"
+      unset VOINETWORK_IMPORT_ACCOUNT
+    fi
   fi
 }
 
