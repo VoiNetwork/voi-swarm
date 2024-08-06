@@ -667,15 +667,18 @@ get_telemetry_name() {
 update_profile_setting() {
   local setting_name="$1"
   local new_value="$2"
-  local profile_file="${HOME}/voi/.profile"
+  local profile_file="${voi_home}/.profile"
 
+if [[ -f "$profile_file" ]]; then
   if grep -q "^export ${setting_name}=" "$profile_file"; then
     escaped_value=$(printf '%s\n' "$new_value" | sed 's/[\/&]/\\&/g')
     sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${escaped_value}/" "$profile_file"
   else
-    # Add the new setting if it doesn't exist
     echo "export ${setting_name}=${new_value}" >> "$profile_file"
   fi
+else
+  echo "export ${setting_name}=${new_value}" >> "$profile_file"
+fi
 }
 
 clone_environment_settings_to_profile() {
