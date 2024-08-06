@@ -685,7 +685,6 @@ clone_environment_settings_to_profile() {
   local var
   for var in $(env); do
     if [[ $var == VOINETWORK_* && $var != VOINETWORK_PROFILE=* && $var != VOINETWORK_IMPORT_ACCOUNT=* ]]; then
-      touch "${voi_home}/.profile"
       name=$(echo "$var" | cut -d'=' -f1)
       value=$(echo "$var" | cut -d'=' -f2-)
       update_profile_setting "$name" "$value"
