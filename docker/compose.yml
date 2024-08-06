@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   algod:
-    image: ghcr.io/voinetwork/docker-participation-node:latest
+    image: ghcr.io/voinetwork/voi-node:3.25.0-participation-alpha1
     environment:
       TELEMETRY_NAME: ${VOINETWORK_TELEMETRY_NAME}
       VOINETWORK_PROFILE: ${VOINETWORK_PROFILE}
