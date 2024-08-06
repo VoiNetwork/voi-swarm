@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   archiver:
-    image: ghcr.io/voinetwork/voi-node:3.25.0-archiver-alpha1
+    image: ghcr.io/voinetwork/voi-node:latest
     hostname: ${VOINETWORK_TELEMETRY_NAME}
     environment:
       VOINETWORK_PROFILE: ${VOINETWORK_PROFILE}
