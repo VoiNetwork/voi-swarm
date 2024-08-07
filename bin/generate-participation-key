@@ -20,4 +20,4 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-docker exec -e account_addr="$1" -it "${CONTAINER_ID}" bash -c 'start=$(goal node status | grep "Last committed block:" | cut -d\  -f4) && duration=${duration:-2000000} && end=$((start + duration)) && goal account addpartkey -a ${account_addr} --roundFirstValid $start --roundLastValid $end'
+docker exec -e account_addr="$1" -it "${CONTAINER_ID}" bash -c 'start=$(/node/bin/goal node status | grep "Last committed block:" | cut -d\  -f4) && duration=${duration:-2000000} && end=$((start + duration)) && /node/bin/goal account addpartkey -a ${account_addr} --roundFirstValid $start --roundLastValid $end'
