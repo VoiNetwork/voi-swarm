@@ -20,7 +20,7 @@ get_algod_token() {
 }
 
 get_last_committed_block() {
-  docker exec -it "${CONTAINER_ID}" bash -c "goal node status | grep 'Last committed block' | cut -d' ' -f4 | tr -cd '[:digit:]'"
+  docker exec -it "${CONTAINER_ID}" bash -c "/node/bin/goal node status | grep 'Last committed block' | cut -d' ' -f4 | tr -cd '[:digit:]'"
 }
 
 get_accounts() {
