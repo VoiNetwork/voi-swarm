@@ -875,6 +875,18 @@ set_profile() {
   display_banner "Setting up Voi Swarm using profile: ${VOINETWORK_PROFILE}"
 }
 
+get_tarball() {
+  local branch
+  if [[ -n ${VOINETWORK_BRANCH} ]]; then
+    branch=${VOINETWORK_BRANCH}
+  else
+    branch="main"
+  fi
+  curl -sSL https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/"${branch}" --output "${voi_home}"/voi-swarm.tar.gz
+  tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
+  rm "${voi_home}"/voi-swarm.tar.gz
+}
+
 preserve_autoupdate() {
     if [[ ${VOINETWORK_PROFILE} == "relay" ]]; then
       docker_filename="${voi_home}/docker/relay.yml"
@@ -1024,9 +1036,8 @@ if [[ ! -e /var/lib/voi/algod/metrics ]]; then
 fi
 
 display_banner "Fetching the latest Voi Network updates and scripts."
-curl -sSL https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/main --output "${voi_home}"/voi-swarm.tar.gz
-tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
-rm "${voi_home}"/voi-swarm.tar.gz
+
+get_tarball
 
 cleanup_deprecated_files_and_folders
 
