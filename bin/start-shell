@@ -2,4 +2,14 @@
 
 source "${HOME}/voi/bin/.helpers/util.sh"
 
-echo "This command has been deprecated. Docker images no longer contains a shell."
+function validate_supported_node_type() {
+  if [[ ${VOINETWORK_PROFILE} != "participation" ]]; then
+    util_abort "This operation is only supported for participation nodes. Exiting the program."
+  fi
+}
+
+validate_supported_node_type
+util_validate_supported_node_type "participation"
+util_validate_running_container
+
+docker exec -it "${CONTAINER_ID}" bash
