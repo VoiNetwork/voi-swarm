@@ -11,4 +11,4 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-docker exec -e account_addr="$1" -it "${CONTAINER_ID}" bash -c 'goal account dump -a "${account_addr}" | jq -r '\''if (.onl == 1) then "You are online!" else "You are offline." end'\'''
+docker exec -e account_addr="$1" -it "${CONTAINER_ID}" bash -c '/node/bin/goal account dump -a "${account_addr}" | jq -r '\''if (.onl == 1) then "You are online!" else "You are offline." end'\'''

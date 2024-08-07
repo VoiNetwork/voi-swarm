@@ -28,7 +28,7 @@ jobs:
       - name: Run goal command
         run: |
           container_id=$(docker ps -q -f name=voinetwork_algod)
-          docker exec "${container_id}" bash -c "goal node status"
+          docker exec "${container_id}" bash -c "/node/bin/goal node status"
 
       - name: Validate auto-update is set and that scheduler can start
         run: |
