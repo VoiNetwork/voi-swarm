@@ -682,6 +682,8 @@ fi
 }
 
 clone_environment_settings_to_profile() {
+  mkdir -p "${voi_home}"
+
   local var
   for var in $(env); do
     if [[ $var == VOINETWORK_* && $var != VOINETWORK_PROFILE=* && $var != VOINETWORK_IMPORT_ACCOUNT=* ]]; then
@@ -860,8 +862,6 @@ check_minimum_requirements() {
 }
 
 set_profile() {
-  mkdir -p "${voi_home}"
-
   if [[ -f "${voi_home}/.profile" ]]; then
       source "${voi_home}/.profile"
   else
