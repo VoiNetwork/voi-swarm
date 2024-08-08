@@ -669,21 +669,20 @@ update_profile_setting() {
   local new_value="$2"
   local profile_file="${voi_home}/.profile"
 
-if [[ -f "$profile_file" ]]; then
-  if grep -q "^export ${setting_name}=" "$profile_file"; then
-    escaped_value=$(printf '%s\n' "$new_value" | sed 's/[\/&]/\\&/g')
-    sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${escaped_value}/" "$profile_file"
+  if [[ -f "$profile_file" ]]; then
+    if grep -q "^export ${setting_name}=" "$profile_file"; then
+      escaped_value=$(printf '%s\n' "$new_value" | sed 's/[\/&]/\\&/g')
+      sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${escaped_value}/" "$profile_file"
+    else
+      echo "export ${setting_name}=${new_value}" >> "$profile_file"
+    fi
   else
+    touch "$profile_file"
     echo "export ${setting_name}=${new_value}" >> "$profile_file"
   fi
-else
-  echo "export ${setting_name}=${new_value}" >> "$profile_file"
-fi
 }
 
 clone_environment_settings_to_profile() {
-  mkdir -p "${voi_home}"
-
   local var
   for var in $(env); do
     if [[ $var == VOINETWORK_* && $var != VOINETWORK_PROFILE=* && $var != VOINETWORK_IMPORT_ACCOUNT=* ]]; then
@@ -981,6 +980,8 @@ if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && ${VOINETWORK_SKIP_WALLET_SETUP} -eq 
 fi
 
 display_banner "${bold}Welcome to Voi Swarm${normal}. Let's get started!"
+
+mkdir -p "${voi_home}"
 
 clone_environment_settings_to_profile
 set_profile
