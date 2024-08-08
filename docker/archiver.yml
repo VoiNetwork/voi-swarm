@@ -12,6 +12,7 @@ services:
       driver: "local"
     volumes:
       - /var/lib/voi/algod/data:/algod/data/:rw
+      - /var/lib/voi/algod/data/cold-storage:/algod/data/cold-storage/:rw
     ports:
       - published: 5011
         target: 8080
