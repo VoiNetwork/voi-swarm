@@ -1035,6 +1035,10 @@ if [[ ! -e /var/lib/voi/algod/metrics ]]; then
   execute_sudo "mkdir -p /var/lib/voi/algod/metrics"
 fi
 
+if [[ ! -e /var/lib/voi/algod/data/cold-storage && ${VOINETWORK_PROFILE} == "archiver" ]]; then
+  execute_sudo "mkdir -p /var/lib/voi/algod/data/cold-storage"
+fi
+
 display_banner "Fetching the latest Voi Network updates and scripts."
 
 get_tarball
