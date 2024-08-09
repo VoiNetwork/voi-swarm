@@ -21,7 +21,7 @@ all use cases.
 ## Features
 
 - **Effortless Installation**: Deploy a Voi node on Linux with a single command.
-- **Rapid Deployment**: Built for swift setup and onboarding.
+- **Rapid Deployment**: Built for swift set up and onboarding.
 - **Automatic Updates**: Seamless application of Docker image updates.
 - **Health Monitoring**: System auto-restarts the node if needed.
 - **Optional Notification**: Get notified when actions are required.

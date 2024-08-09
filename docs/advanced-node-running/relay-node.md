@@ -2,7 +2,7 @@
 
 !!! abstract
     This guide is for advanced users who want to run a relay node on the Voi network.
-    If you are starting out on Voi you should [start running a participation node](../../installation/system-requirements/) first.
+    If you are starting out on Voi, you should [start running a participation node](../../installation/system-requirements/) first.
 
 Relay running is a critical part of the Voi network. It helps to relay transactions and blocks between the network participating nodes.
 
@@ -25,7 +25,7 @@ Running a relay is a permission-based process, and you need to [apply for permis
 
 ## Installation
 
-To setup a new relay node execute the following command:
+To set up a new relay node, execute the following command:
 
 ```bash
 export VOINETWORK_PROFILE=relay

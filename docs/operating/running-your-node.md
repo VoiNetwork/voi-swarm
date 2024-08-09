@@ -8,8 +8,8 @@ The Voi CLI tools is a bundle of commands
 that allow you to manage common operation related to the network, as well as your setup.
 The Voi CLI tools are installed with the Voi Swarm package.
 
-As a participant, it's important that you continuously monitor the health of your node, this includes monitoring system
-metrics, node health as well as ensuring participation keys are up-to-date.
+As a participant, it's important that you continuously monitor the health of your node. This includes monitoring system
+metrics, node health as well as ensuring participation keys are up to date.
 
 | Metrics                  | Description                                   | How to Monitor                                                                                                                                                                       | Feature in Voi Swarm |
 |--------------------------|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|
