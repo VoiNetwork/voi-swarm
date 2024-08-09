@@ -11,4 +11,4 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-docker exec -e account_addr="$1" -it "${CONTAINER_ID}" bash -c 'goal account export -a $account_addr'
+docker exec -e account_addr="$1" -it "${CONTAINER_ID}" bash -c '/node/bin/goal account export -a $account_addr'

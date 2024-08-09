@@ -237,7 +237,7 @@ get_current_net_round() {
 }
 
 get_node_status() {
-    current_node_round=$(execute_docker_command 'goal node lastround | head -n 1')
+    current_node_round=$(execute_docker_command '/node/bin/goal node lastround | head -n 1')
     get_current_net_round
     current_node_round=${current_node_round//[!0-9]/}
 }
@@ -280,7 +280,7 @@ ask_for_password() {
 }
 
 create_wallet() {
-  if [[ $(execute_docker_command "goal wallet list | wc -l") -eq 1 ]]; then
+  if [[ $(execute_docker_command "/node/bin/goal wallet list | wc -l") -eq 1 ]]; then
     local kmd_token
     echo "Let's create a new wallet for you. Please provide a password for security."
 
@@ -303,7 +303,7 @@ EOF
 
 get_account_balance() {
   local balance
-  balance=$(execute_docker_command "goal account balance -a $1")
+  balance=$(execute_docker_command "/node/bin/goal account balance -a $1")
   balance=${balance//[!0-9]/}
   echo "$balance"
 }
@@ -383,11 +383,11 @@ get_participation_expiration_eta() {
 }
 
 get_current_account_keys_info() {
-  execute_docker_command "goal account listpartkeys -a $1"
+  execute_docker_command "/node/bin/goal account listpartkeys -a $1"
 }
 
 get_last_committed_block() {
-  execute_docker_command "goal node status" | grep 'Last committed block' | cut -d\  -f4 | tr -d '\r'
+  execute_docker_command "/node/bin/goal node status" | grep 'Last committed block' | cut -d\  -f4 | tr -d '\r'
 }
 
 get_account_addresses() {
@@ -418,7 +418,7 @@ generate_new_key() {
   address=$1
   echo "Generating participation key for account ${address} with start block ${start_block} and end block ${end_block}"
   echo "New key is expected to be valid until: ${expiration_date}"
-  execute_interactive_docker_command "goal account addpartkey -a ${address} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
+  execute_interactive_docker_command "/node/bin/goal account addpartkey -a ${address} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
 }
 
 generate_participation_key() {
@@ -431,7 +431,7 @@ generate_participation_key() {
     local active_key_last_valid_round
     local last_committed_block
 
-    active_key_last_valid_round=$(docker exec -it "${container_id}" bash -c 'goal account listpartkeys' | awk -v addr="${account}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $6}' | tr -cd '[:digit:]')
+    active_key_last_valid_round=$(docker exec -it "${container_id}" bash -c '/node/bin/goal account listpartkeys' | awk -v addr="${account}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $6}' | tr -cd '[:digit:]')
 
     last_committed_block=$(get_last_committed_block)
 
@@ -451,7 +451,7 @@ generate_participation_key() {
           generate_new_key "${account}"
 
           change_account_online_status "${account}"
-          account_status=$(execute_docker_command "goal account dump -a ${account}" | jq -r .onl)
+          account_status=$(execute_docker_command "/node/bin/goal account dump -a ${account}" | jq -r .onl)
           if [[ ${account_status} -eq 1 ]]; then
             echo "Account ${account} is now online!"
           else
@@ -472,8 +472,8 @@ generate_participation_key() {
       existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
       new_expiration_date=$(get_participation_expiration_eta "${end_block}" "${last_committed_block}")
 
-      current_key_prefix=$(docker exec -it "${container_id}" bash -c 'goal account listpartkeys' | awk -v addr="${account_address}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $3}' | tr -cd '[:digit:]')
-      current_key_id=$(execute_docker_command "goal account partkeyinfo" | grep "${current_key_prefix}" | awk '{print $3}')
+      current_key_prefix=$(docker exec -it "${container_id}" bash -c '/node/bin/goal account listpartkeys' | awk -v addr="${account_address}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $3}' | tr -cd '[:digit:]')
+      current_key_id=$(execute_docker_command "/node/bin/goal account partkeyinfo" | grep "${current_key_prefix}" | awk '{print $3}')
 
       echo "Current participation key for account ${account} is expected to expire at: ${existing_expiration_date}"
       echo "Currently the network is at block: ${last_committed_block}"
@@ -486,8 +486,8 @@ generate_participation_key() {
       echo ""
       echo "You will be asked to enter your password to activate the new key."
 
-      execute_interactive_docker_command "goal account renewpartkey -a ${account} --roundLastValid ${end_block}"
-      execute_interactive_docker_command "goal account deletepartkey --partkeyid ${current_key_id}"
+      execute_interactive_docker_command "/node/bin/goal account renewpartkey -a ${account} --roundLastValid ${end_block}"
+      execute_interactive_docker_command "/node/bin/goal account deletepartkey --partkeyid ${current_key_id}"
     else
       local existing_expiration_date
       existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
@@ -501,7 +501,7 @@ generate_participation_key() {
 }
 
 start_kmd() {
-  execute_docker_command "goal kmd start -t 600"
+  execute_docker_command "/node/bin/goal kmd start -t 600"
 }
 
 get_kmd_token() {
@@ -607,7 +607,7 @@ change_account_online_status() {
   local account
   account=$1
   echo "Enter your password to join the network for account ${account}."
-  execute_interactive_docker_command "goal account changeonlinestatus -a ${account}"
+  execute_interactive_docker_command "/node/bin/goal account changeonlinestatus -a ${account}"
 }
 
 join_as_new_user() {
@@ -620,7 +620,7 @@ join_as_new_user() {
 
   change_account_online_status "${account}"
 
-  account_status=$(execute_docker_command "goal account dump -a ${account}" | jq -r .onl)
+  account_status=$(execute_docker_command "/node/bin/goal account dump -a ${account}" | jq -r .onl)
 
   ## This step is late in the process and does require a restart of the service to take effect.
   ## Container ID from verify_node_running will have to be re-fetched if any use of the node is to be done after this point.
@@ -642,7 +642,7 @@ join_as_new_user() {
   echo "Your Voi address: ${account_addr}"
   echo "Enter password to get your Voi account recovery mnemonic. Store your mnemonic safely:"
 
-  execute_interactive_docker_command "goal account export -a ${account_addr}"
+  execute_interactive_docker_command "/node/bin/goal account export -a ${account_addr}"
 }
 
 add_docker_groups() {
@@ -669,22 +669,23 @@ update_profile_setting() {
   local new_value="$2"
   local profile_file="${voi_home}/.profile"
 
-if [[ -f "$profile_file" ]]; then
-  if grep -q "^export ${setting_name}=" "$profile_file"; then
-    escaped_value=$(printf '%s\n' "$new_value" | sed 's/[\/&]/\\&/g')
-    sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${escaped_value}/" "$profile_file"
+  if [[ -f "$profile_file" ]]; then
+    if grep -q "^export ${setting_name}=" "$profile_file"; then
+      escaped_value=$(printf '%s\n' "$new_value" | sed 's/[\/&]/\\&/g')
+      sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${escaped_value}/" "$profile_file"
+    else
+      echo "export ${setting_name}=${new_value}" >> "$profile_file"
+    fi
   else
+    touch "$profile_file"
     echo "export ${setting_name}=${new_value}" >> "$profile_file"
   fi
-else
-  echo "export ${setting_name}=${new_value}" >> "$profile_file"
-fi
 }
 
 clone_environment_settings_to_profile() {
   local var
   for var in $(env); do
-    if [[ $var == VOINETWORK_* && $var != VOINETWORK_PROFILE=* && $var != VOINETWORK_IMPORT_ACCOUNT=* ]]; then
+    if [[ $var == VOINETWORK_* && $var != VOINETWORK_IMPORT_ACCOUNT=* ]]; then
       name=$(echo "$var" | cut -d'=' -f1)
       value=$(echo "$var" | cut -d'=' -f2-)
       update_profile_setting "$name" "$value"
@@ -860,8 +861,6 @@ check_minimum_requirements() {
 }
 
 set_profile() {
-  mkdir -p "${voi_home}"
-
   if [[ -f "${voi_home}/.profile" ]]; then
       source "${voi_home}/.profile"
   else
@@ -873,6 +872,18 @@ set_profile() {
   fi
 
   display_banner "Setting up Voi Swarm using profile: ${VOINETWORK_PROFILE}"
+}
+
+get_tarball() {
+  local branch
+  if [[ -n ${VOINETWORK_BRANCH} ]]; then
+    branch=${VOINETWORK_BRANCH}
+  else
+    branch="main"
+  fi
+  curl -sSL https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/"${branch}" --output "${voi_home}"/voi-swarm.tar.gz
+  tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
+  rm "${voi_home}"/voi-swarm.tar.gz
 }
 
 preserve_autoupdate() {
@@ -970,6 +981,8 @@ fi
 
 display_banner "${bold}Welcome to Voi Swarm${normal}. Let's get started!"
 
+mkdir -p "${voi_home}"
+
 clone_environment_settings_to_profile
 set_profile
 
@@ -1023,10 +1036,13 @@ if [[ ! -e /var/lib/voi/algod/metrics ]]; then
   execute_sudo "mkdir -p /var/lib/voi/algod/metrics"
 fi
 
+if [[ ! -e /var/lib/voi/algod/data/cold-storage && ${VOINETWORK_PROFILE} == "archiver" ]]; then
+  execute_sudo "mkdir -p /var/lib/voi/algod/data/cold-storage"
+fi
+
 display_banner "Fetching the latest Voi Network updates and scripts."
-curl -sSL https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/main --output "${voi_home}"/voi-swarm.tar.gz
-tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
-rm "${voi_home}"/voi-swarm.tar.gz
+
+get_tarball
 
 cleanup_deprecated_files_and_folders
 
@@ -1060,13 +1076,13 @@ if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; 
   else
     echo ""
     echo "Let's proceed to import an account using your existing account mnemonic."
-    execute_interactive_docker_command "goal account import"
+    execute_interactive_docker_command "/node/bin/goal account import"
     get_account_address
   fi
 
 else
   if check_if_account_exists; then
-    execute_interactive_docker_command "goal account new"
+    execute_interactive_docker_command "/node/bin/goal account new"
     get_account_address
 
     # Get Voi from faucet
