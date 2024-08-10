@@ -673,13 +673,13 @@ update_profile_setting() {
   if [[ -f "$profile_file" ]]; then
     if grep -q "^export ${setting_name}=" "$profile_file"; then
       escaped_value=$(printf '%s\n' "$new_value" | sed 's/[\/&]/\\&/g')
-      sed -i "s/^export ${setting_name}=.*/export ${setting_name}=${escaped_value}/" "$profile_file"
+      sed -i "s/^export ${setting_name}=.*/export ${setting_name}=\"${escaped_value}\"/" "$profile_file"
     else
-      echo "export ${setting_name}=${new_value}" >> "$profile_file"
+      echo "export ${setting_name}=\"${new_value}\"" >> "$profile_file"
     fi
   else
     touch "$profile_file"
-    echo "export ${setting_name}=${new_value}" >> "$profile_file"
+    echo "export ${setting_name}=\"${new_value}\"" >> "$profile_file"
   fi
 }
 
