@@ -670,6 +670,9 @@ update_profile_setting() {
   local new_value="$2"
   local profile_file="${voi_home}/.profile"
 
+  echo "$1"
+  echo "$2"
+
   if [[ -f "$profile_file" ]]; then
     if grep -q "^export ${setting_name}=" "$profile_file"; then
       escaped_value=$(printf '%s\n' "$new_value" | sed 's/[\/&]/\\&/g')
