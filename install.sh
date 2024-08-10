@@ -684,13 +684,12 @@ update_profile_setting() {
 }
 
 clone_environment_settings_to_profile() {
+  echo "${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS}"
   local var
   for var in $(env); do
     if [[ $var == VOINETWORK_* && $var != VOINETWORK_IMPORT_ACCOUNT=* ]]; then
-      echo "${var}"
       name=$(echo "$var" | cut -d'=' -f1)
       value=$(echo "$var" | cut -d'=' -f2-)
-      echo "$value"
       update_profile_setting "$name" "$value"
     fi
   done
