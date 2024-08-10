@@ -15,7 +15,7 @@ jobs:
     env:
       VOINETWORK_SKIP_WALLET_SETUP: 1
       VOINETWORK_HEADLESS_INSTALL: 1
-      VOINETWORK_DOCKER_SWARM_INIT_SETTINGS: '--advertise-addr 127.0.0.1'
+      VOINETWORK_DOCKER_SWARM_INIT_SETTINGS: "--advertise-addr 127.0.0.1"
 
     steps:
       - uses: actions/checkout@v3
