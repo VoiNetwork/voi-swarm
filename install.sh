@@ -684,9 +684,7 @@ update_profile_setting() {
 }
 
 clone_environment_settings_to_profile() {
-  echo "${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS}"
   printenv | while IFS='=' read -r name value; do
-    echo "${name}=${value}"
     if [[ $name == VOINETWORK_* && $name != VOINETWORK_IMPORT_ACCOUNT ]]; then
       update_profile_setting "$name" "$value"
     fi
