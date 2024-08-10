@@ -861,6 +861,7 @@ check_minimum_requirements() {
 set_profile() {
   if [[ -f "${voi_home}/.profile" ]]; then
       source "${voi_home}/.profile"
+      echo "${VOINETWORK_DOCKER_SWARM_INIT_SETTINGS}"
   else
       if [[ -z ${VOINETWORK_PROFILE} ]]; then
           # If VOINETWORK_PROFILE is not set, use default "participation" to profile
