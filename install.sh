@@ -100,7 +100,6 @@ start_docker_swarm() {
       command+=" --listen-addr lo --advertise-addr lo"
     fi
 
-    echo "$command"
     execute_sudo "$command"
 
     # shellcheck disable=SC2181
