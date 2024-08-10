@@ -11,14 +11,14 @@ Running an archive is a permission-based process, and you need to [apply for per
 
 ## System Requirements
 
-| Minimum Requirements  | Recommended Requirements |
-|-----------------------|--------------------------|
-| 4 CPU cores           | 4 CPU cores              |
-| 8 GB RAM              | 8 GB RAM                 |
-| 3 TB storage          | 3 TB storage             |
-| 1 Gbps network        | 1 Gbps network           |
-| ? TB egress traffic   | ? TB egress traffic      |
-| 30 TB ingress traffic | 40 TB ingress traffic    |
+| Minimum Requirements | Recommended Requirements |
+|----------------------|--------------------------|
+| 4 CPU cores          | 4 CPU cores              |
+| 8 GB RAM             | 8 GB RAM                 |
+| 1 TB storage         | 2 TB storage             |
+| 1 Gbps network       | 1 Gbps network           |
+| ? TB egress traffic  | ? TB egress traffic      |
+| ? TB ingress traffic | ? TB ingress traffic     |
 
 !!! note
 The above requirements are based on well-performing hosting providers. If you are unable to use a dedicated hosting
@@ -47,3 +47,5 @@ To create a symlink link, you can run the following command:
 ```bash
 ln -s /mnt/<cost-efficient-storage-mount-point> /var/lib/voi/algod/data/cold-storage
 ```
+
+The volume used for cold storage will benefit from transparent compression being enabled.
