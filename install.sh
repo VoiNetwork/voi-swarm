@@ -670,9 +670,6 @@ update_profile_setting() {
   local new_value="$2"
   local profile_file="${voi_home}/.profile"
 
-  echo "$1"
-  echo "$2"
-
   if [[ -f "$profile_file" ]]; then
     if grep -q "^export ${setting_name}=" "$profile_file"; then
       escaped_value=$(printf '%s\n' "$new_value" | sed 's/[\/&]/\\&/g')
@@ -692,6 +689,7 @@ clone_environment_settings_to_profile() {
     if [[ $var == VOINETWORK_* && $var != VOINETWORK_IMPORT_ACCOUNT=* ]]; then
       name=$(echo "$var" | cut -d'=' -f1)
       value=$(echo "$var" | cut -d'=' -f2-)
+      echo "$value"
       update_profile_setting "$name" "$value"
     fi
   done
