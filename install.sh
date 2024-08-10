@@ -860,12 +860,12 @@ check_minimum_requirements() {
 set_profile() {
   if [[ -f "${voi_home}/.profile" ]]; then
       source "${voi_home}/.profile"
-  else
-      if [[ -z ${VOINETWORK_PROFILE} ]]; then
-          # If VOINETWORK_PROFILE is not set, use default "participation" to profile
-          VOINETWORK_PROFILE="participation"
-      fi
-      echo "export VOINETWORK_PROFILE=${VOINETWORK_PROFILE}" > "${voi_home}/.profile"
+  fi
+
+  if [[ -z ${VOINETWORK_PROFILE} ]]; then
+    # If VOINETWORK_PROFILE is not set, use default "participation" to profile
+    VOINETWORK_PROFILE="participation"
+    echo "export VOINETWORK_PROFILE=${VOINETWORK_PROFILE}" >> "${voi_home}/.profile"
   fi
 
   display_banner "Setting up Voi Swarm using profile: ${VOINETWORK_PROFILE}"
