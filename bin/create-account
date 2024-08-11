@@ -5,4 +5,4 @@ source "${HOME}/voi/bin/.helpers/util.sh"
 util_validate_supported_node_type "participation" "relay"
 util_validate_running_container
 
-docker exec -it "${CONTAINER_ID}" goal account new
+docker exec -it "${CONTAINER_ID}" /node/bin/goal account new

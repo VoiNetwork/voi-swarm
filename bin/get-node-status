@@ -20,7 +20,7 @@ get_algod_token() {
 }
 
 get_last_committed_block() {
-  docker exec -it "${CONTAINER_ID}" bash -c "goal node status | grep 'Last committed block' | cut -d' ' -f4 | tr -cd '[:digit:]'"
+  docker exec -it "${CONTAINER_ID}" bash -c "/node/bin/goal node status | grep 'Last committed block' | cut -d' ' -f4 | tr -cd '[:digit:]'"
 }
 
 get_accounts() {
@@ -79,8 +79,7 @@ display_account_information() {
 
   ## This is a workaround to get the last valid round of the active participation key that is installed on the system.
   ## If using REST API we will get key for last online transaction, which is valid for other usecases
-  #active_key_last_valid_round=$(docker exec -it "${CONTAINER_ID}" bash -c 'goal account listpartkeys' | awk '$1=="yes" {print $6}' | tr -cd '[:digit:]')
-  active_key_last_valid_round=$(docker exec -it "${CONTAINER_ID}" bash -c 'goal account listpartkeys' | awk -v addr="${account_address}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $6}' | tr -cd '[:digit:]')
+  active_key_last_valid_round=$(docker exec -it "${CONTAINER_ID}" bash -c '/node/bin/goal account listpartkeys' | awk -v addr="${account_address}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $6}' | tr -cd '[:digit:]')
 
   if [[ -z "${active_key_last_valid_round}" ]]; then
     echo "Participation status: No active participation key found."
@@ -89,7 +88,7 @@ display_account_information() {
 
   existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
 
-  echo "Participation status: $(docker exec -it "${CONTAINER_ID}" bash -c 'goal account dump -a '"${account_address}"' | jq -r '\''if (.onl == 1) then "online" else "offline" end'\''')"
+  echo "Participation status: $(docker exec -it "${CONTAINER_ID}" bash -c '/node/bin/goal account dump -a '"${account_address}"' | jq -r '\''if (.onl == 1) then "online" else "offline" end'\''')"
   echo "Participation key expires at block: ${active_key_last_valid_round} (last committed: ${last_committed_block})"
   echo "Participation key expected to expire at: ${existing_expiration_date}"
 }
@@ -110,7 +109,7 @@ fi
 
 declare -A health_checks
 
-if [[ $(docker exec -it "${CONTAINER_ID}" bash -c "goal node status") ]]; then
+if [[ $(docker exec -it "${CONTAINER_ID}" bash -c "/node/bin/goal node status") ]]; then
     health_checks["Daemon running"]="true"
 else
     health_checks["Daemon running"]="false"
@@ -140,7 +139,7 @@ echo ""
 
 echo "AVM version:"
 echo "**************"
-algod_version=$(docker exec -it "${CONTAINER_ID}" bash -c 'goal version -v')
+algod_version=$(docker exec -it "${CONTAINER_ID}" bash -c '/node/bin/goal version -v')
 echo "${algod_version}"
 echo ""
 
