@@ -299,19 +299,17 @@ catchup_node() {
 
   get_node_status
 
-  if [[ ${network_status_url} != "" ]]; then
-    while [[ ${current_node_round} -lt ${current_net_round} ]]; do
-      rounds_to_go=$((current_net_round - current_node_round))
-      if [[ ${rounds_to_go} -gt 1 ]]; then
-        printf "\rWaiting for catchup: %d blocks to go                     " "${rounds_to_go}"
-      else
-        printf "\rWaiting for catchup: One more block to go!                                           "
-      fi
-      get_node_status
-      sleep 5
-    done
-    display_banner "Caught up with the network!"
-  fi
+  while [[ ${current_node_round} -lt ${current_net_round} ]]; do
+    rounds_to_go=$((current_net_round - current_node_round))
+    if [[ ${rounds_to_go} -gt 1 ]]; then
+      printf "\rWaiting for catchup: %d blocks to go                     " "${rounds_to_go}"
+    else
+      printf "\rWaiting for catchup: One more block to go!                                           "
+    fi
+    get_node_status
+    sleep 5
+  done
+  display_banner "Caught up with the network!"
 }
 
 ask_for_password() {
