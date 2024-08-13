@@ -2,112 +2,112 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/cli-tools/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/migrating/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/provider-guidance/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/troubleshooting/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/advanced-node-running/archiver-node/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/advanced-node-running/relay-node/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/getting-started/introduction/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/installation/installation-advanced/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/installation/installation/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/installation/prerequisites/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/installation/system-requirements/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/installation/uninstall/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/notification-guides/amazon-ses/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/notification-guides/email/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/notification-guides/notification-test/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/notification-guides/pushbullet/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/operating/participation-keys/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/operating/running-your-node/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/operating/setup-notifications/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/updating/swarm-update/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://voinetwork.github.io/voi-swarm/updating/telemetry/</loc>
-         <lastmod>2024-08-11</lastmod>
+         <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
