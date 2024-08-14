@@ -362,16 +362,16 @@ get_account_balance() {
   echo "$balance"
 }
 
-busy_wait_until_balance_is_1_voi() {
+busy_wait_until_balance_is_sufficient() {
   local balance
-  display_banner "Waiting for balance (account: ${account_addr}) to be 1 Voi"
+  display_banner "Waiting for balance (account: ${account_addr}) to be 0.001 Voi"
   balance=$(get_account_balance "${account_addr}")
-  while [[ ${balance} -lt "1000000" ]]; do
-    echo "Waiting for balance to be 1 Voi at minimum"
+  while [[ ${balance} -lt "1000" ]]; do
+    echo "Waiting for balance to be 0.001 Voi at minimum"
     balance=$(get_account_balance "${account_addr}")
     sleep 10
   done
-  display_banner "Account has balance of 1 Voi or greater!"
+  display_banner "Account has balance of 0.001 Voi or greater!"
 }
 
 get_account_info() {
@@ -680,7 +680,7 @@ join_as_new_user() {
 
   generate_participation_key
 
-  busy_wait_until_balance_is_1_voi
+  busy_wait_until_balance_is_sufficient
 
   change_account_online_status "${account}"
 
