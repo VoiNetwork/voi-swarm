@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   relay:
-    image: ghcr.io/voinetwork/voi-node:latest
+    image: ghcr.io/voinetwork/voi-node-${VOINETWORK_NETWORK}:latest
     hostname: ${VOINETWORK_TELEMETRY_NAME}
     environment:
       VOINETWORK_PROFILE: ${VOINETWORK_PROFILE}
