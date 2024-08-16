@@ -91,8 +91,8 @@ fi
 if [[ -z ${VOINETWORK_TELEMETRY_NAME} ]]; then
   echo "Telemetry sharing skipped."
 
-  if grep -q "^export VOINETWORK_TELEMETRY_NAME=" ~/voi/.profile; then
-    sed -i '/^export VOINETWORK_TELEMETRY_NAME=/d' ~/voi/.profile
+  if grep -q "^export VOINETWORK_TELEMETRY_NAME=" ${HOME}/voi/.profile; then
+    sed -i '/^export VOINETWORK_TELEMETRY_NAME=/d' ${HOME}/voi/.profile
   fi
 
   util_start_stack
