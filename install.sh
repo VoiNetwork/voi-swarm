@@ -1219,6 +1219,7 @@ if [[ ${skip_account_setup} -eq 0 || ${new_network} -eq 1 ]]; then
 else
   generate_participation_key
   participation_key_generation_status=$?
+
   ## Catch cases where an install was aborted / user didn't succeed in going online
   ## This can happen where there are no part keys present on the machine, or where there's multiple part keys but
   ## no key is active.
