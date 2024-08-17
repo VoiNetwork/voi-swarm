@@ -475,6 +475,30 @@ generate_new_key() {
   execute_interactive_docker_command "/node/bin/goal account addpartkey -a ${address} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
 }
 
+ensure_accounts_are_offline() {
+  account_addresses=$(get_account_addresses)
+
+  if [[ -z ${account_addresses} ]]; then
+    return
+  fi
+
+  echo "Checking if accounts are online and have a balance of 1,000 microVoi or more."
+  echo "Accounts with a balance of 1,000 microVoi or more will be taken offline."
+
+
+  for account in ${account_addresses}; do
+    local balance
+    balance=$(get_account_balance "${account}")
+    account_status=$(execute_docker_command "/node/bin/goal account dump -a ${account}" | jq -r .onl)
+
+    if [[ ${balance} -ge 1000 && ${account_status} -eq 1 ]]; then
+      echo "Balance is equal/above 1,000 microVoi. Taking account ${account} offline."
+      execute_interactive_docker_command "/node/bin/goal account changeonlinestatus -a ${account} -o=false"
+      echo "Account ${account} is now offline!"
+    fi
+  done
+}
+
 generate_participation_key() {
   display_banner "Generating/Updating participation key"
 
@@ -504,12 +528,12 @@ generate_participation_key() {
         return 1
       fi
 
-      local balance
-      balance=$(get_account_balance "${account}")
-
       if [[ ${account_addresses_length} -eq 1 ]]; then
         generate_new_key "${account}"
       else
+        local balance
+        balance=$(get_account_balance "${account}")
+
         if [[ ${balance} -ge 1000 ]]; then
           echo "Balance is equal/above 1,000 microVoi. Generating participation key for account ${account}"
           generate_new_key "${account}"
@@ -1083,6 +1107,10 @@ if [[ ${VOINETWORK_NETWORK} == "mainnet" && ${terminal_width} -ge "128" && ${VOI
 fi
 
 check_minimum_requirements
+
+if [[ ${new_network} -eq 1 ]]; then
+  ensure_accounts_are_offline
+fi
 
 get_telemetry_name
 set_telemetry_name
