@@ -11,6 +11,7 @@ wallet_password=""
 new_user_setup=0
 new_network=0
 network_status_url=""
+container_id=""
 
 voi_logo="[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m
 [0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m
@@ -222,12 +223,31 @@ wait_for_stack_to_be_ready() {
   display_banner "Stack is ready!"
 }
 
+function get_container_id() {
+  case ${VOINETWORK_PROFILE} in
+    "relay")
+      container_id=$(docker ps -q -f name=voinetwork_relay)
+      ;;
+    "developer")
+      container_id=$(docker ps -q -f name=voinetwork_developer)
+      ;;
+    "archiver")
+      container_id=$(docker ps -q -f name=voinetwork_archiver)
+      ;;
+    "participation")
+      container_id=$(docker ps -q -f name=voinetwork_algod)
+      ;;
+    *)
+      abort "Invalid profile. Exiting the program."
+      ;;
+  esac
+}
+
 verify_node_is_running() {
   local retries=0
   local max_retries=5
 
   while [[ $retries -lt $max_retries ]]; do
-    container_id=$(execute_sudo "docker ps -q -f name=voinetwork_algod")
     if [[ -n "$container_id" ]]; then
       execute_sudo "docker exec ${container_id} bash -c \"curl -sS http://localhost:8080/health > /dev/null\""
       local exit_code=$?
@@ -309,6 +329,7 @@ catchup_node() {
     get_node_status
     sleep 5
   done
+  echo ""
   display_banner "Caught up with the network!"
 }
 
@@ -482,9 +503,15 @@ ensure_accounts_are_offline() {
     return
   fi
 
+  if [[ ${container_id} == "" ]]; then
+    echo "Skipping account offline check as container not found."
+    return
+  fi
+
+  display_banner "Migrating to new network. Ensuring all accounts are offline."
+
   echo "Checking if accounts are online and have a balance of 1,000 microVoi or more."
   echo "Accounts with a balance of 1,000 microVoi or more will be taken offline."
-
 
   for account in ${account_addresses}; do
     local balance
@@ -492,7 +519,8 @@ ensure_accounts_are_offline() {
     account_status=$(execute_docker_command "/node/bin/goal account dump -a ${account}" | jq -r .onl)
 
     if [[ ${balance} -ge 1000 && ${account_status} -eq 1 ]]; then
-      echo "Balance is equal/above 1,000 microVoi. Taking account ${account} offline."
+      echo ""
+      echo "Balance is ${balance} which is above 1,000 microVoi. Taking account ${account} offline."
       execute_interactive_docker_command "/node/bin/goal account changeonlinestatus -a ${account} -o=false"
       echo "Account ${account} is now offline!"
     fi
@@ -548,6 +576,7 @@ generate_participation_key() {
         else
           echo "Balance is below 1,000 microVoi. Skipping participation key generation for account ${account}"
         fi
+        echo ""
       fi
     elif [[ $((active_key_last_valid_round-last_committed_block)) -le 417104 ]]; then
       local existing_expiration_date
@@ -700,9 +729,20 @@ change_account_online_status() {
 
 join_as_new_user() {
   new_user_setup=1
+  local account_addresses
+  account_addresses=$(get_account_addresses)
+
   display_banner "Joining network"
 
   generate_participation_key
+
+  # If there are multiple accounts, we don't want to go online automatically, unless previously done
+  # as part of participation key generation.
+  if [[ $(echo "$account_addresses" | wc -l) -gt 1 ]]; then
+    display_banner "Welcome to Voi!"
+    joined_network_instructions
+    return
+  fi
 
   busy_wait_until_balance_is_sufficient
 
@@ -1109,6 +1149,7 @@ fi
 check_minimum_requirements
 
 if [[ ${new_network} -eq 1 ]]; then
+  get_container_id
   ensure_accounts_are_offline
 fi
 
@@ -1177,6 +1218,7 @@ start_stack
 wait_for_stack_to_be_ready
 
 if [[ ${VOINETWORK_PROFILE} == "participation" ]]; then
+  get_container_id
   verify_node_is_running
 fi
 
