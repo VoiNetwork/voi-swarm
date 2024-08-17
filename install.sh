@@ -678,10 +678,10 @@ joined_network_instructions() {
       echo "Account setup skipped. Multiple accounts detected in your wallet."
     else
       echo "Account setup skipped. Detected existing account with address: ${account_addr}"
-    fi
 
-    echo "To see network participation status use ${HOME}/voi/bin/get-participation-status ${account_addr}"
-    echo "To go online use ${HOME}/voi/bin/go-online ${account_addr}"
+      echo "To see network participation status use ${HOME}/voi/bin/get-participation-status ${account_addr}"
+      echo "To go online use ${HOME}/voi/bin/go-online ${account_addr}"
+    fi
   fi
 
   # Display information informing the user that the network will catch up in the background if used in non-interactive mode
@@ -740,8 +740,10 @@ join_as_new_user() {
   # as part of participation key generation.
   if [[ $(echo "$account_addresses" | wc -l) -gt 1 ]]; then
     display_banner "Welcome to Voi!"
+
     joined_network_instructions
-    return
+
+    exit
   fi
 
   busy_wait_until_balance_is_sufficient
