@@ -743,7 +743,7 @@ join_as_new_user() {
 
     joined_network_instructions
 
-    exit
+    return
   fi
 
   busy_wait_until_balance_is_sufficient
