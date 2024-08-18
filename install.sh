@@ -504,7 +504,7 @@ ensure_accounts_are_offline() {
   fi
 
   if [[ ${container_id} == "" ]]; then
-    echo "Skipping account offline check as container not found."
+    echo "Skipping account offline check as no existing Voi Swarm container could be found."
     return
   fi
 
