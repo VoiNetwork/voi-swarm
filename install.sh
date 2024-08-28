@@ -12,6 +12,7 @@ new_user_setup=0
 new_network=0
 network_status_url=""
 network_identifier=""
+staking_url=""
 container_id=""
 
 voi_logo="[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m
@@ -297,7 +298,7 @@ get_node_status() {
     fi
 }
 
-set_network_url() {
+set_network_status_url() {
   case ${VOINETWORK_NETWORK} in
     "mainnet")
       network_status_url="https://mainnet-api.voi.nodly.io/v2/status"
@@ -311,6 +312,23 @@ set_network_url() {
     *)
       abort "Unable to find status URL. Swarm is running in the background." true
       ;;
+  esac
+}
+
+set_staking_url() {
+  case ${VOINETWORK_NETWORK} in
+  "mainnet")
+    staking_url="https://mainnet-idx.nautilus.sh/v1/scs/accounts"
+    ;;
+  "betanet")
+    staking_url="https://betanet-idx.nautilus.sh/v1/scs/accounts"
+    ;;
+  "testnet")
+    staking_url="https://arc72-idx.nautilus.sh/v1/scs/accounts"
+    ;;
+  *)
+    abort "Unable to find staking URL. Exiting the program."
+    ;;
   esac
 }
 
@@ -333,7 +351,7 @@ set_network_identifier() {
 
 catchup_node() {
   display_banner "Catching up with the network... This might take some time, and numbers might briefly increase"
-  set_network_url
+  set_network_status_url
 
   get_node_status
 
@@ -738,6 +756,103 @@ joined_network_instructions() {
   fi
 }
 
+check_staking_accounts() {
+  account_addresses=$(get_account_addresses)
+  if [[ $? -eq 1 ]]; then
+    return
+  else
+    set_staking_url
+
+    for account in ${account_addresses}; do
+      local staking_endpoint
+      local response
+      local http_code
+      local json_response
+
+      staking_endpoint="${staking_url}?owner=${account}&deleted=0"
+      echo "${staking_endpoint}"
+      response=$(curl -s --max-time 5 -w "%{http_code}" "${staking_endpoint}")
+      http_code=$(echo "${response}" | awk '{print substr($0, length($0) - 2)}')
+      json_response=$(echo "${response}" | awk '{print substr($0, 1, length($0) - 3)}')
+
+      echo "http code: ${http_code}"
+      echo "json response: ${json_response}"
+
+      if [[ "${http_code}" -eq 200 ]]; then
+        accounts_length=$(jq '.accounts | length' <<< "${json_response}")
+        if [[ "${accounts_length}" -gt 0 ]]; then
+          echo "Account ${account} has received an airdrop / is a staking account."
+          local staking_accounts
+          staking_accounts=$(jq -c '.accounts[]' <<< "${json_response}")
+          for staking_account in ${staking_accounts}; do
+            local contract_address
+            # local contract_id
+            local part_vote_k
+
+            # contract_id=$(jq -r '.contractId' <<< "${staking_account}")
+            contract_address=$(jq -r '.contractAddress' <<< "${staking_account}")
+            part_vote_k=$(jq -r '.part_vote_k' <<< "${staking_account}")
+
+            echo "Processing account ID: ${contract_address}"
+            if [ "${part_vote_k}" == "null" ]; then
+              echo "Part key is null, generating a new participation key..."
+              generate_new_key "${contract_address}"
+
+
+
+              execute_interactive_docker_command "/node/bin/goal clerk send -a 1000 -f ${account} -t ${contract_address} --out=/tmp/payment.txn"
+              # execute_interactive_docker_command "/node/bin/goal app call --app-id ${contract_id} --from ${account} --app-arg 'b64:zSTeiA==' --app-arg 'b64:${voting_key}' --app-arg 'b64:${selection_key}' --app-arg 'int:${first_round}' --app-arg 'int:${last_round}' --app-arg 'int:${key_dilution}' --app-arg 'b64:${stateproof_key}' --out=/tmp/app_call.txn"
+
+            else
+              echo "Part key: ${part_vote_k}"
+            fi
+          done
+        else
+          echo "Account ${account} has not received an airdrop / is not a staking account."
+        fi
+      else
+        echo "Failed to fetch staking information for account ${account}."
+      fi
+        # Format of object is:
+#            {
+#              "contractId": 85272310,
+#              "contractAddress": "X3F5CNAY7IG4SHRT222QLPX3G3NPIEZVWLNIB6KX4CETL3YAI7ECWPBGZQ",
+#              "creator": "KOW6PLDVHZFKQVFQMSZP32IKDQGP66EST24WIJDNYESJ5H3E27WRLSGKWQ",
+#              "createRound": 9987667,
+#              "lastSyncRound": 9987770,
+#              "global_funder": "BNERIHFXRPMF5RI4UQHMB6CFZ4RVXIBOJUNYEUXKDUSETECXDNGWLW5EOY",
+#              "global_funding": null,
+#              "global_owner": "G3MSA75OZEJTCCENOJDLDJK7UD7E2K5DNC7FVHCNOV7E3I4DTXTOWDUIFQ",
+#              "global_period": 0,
+#              "global_total": null,
+#              "global_period_seconds": 3600,
+#              "global_lockup_delay": 12,
+#              "global_vesting_delay": 12,
+#              "global_period_limit": 5,
+#              "global_delegate": null,
+#              "global_parent_id": 85252562,
+#              "global_messenger_id": 73060985,
+#              "global_initial": "1000000",
+#              "global_deadline": 1724793316,
+#              "part_vote_k": null,
+#              "part_sel_k": null,
+#              "part_vote_fst": null,
+#              "part_vote_lst": null,
+#              "part_vote_kd": null,
+#              "part_sp_key": null,
+#              "deleted": 0
+#            }
+
+        # if vote_key matches a local key, and part_vote_lst is within 417,104 blocks of the last committed block, renew the key, if the accout has a balance of 1,000 microVoi or more.
+        # if new keys are generated, delete the old key.
+        # after keys have been generated create an offline payment transaction
+        # after having generated an offline payment transaction, create a new inner app transaction on contractAddress from the json object.
+        # sign both transactions as a group, in the order of creation, and submit to the network.
+        # after this has been done for all accounts, set a state variable to indicate that the accounts have been processed.
+    done
+  fi
+}
+
 change_account_online_status() {
   local account
   account=$1
@@ -769,6 +884,8 @@ join_as_new_user() {
   change_account_online_status "${account}"
 
   account_status=$(execute_docker_command "/node/bin/goal account dump -a ${account}" | jq -r .onl)
+
+  check_staking_accounts
 
   ## This step is late in the process and does require a restart of the service to take effect.
   ## Container ID from verify_node_running will have to be re-fetched if any use of the node is to be done after this point.
@@ -1321,6 +1438,8 @@ else
 
     join_as_new_user
   fi
+
+  check_staking_accounts
 
   migrate_host_based_voi_setup
 
