@@ -11,6 +11,7 @@ wallet_password=""
 new_user_setup=0
 new_network=0
 network_status_url=""
+network_identifier=""
 container_id=""
 
 voi_logo="[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m
@@ -313,6 +314,23 @@ set_network_url() {
   esac
 }
 
+set_network_identifier() {
+  case ${VOINETWORK_NETWORK} in
+    "mainnet")
+      network_identifier="voimain-v1.0"
+      ;;
+    "betanet")
+      network_identifier="voibeta-v1.0"
+      ;;
+    "testnet")
+      network_identifier="voitest-v1"
+      ;;
+    *)
+      network_identifier="voitest-v1"
+      ;;
+  esac
+}
+
 catchup_node() {
   display_banner "Catching up with the network... This might take some time, and numbers might briefly increase"
   set_network_url
@@ -398,11 +416,11 @@ busy_wait_until_balance_is_sufficient() {
 get_account_info() {
   allow_one_account=$1
 
-  if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voitest-v1/accountList.json"'; then
+  if execute_sudo "test ! -f \"/var/lib/voi/algod/data/${network_identifier}/accountList.json\""; then
     return 0
   fi
 
-  accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
+  accounts_json=$(execute_sudo "cat /var/lib/voi/algod/data/${network_identifier}/accountList.json")
   number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
 
   if [[ $number_of_accounts -gt 1 ]]; then
@@ -466,11 +484,11 @@ get_last_committed_block() {
 }
 
 get_account_addresses() {
-  if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voitest-v1/accountList.json"'; then
+  if execute_sudo "test ! -f \"/var/lib/voi/algod/data/${network_identifier}/accountList.json\""; then
     abort "Account list not found. Exiting the program."
   fi
 
-  accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
+  accounts_json=$(execute_sudo "cat /var/lib/voi/algod/data/${network_identifier}/accountList.json")
   number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
 
   if [[ $number_of_accounts -eq 0 ]]; then
@@ -1131,6 +1149,7 @@ fi
 display_banner "${bold}Welcome to Voi Swarm${normal}. Let's get started!"
 
 mkdir -p "${voi_home}"
+set_network_identifier
 
 existing_network=$(get_existing_network)
 
