@@ -350,6 +350,23 @@ set_network_identifier() {
   esac
 }
 
+get_network_identifier() {
+    case $1 in
+      "mainnet")
+        echo "voimain-v1.0"
+        ;;
+      "betanet")
+        echo "voibeta-v1.0"
+        ;;
+      "testnet")
+        echo "voitest-v1"
+        ;;
+      *)
+        echo "voitest-v1"
+        ;;
+    esac
+}
+
 catchup_node() {
   display_banner "Catching up with the network... This might take some time, and numbers might briefly increase"
   set_network_status_url
@@ -503,11 +520,20 @@ get_last_committed_block() {
 }
 
 get_account_addresses() {
-  if execute_sudo "test ! -f \"/var/lib/voi/algod/data/${network_identifier}/accountList.json\""; then
+  local network_identifier_override
+  local local_network_identifier
+  network_identifier_override=$1
+  local_network_identifier=${network_identifier}
+
+  if [[ -n ${network_identifier_override} ]]; then
+    local_network_identifier=${network_identifier_override}
+  fi
+
+  if execute_sudo "test ! -f \"/var/lib/voi/algod/data/${local_network_identifier}/accountList.json\""; then
     abort "Account list not found. Exiting the program."
   fi
 
-  accounts_json=$(execute_sudo "cat /var/lib/voi/algod/data/${network_identifier}/accountList.json")
+  accounts_json=$(execute_sudo "cat /var/lib/voi/algod/data/${local_network_identifier}/accountList.json")
   number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
 
   if [[ $number_of_accounts -eq 0 ]]; then
@@ -525,7 +551,7 @@ generate_new_key() {
   local expiration_date
 
   start_block=$(get_last_committed_block)
-  end_block=$((start_block + 2000000))
+  end_block=$((start_block + 20000))
   expiration_date=$(get_participation_expiration_eta "${end_block}" "${start_block}")
   address=$1
   latest_key_end_block=${end_block}
@@ -535,7 +561,9 @@ generate_new_key() {
 }
 
 ensure_accounts_are_offline() {
-  account_addresses=$(get_account_addresses)
+  local local_network_identifier
+  local_network_identifier=$(get_network_identifier "$1")
+  account_addresses=$(get_account_addresses "${local_network_identifier}")
 
   if [[ -z ${account_addresses} ]]; then
     return
@@ -684,7 +712,9 @@ generate_participation_key() {
       echo "You will be asked to enter your password to activate the new key."
 
       execute_interactive_docker_command "/node/bin/goal account renewpartkey -a ${account} --roundLastValid ${end_block}"
-      execute_interactive_docker_command "/node/bin/goal account deletepartkey --partkeyid ${current_key_id}"
+      if [[ -n ${current_key_id} ]]; then
+        execute_interactive_docker_command "/node/bin/goal account deletepartkey --partkeyid ${current_key_id}"
+      fi
     else
       local existing_expiration_date
       existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
@@ -917,39 +947,15 @@ check_staking_accounts() {
               echo ""
             fi
           done
+
+          echo ""
+          echo "${bold}To learn how to use your staking contract visit: https://staking.voi.network${normal}"
+        else
+          display_banner "No staking contract detected"
+
+          echo "No staking contracts found for owner ${account}. To learn more visit: https://staking.voi.network"
         fi
       fi
-        # Format of object is:
-#            {
-#              "contractId": 85272310,
-#              "contractAddress": "X3F5CNAY7IG4SHRT222QLPX3G3NPIEZVWLNIB6KX4CETL3YAI7ECWPBGZQ",
-#              "creator": "KOW6PLDVHZFKQVFQMSZP32IKDQGP66EST24WIJDNYESJ5H3E27WRLSGKWQ",
-#              "createRound": 9987667,
-#              "lastSyncRound": 9987770,
-#              "global_funder": "BNERIHFXRPMF5RI4UQHMB6CFZ4RVXIBOJUNYEUXKDUSETECXDNGWLW5EOY",
-#              "global_funding": null,
-#              "global_owner": "G3MSA75OZEJTCCENOJDLDJK7UD7E2K5DNC7FVHCNOV7E3I4DTXTOWDUIFQ",
-#              "global_period": 0,
-#              "global_total": null,
-#              "global_period_seconds": 3600,
-#              "global_lockup_delay": 12,
-#              "global_vesting_delay": 12,
-#              "global_period_limit": 5,
-#              "global_delegate": null,
-#              "global_parent_id": 85252562,
-#              "global_messenger_id": 73060985,
-#              "global_initial": "1000000",
-#              "global_deadline": 1724793316,
-#              "part_vote_k": null,
-#              "part_sel_k": null,
-#              "part_vote_fst": null,
-#              "part_vote_lst": null,
-#              "part_vote_kd": null,
-#              "part_sp_key": null,
-#              "deleted": 0
-#            }
-
-        # after this has been done for all accounts, set a state variable to indicate that the accounts have been processed.
     done
   fi
 }
@@ -1389,7 +1395,7 @@ check_minimum_requirements
 
 if [[ ${new_network} -eq 1 ]]; then
   get_container_id
-  ensure_accounts_are_offline
+  ensure_accounts_are_offline "${existing_network}"
 fi
 
 get_telemetry_name
