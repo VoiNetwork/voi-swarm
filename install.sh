@@ -551,7 +551,7 @@ generate_new_key() {
   local expiration_date
 
   start_block=$(get_last_committed_block)
-  end_block=$((start_block + 20000))
+  end_block=$((start_block + 2000000))
   expiration_date=$(get_participation_expiration_eta "${end_block}" "${start_block}")
   address=$1
   latest_key_end_block=${end_block}
@@ -884,7 +884,7 @@ check_staking_accounts() {
             # shellcheck disable=SC2046
             participation_key_id=$(get_participation_key_id_from_vote_key "${part_vote_k}")
 
-            if [[ "${part_vote_k}" == "null" || $((part_vote_lst-last_committed_block)) -le 41710400 || -z "${participation_key_id}" ]]; then
+            if [[ "${part_vote_k}" == "null" || $((part_vote_lst-last_committed_block)) -le 417104 || -z "${participation_key_id}" ]]; then
 
               if  [[ "${part_vote_k}" == "null" ]]; then
                 echo "No staking participation key detected."
