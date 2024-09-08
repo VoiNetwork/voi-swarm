@@ -12,7 +12,9 @@ new_user_setup=0
 new_network=0
 network_status_url=""
 network_identifier=""
+staking_url=""
 container_id=""
+latest_key_end_block=""
 
 voi_logo="[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m
 [0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m[38;2;255;255;255mM[0m
@@ -297,7 +299,7 @@ get_node_status() {
     fi
 }
 
-set_network_url() {
+set_network_status_url() {
   case ${VOINETWORK_NETWORK} in
     "mainnet")
       network_status_url="https://mainnet-api.voi.nodly.io/v2/status"
@@ -311,6 +313,23 @@ set_network_url() {
     *)
       abort "Unable to find status URL. Swarm is running in the background." true
       ;;
+  esac
+}
+
+set_staking_url() {
+  case ${VOINETWORK_NETWORK} in
+  "mainnet")
+    staking_url="https://mainnet-idx.nautilus.sh/v1/scs/accounts"
+    ;;
+  "betanet")
+    staking_url="https://betanet-idx.nautilus.sh/v1/scs/accounts"
+    ;;
+  "testnet")
+    staking_url="https://arc72-idx.nautilus.sh/v1/scs/accounts"
+    ;;
+  *)
+    abort "Unable to find staking URL. Exiting the program."
+    ;;
   esac
 }
 
@@ -331,9 +350,26 @@ set_network_identifier() {
   esac
 }
 
+get_network_identifier() {
+    case $1 in
+      "mainnet")
+        echo "voimain-v1.0"
+        ;;
+      "betanet")
+        echo "voibeta-v1.0"
+        ;;
+      "testnet")
+        echo "voitest-v1"
+        ;;
+      *)
+        echo "voitest-v1"
+        ;;
+    esac
+}
+
 catchup_node() {
   display_banner "Catching up with the network... This might take some time, and numbers might briefly increase"
-  set_network_url
+  set_network_status_url
 
   get_node_status
 
@@ -484,11 +520,20 @@ get_last_committed_block() {
 }
 
 get_account_addresses() {
-  if execute_sudo "test ! -f \"/var/lib/voi/algod/data/${network_identifier}/accountList.json\""; then
+  local network_identifier_override
+  local local_network_identifier
+  network_identifier_override=$1
+  local_network_identifier=${network_identifier}
+
+  if [[ -n ${network_identifier_override} ]]; then
+    local_network_identifier=${network_identifier_override}
+  fi
+
+  if execute_sudo "test ! -f \"/var/lib/voi/algod/data/${local_network_identifier}/accountList.json\""; then
     abort "Account list not found. Exiting the program."
   fi
 
-  accounts_json=$(execute_sudo "cat /var/lib/voi/algod/data/${network_identifier}/accountList.json")
+  accounts_json=$(execute_sudo "cat /var/lib/voi/algod/data/${local_network_identifier}/accountList.json")
   number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
 
   if [[ $number_of_accounts -eq 0 ]]; then
@@ -509,13 +554,16 @@ generate_new_key() {
   end_block=$((start_block + 2000000))
   expiration_date=$(get_participation_expiration_eta "${end_block}" "${start_block}")
   address=$1
-  echo "Generating participation key for account ${address} with start block ${start_block} and end block ${end_block}"
+  latest_key_end_block=${end_block}
+  echo "Generating participation key for ${address} with start block ${start_block} and end block ${end_block}"
   echo "New key is expected to be valid until: ${expiration_date}"
   execute_interactive_docker_command "/node/bin/goal account addpartkey -a ${address} --roundFirstValid ${start_block} --roundLastValid ${end_block}"
 }
 
 ensure_accounts_are_offline() {
-  account_addresses=$(get_account_addresses)
+  local local_network_identifier
+  local_network_identifier=$(get_network_identifier "$1")
+  account_addresses=$(get_account_addresses "${local_network_identifier}")
 
   if [[ -z ${account_addresses} ]]; then
     return
@@ -543,6 +591,48 @@ ensure_accounts_are_offline() {
       echo "Account ${account} is now offline!"
     fi
   done
+}
+
+get_participation_key_id_from_vote_key() {
+  local vote_key
+  local output
+  vote_key=$1
+
+  output=$(execute_docker_command "/node/bin/goal account partkeyinfo")
+  echo "${output}" | grep -B 10 "${vote_key}" | grep 'Participation ID:' | head -n 1 | cut -d ':' -f2- | xargs
+}
+
+get_most_recent_participation_key_details() {
+  local address=$1
+  local output
+
+  output=$(execute_docker_command "/node/bin/goal account partkeyinfo")
+
+  local first_round
+  first_round=$(echo "$output" | grep -A 4 -B 5 "${latest_key_end_block}" | grep 'First round:' | head -n 1 | cut -d ':' -f2- | xargs)
+  local last_round
+  last_round=$(echo "$output" | grep -A 4 -B 5 "${latest_key_end_block}" | grep 'Last round:' | head -n 1 | cut -d ':' -f2- | xargs)
+  local key_dilution
+  key_dilution=$(echo "$output" | grep -A 4 -B 5 "${latest_key_end_block}" | grep 'Key dilution:' | head -n 1 | cut -d ':' -f2- | xargs)
+  local selection_key
+  selection_key=$(echo "$output" | grep -A 4 -B 5 "${latest_key_end_block}" | grep 'Selection key:' | head -n 1 | cut -d ':' -f2- | xargs)
+  local voting_key
+  voting_key=$(echo "$output" | grep -A 4 -B 5 "${latest_key_end_block}" | grep 'Voting key:' | head -n 1 | cut -d ':' -f2- | xargs)
+  local stateproof_key
+  # shellcheck disable=SC2034
+  stateproof_key=$(echo "$output" | grep -A 4 -B 5 "${latest_key_end_block}" | grep 'State proof key:' | head -n 1 | cut -d ':' -f2- | xargs)
+
+  key_info_json=$(jq --null-input --arg address "$address" --arg first_round "$first_round" --arg last_round "$last_round" --arg key_dilution "$key_dilution" --arg selection_key "$selection_key" --arg voting_key "$voting_key" --arg stateproof_key "$stateproof_key" '{
+    "address": $address,
+    "first_round": $first_round,
+    "last_valid": $last_round,
+    "key_dilution": $key_dilution,
+    "selection_key": $selection_key,
+    "voting_key": $voting_key,
+    "stateproof_key": $stateproof_key
+  }')
+
+  echo "${key_info_json}"
 }
 
 generate_participation_key() {
@@ -622,7 +712,9 @@ generate_participation_key() {
       echo "You will be asked to enter your password to activate the new key."
 
       execute_interactive_docker_command "/node/bin/goal account renewpartkey -a ${account} --roundLastValid ${end_block}"
-      execute_interactive_docker_command "/node/bin/goal account deletepartkey --partkeyid ${current_key_id}"
+      if [[ -n ${current_key_id} ]]; then
+        execute_interactive_docker_command "/node/bin/goal account deletepartkey --partkeyid ${current_key_id}"
+      fi
     else
       local existing_expiration_date
       existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
@@ -738,6 +830,136 @@ joined_network_instructions() {
   fi
 }
 
+check_staking_accounts() {
+  account_addresses=$(get_account_addresses)
+  if [[ $? -eq 1 ]]; then
+    return
+  else
+    set_staking_url
+
+    for account in ${account_addresses}; do
+      local staking_endpoint
+      local response
+      local http_code
+      local json_response
+
+      staking_endpoint="${staking_url}?owner=${account}&deleted=0"
+      response=$(curl -s --max-time 5 -w "%{http_code}" "${staking_endpoint}")
+      http_code=$(echo "${response}" | awk '{print substr($0, length($0) - 2)}')
+      json_response=$(echo "${response}" | awk '{print substr($0, 1, length($0) - 3)}')
+
+      if [[ "${http_code}" -eq 200 ]]; then
+        accounts_length=$(jq '.accounts | length' <<< "${json_response}")
+        if [[ "${accounts_length}" -gt 0 ]]; then
+          display_banner "Staking contract detected"
+
+          echo "Staking contract has been detected for owner ${account}"
+          echo ""
+
+          local balance
+          balance=$(get_account_balance "${account_addr}")
+
+          if [[ ${balance} -lt "1000" ]]; then
+            echo "Balance is below 1,000 microVoi. Skipping staking account setup."
+            continue
+          fi
+
+          local staking_accounts
+          staking_accounts=$(jq -c '.accounts[]' <<< "${json_response}")
+          for staking_account in ${staking_accounts}; do
+            local last_committed_block
+            local contract_address
+            local contract_id
+            local part_vote_k
+            local part_vote_lst
+            local participation_key_id
+
+            contract_id=$(jq -r '.contractId' <<< "${staking_account}")
+            contract_address=$(jq -r '.contractAddress' <<< "${staking_account}")
+            last_committed_block=$(get_last_committed_block)
+
+            part_vote_k=$(jq -r '.part_vote_k' <<< "${staking_account}")
+            part_vote_lst=$(jq -r '.part_vote_lst' <<< "${staking_account}")
+
+            # shellcheck disable=SC2046
+            participation_key_id=$(get_participation_key_id_from_vote_key "${part_vote_k}")
+
+            if [[ "${part_vote_k}" == "null" || $((part_vote_lst-last_committed_block)) -le 417104 || -z "${participation_key_id}" ]]; then
+
+              if  [[ "${part_vote_k}" == "null" ]]; then
+                echo "No staking participation key detected."
+              elif [[ -z ${participation_key_id} ]]; then
+                echo "Registered staking participation key is not installed locally."
+              else
+                local existing_expiration_date
+                existing_expiration_date=$(get_participation_expiration_eta "${part_vote_lst}" "${last_committed_block}")
+
+                echo "Current participation key for account ${account} is expected to expire at: ${existing_expiration_date}"
+                echo "Currently the network is at block: ${last_committed_block}"
+                echo "Current participation key expires at block: ${part_vote_lst}"
+                echo ""
+                echo "This is below the required threshold of 417,104 blocks / ~14 days."
+              fi
+
+              echo ""
+              echo "Generating new key for owner ${account} and contract address ${contract_address}"
+
+              generate_new_key "${contract_address}"
+
+              local partkey_info
+              local voting_key
+              local selection_key
+              local first_round
+              local last_round
+              local key_dilution
+              local stateproof_key
+
+              partkey_info=$(get_most_recent_participation_key_details "${contract_address}")
+              voting_key=$(jq -r '.voting_key' <<< "${partkey_info}")
+              selection_key=$(jq -r '.selection_key' <<< "${partkey_info}")
+              first_round=$(jq -r '.first_round' <<< "${partkey_info}")
+              last_round=$(jq -r '.last_valid' <<< "${partkey_info}")
+              key_dilution=$(jq -r '.key_dilution' <<< "${partkey_info}")
+              stateproof_key=$(jq -r '.stateproof_key' <<< "${partkey_info}")
+
+              execute_interactive_docker_command "/node/bin/goal clerk send -a 1000 -f ${account} -t ${contract_address} --out=/tmp/payment.txn"
+              execute_interactive_docker_command "/node/bin/goal app call --app-id ${contract_id} --from ${account} --app-arg 'b64:zSTeiA==' --app-arg 'b64:${voting_key}' --app-arg 'b64:${selection_key}' --app-arg 'int:${first_round}' --app-arg 'int:${last_round}' --app-arg 'int:${key_dilution}' --app-arg 'b64:${stateproof_key}' --out=/tmp/app_call.txn"
+
+              execute_docker_command "cat /tmp/{payment,app_call}.txn > /tmp/combined.txn"
+              execute_interactive_docker_command "/node/bin/goal clerk group -i /tmp/combined.txn -o /tmp/grouped.txn > /dev/null"
+              execute_interactive_docker_command "/node/bin/goal clerk split -i /tmp/grouped.txn -o /tmp/split.txn > /dev/null"
+              execute_interactive_docker_command "/node/bin/goal clerk sign -i /tmp/split-0.txn -o /tmp/signed-0.txn"
+              execute_interactive_docker_command "/node/bin/goal clerk sign -i /tmp/split-1.txn -o /tmp/signed-1.txn"
+              execute_docker_command "cat /tmp/signed-{0,1}.txn > /tmp/signed-combined.txn"
+              execute_interactive_docker_command "/node/bin/goal clerk rawsend -f /tmp/signed-combined.txn"
+
+              if [[ -n ${participation_key_id} ]]; then
+                execute_interactive_docker_command "/node/bin/goal account deletepartkey --partkeyid ${participation_key_id}"
+              fi
+            else
+              local existing_expiration_date
+              existing_expiration_date=$(get_participation_expiration_eta "${part_vote_lst}" "${last_committed_block}")
+
+              echo "Current staking participation key for owner ${account}, and"
+              echo "contract address ${contract_address} is expected to expire at: ${existing_expiration_date}"
+              echo "This is above the required threshold of 417,104 blocks / ~14 days."
+              echo "No new staking participation key will be generated."
+              echo ""
+            fi
+          done
+
+          echo ""
+          echo "${bold}To learn how to use your staking contract visit: https://staking.voi.network${normal}"
+        else
+          display_banner "No staking contract detected"
+
+          echo "No staking contracts found for owner ${account}. To learn more visit: https://staking.voi.network"
+        fi
+      fi
+    done
+  fi
+}
+
 change_account_online_status() {
   local account
   account=$1
@@ -769,6 +991,8 @@ join_as_new_user() {
   change_account_online_status "${account}"
 
   account_status=$(execute_docker_command "/node/bin/goal account dump -a ${account}" | jq -r .onl)
+
+  check_staking_accounts
 
   ## This step is late in the process and does require a restart of the service to take effect.
   ## Container ID from verify_node_running will have to be re-fetched if any use of the node is to be done after this point.
@@ -1171,7 +1395,7 @@ check_minimum_requirements
 
 if [[ ${new_network} -eq 1 ]]; then
   get_container_id
-  ensure_accounts_are_offline
+  ensure_accounts_are_offline "${existing_network}"
 fi
 
 get_telemetry_name
@@ -1321,6 +1545,8 @@ else
 
     join_as_new_user
   fi
+
+  check_staking_accounts
 
   migrate_host_based_voi_setup
 
