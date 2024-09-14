@@ -319,10 +319,10 @@ set_network_status_url() {
 set_staking_url() {
   case ${VOINETWORK_NETWORK} in
   "mainnet")
-    staking_url="https://mainnet-idx.nautilus.sh/v1/scs/accounts"
+    staking_url="https://voimain-idx.nautilus.sh/v1/scs/accounts"
     ;;
   "betanet")
-    staking_url="https://betanet-idx.nautilus.sh/v1/scs/accounts"
+    staking_url="https://voibeta-idx.nautilus.sh/v1/scs/accounts"
     ;;
   "testnet")
     staking_url="https://arc72-idx.nautilus.sh/v1/scs/accounts"
