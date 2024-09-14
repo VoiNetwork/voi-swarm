@@ -302,7 +302,7 @@ get_node_status() {
 set_network_status_url() {
   case ${VOINETWORK_NETWORK} in
     "mainnet")
-      network_status_url="https://mainnet-api.voi.nodly.io/v2/status"
+      network_status_url="https://mainnet-api.voi.nodely.dev/v2/status"
       ;;
     "betanet")
       network_status_url="https://betanet-api.voi.nodly.io/v2/status"
