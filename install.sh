@@ -922,6 +922,10 @@ check_staking_accounts() {
               key_dilution=$(jq -r '.key_dilution' <<< "${partkey_info}")
               stateproof_key=$(jq -r '.stateproof_key' <<< "${partkey_info}")
 
+              echo "Sending transactions to staking contract ${contract_address} for owner ${account}"
+              echo "This will update the staking contract with the new participation key info, allowing participation in the network"
+              echo "You will be asked to enter your password multiple times to confirm the transactions."
+
               execute_interactive_docker_command "/node/bin/goal clerk send -a 1000 -f ${account} -t ${contract_address} --out=/tmp/payment.txn"
               execute_interactive_docker_command "/node/bin/goal app call --app-id ${contract_id} --from ${account} --app-arg 'b64:zSTeiA==' --app-arg 'b64:${voting_key}' --app-arg 'b64:${selection_key}' --app-arg 'int:${first_round}' --app-arg 'int:${last_round}' --app-arg 'int:${key_dilution}' --app-arg 'b64:${stateproof_key}' --out=/tmp/app_call.txn"
 
