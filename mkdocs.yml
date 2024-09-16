@@ -108,6 +108,7 @@ nav:
   - Updating:
         - Updating Voi Swarm: updating/swarm-update.md
         - Telemetry name: updating/telemetry.md
+        - Migrating network: updating/migrating-network.md
   - Operating:
         - Running your node: operating/running-your-node.md
         - Participation keys: operating/participation-keys.md

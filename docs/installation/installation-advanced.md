@@ -17,6 +17,7 @@ other systems, use the **VOINETWORK_SKIP_WALLET_SETUP** environment variable.
 To skip wallet setup, run the following command:
 
 ```bash
+export VOINETWORK_NETWORK=mainnet
 export VOINETWORK_SKIP_WALLET_SETUP=1
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
@@ -33,8 +34,22 @@ If you prefer to set a name through the environment, you can do so by setting th
 This would typically be done if you are automating the installation process.
 
 ```bash
+export VOINETWORK_NETWORK=mainnet
 export VOINETWORK_TELEMETRY_NAME="my_custom_telemetry_name"
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
 A custom telemetry name can be combined with other environment variables.
+
+## Joining a Specific Network (advanced)
+
+Voi Swarm supports joining the `mainnet`, `betanet`, or `testnet` networks.
+To specify a network during installation, set the **VOINETWORK_NETWORK** environment variable:
+
+```bash
+export VOINETWORK_NETWORK=testnet
+/bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
+```
+
+When joining a new network, you will be prompted to take existing accounts offline.
+New participation keys will then be generated allowing you to go online on the net network.

@@ -9,6 +9,7 @@ and where we have automated as much as possible.
 To set up a new Voi node, run the following command:
 
 ```bash
+export VOINETWORK_NETWORK=mainnet
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
@@ -22,6 +23,16 @@ To import your account and set up a new Voi node, run the following command:
 
 ```bash
 export VOINETWORK_IMPORT_ACCOUNT=1
+export VOINETWORK_NETWORK=mainnet
+/bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
+```
+
+## Migrating to Mainnet
+
+To migrate an existing installation to mainnet, use the following command:
+
+```bash
+export VOINETWORK_NETWORK=mainnet
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 

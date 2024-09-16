@@ -29,6 +29,7 @@ To set up a new relay node, execute the following command:
 
 ```bash
 export VOINETWORK_PROFILE=relay
+export VOINETWORK_NETWORK=mainnet
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
