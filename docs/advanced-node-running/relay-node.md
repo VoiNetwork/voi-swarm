@@ -41,11 +41,9 @@ The default maximum number of incoming peers is 90. To change this limit, run th
 ~/voi/bin/set-peer-limit <new_limit>
 ```
 
-
 !!! warning
     The maximum number of incoming peers should not exceed what your node can handle.
     If you fail network performance test you may be removed from the network.
-
 
 ## Allowing Metrics Gathering
 
