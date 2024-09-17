@@ -543,28 +543,28 @@ ensure_accounts_are_offline() {
     return
   fi
 
-  if [[ ${container_id} == "" ]]; then
-    echo "Skipping account offline check as no existing Voi Swarm container could be found."
-    return
-  fi
+#  if [[ ${container_id} == "" ]]; then
+#    echo "Skipping account offline check as no existing Voi Swarm container could be found."
+#    return
+#  fi
 
-  display_banner "Migrating to new network. Ensuring all accounts are offline."
-
-  echo "Checking if accounts are online and have a balance of 1,000 microVoi or more."
-  echo "Accounts with a balance of 1,000 microVoi or more will be taken offline."
-
-  for account in ${account_addresses}; do
-    local balance
-    balance=$(get_account_balance "${account}")
-    account_status=$(execute_docker_command "/node/bin/goal account dump -a ${account}" | jq -r .onl)
-
-    if [[ ${balance} -ge 1000 && ${account_status} -eq 1 ]]; then
-      echo ""
-      echo "Balance is ${balance} which is above 1,000 microVoi. Taking account ${account} offline."
-      execute_interactive_docker_command "/node/bin/goal account changeonlinestatus -a ${account} -o=false"
-      echo "Account ${account} is now offline!"
-    fi
-  done
+#  display_banner "Migrating to new network. Ensuring all accounts are offline."
+#
+#  echo "Checking if accounts are online and have a balance of 1,000 microVoi or more."
+#  echo "Accounts with a balance of 1,000 microVoi or more will be taken offline."
+#
+#  for account in ${account_addresses}; do
+#    local balance
+#    balance=$(get_account_balance "${account}")
+#    account_status=$(execute_docker_command "/node/bin/goal account dump -a ${account}" | jq -r .onl)
+#
+#    if [[ ${balance} -ge 1000 && ${account_status} -eq 1 ]]; then
+#      echo ""
+#      echo "Balance is ${balance} which is above 1,000 microVoi. Taking account ${account} offline."
+#      execute_interactive_docker_command "/node/bin/goal account changeonlinestatus -a ${account} -o=false"
+#      echo "Account ${account} is now offline!"
+#    fi
+#  done
 }
 
 get_participation_key_id_from_vote_key() {
