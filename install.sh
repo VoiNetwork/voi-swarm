@@ -1357,6 +1357,13 @@ set_profile
 
 if [[ ${VOINETWORK_NETWORK} != "${existing_network}" && -n ${existing_network} ]]; then
   new_network=1
+elif [[ ${VOINETWORK_NETWORK} == "mainnet" && -z ${existing_network} ]]; then
+  ## This is temporary to allow for people that have not run the installer since
+  ## mid-August 2024, as there prior to this was no network profile.
+  if [[ -e /var/lib/voi/algod/data/voitest-v1 ]]; then
+    existing_network="testnet"
+    new_network=1
+  fi
 fi
 
 check_minimum_requirements
