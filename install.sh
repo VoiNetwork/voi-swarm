@@ -1496,11 +1496,11 @@ if [[ -n ${VOINETWORK_IMPORT_ACCOUNT} && ${VOINETWORK_IMPORT_ACCOUNT} -eq 1 ]]; 
 
 else
   if [[ ${new_network} -eq 1 && -n ${previous_network_addresses} ]]; then
-
+     echo ""
      for account in ${previous_network_addresses}; do
        echo "Let's proceed to import ${account} into ${VOINETWORK_NETWORK} using your existing account mnemonic."
-       echo "This is a two-step process, first we will delete the account from the previous network, followed"
-       echo "by importing the account into the new network."
+       echo " This is a two-step process, first we will delete the account from the previous network, followed"
+       echo " by importing the account into the new network."
        echo ""
        execute_interactive_docker_command "/node/bin/goal account delete -a ${account}"
        execute_interactive_docker_command "/node/bin/goal account import"
