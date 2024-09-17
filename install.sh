@@ -792,16 +792,16 @@ joined_network_instructions() {
   echo "  echo 'export PATH=\"\$PATH:${voi_home}/bin\"' >> ~/.bashrc && source ~/.bashrc"
   echo ""
 
-  if [[ ${skip_account_setup} -eq 0 && ${VOINETWORK_PROFILE} == "participation" ]]; then
-    echo "${bold}*********************************** READ THIS! ***********************************${normal}"
-    echo "After joining the network, it might take up to 2 hours for your server to appear on telemetry"
-    echo "tracking services. Initially, you can identify your server using the 12-digit short GUID shown by"
-    echo "the command ${voi_home}/bin/get-node-status."
-    echo ""
-    echo "At first, your node's health scores ${bold}will be low${normal}. ${bold}This is normal.${normal}"
-    echo "After running your node for 5-7 days, you should see the health score increase."
-    echo ""
-  fi
+#  if [[ ${skip_account_setup} -eq 0 && ${VOINETWORK_PROFILE} == "participation" ]]; then
+#    echo "${bold}*********************************** READ THIS! ***********************************${normal}"
+#    echo "After joining the network, it might take up to 2 hours for your server to appear on telemetry"
+#    echo "tracking services. Initially, you can identify your server using the 12-digit short GUID shown by"
+#    echo "the command ${voi_home}/bin/get-node-status."
+#    echo ""
+#    echo "At first, your node's health scores ${bold}will be low${normal}. ${bold}This is normal.${normal}"
+#    echo "After running your node for 5-7 days, you should see the health score increase."
+#    echo ""
+#  fi
 }
 
 check_staking_accounts() {
