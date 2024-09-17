@@ -832,136 +832,133 @@ joined_network_instructions() {
 
 check_staking_accounts() {
   account_addresses=$(get_account_addresses)
-  if [[ $? -eq 1 ]]; then
-    return
-  else
-    set_staking_url
 
-    for account in ${account_addresses}; do
-      local staking_endpoint
-      local response
-      local http_code
-      local json_response
+  set_staking_url
 
-      staking_endpoint="${staking_url}?owner=${account}&deleted=0"
-      response=$(curl -s --max-time 5 -w "%{http_code}" "${staking_endpoint}")
-      http_code=$(echo "${response}" | awk '{print substr($0, length($0) - 2)}')
-      json_response=$(echo "${response}" | awk '{print substr($0, 1, length($0) - 3)}')
+  for account in ${account_addresses}; do
+    local staking_endpoint
+    local response
+    local http_code
+    local json_response
 
-      if [[ "${http_code}" -eq 200 ]]; then
-        accounts_length=$(jq '.accounts | length' <<< "${json_response}")
-        if [[ "${accounts_length}" -gt 0 ]]; then
-          display_banner "Staking contract detected"
+    staking_endpoint="${staking_url}?owner=${account}&deleted=0"
+    response=$(curl -s --max-time 5 -w "%{http_code}" "${staking_endpoint}")
+    http_code=$(echo "${response}" | awk '{print substr($0, length($0) - 2)}')
+    json_response=$(echo "${response}" | awk '{print substr($0, 1, length($0) - 3)}')
 
-          echo "Staking contract has been detected for owner ${account}"
-          echo ""
+    if [[ "${http_code}" -eq 200 ]]; then
+      accounts_length=$(jq '.accounts | length' <<< "${json_response}")
+      if [[ "${accounts_length}" -gt 0 ]]; then
+        display_banner "Staking contract detected"
 
-          local balance
-          balance=$(get_account_balance "${account_addr}")
+        echo "Staking contract has been detected for owner ${account}"
+        echo ""
 
-          if [[ ${balance} -lt "1000" ]]; then
-            echo "Balance is below 1,000 microVoi. Skipping staking account setup."
-            continue
-          fi
+        local balance
+        balance=$(get_account_balance "${account_addr}")
 
-          local staking_accounts
-          staking_accounts=$(jq -c '.accounts[]' <<< "${json_response}")
-          for staking_account in ${staking_accounts}; do
-            local last_committed_block
-            local contract_address
-            local contract_id
-            local part_vote_k
-            local part_vote_lst
-            local participation_key_id
+        if [[ ${balance} -lt "1000" ]]; then
+          echo "Balance is below 1,000 microVoi. Skipping staking account setup."
+          continue
+        fi
 
-            contract_id=$(jq -r '.contractId' <<< "${staking_account}")
-            contract_address=$(jq -r '.contractAddress' <<< "${staking_account}")
-            last_committed_block=$(get_last_committed_block)
+        local staking_accounts
+        staking_accounts=$(jq -c '.accounts[]' <<< "${json_response}")
+        for staking_account in ${staking_accounts}; do
+          local last_committed_block
+          local contract_address
+          local contract_id
+          local part_vote_k
+          local part_vote_lst
+          local participation_key_id
 
-            part_vote_k=$(jq -r '.part_vote_k' <<< "${staking_account}")
-            part_vote_lst=$(jq -r '.part_vote_lst' <<< "${staking_account}")
+          contract_id=$(jq -r '.contractId' <<< "${staking_account}")
+          contract_address=$(jq -r '.contractAddress' <<< "${staking_account}")
+          last_committed_block=$(get_last_committed_block)
 
-            # shellcheck disable=SC2046
-            participation_key_id=$(get_participation_key_id_from_vote_key "${part_vote_k}")
+          part_vote_k=$(jq -r '.part_vote_k' <<< "${staking_account}")
+          part_vote_lst=$(jq -r '.part_vote_lst' <<< "${staking_account}")
 
-            if [[ "${part_vote_k}" == "null" || $((part_vote_lst-last_committed_block)) -le 417104 || -z "${participation_key_id}" ]]; then
+          # shellcheck disable=SC2046
+          participation_key_id=$(get_participation_key_id_from_vote_key "${part_vote_k}")
 
-              if  [[ "${part_vote_k}" == "null" ]]; then
-                echo "No staking participation key detected."
-              elif [[ -z ${participation_key_id} ]]; then
-                echo "Registered staking participation key is not installed locally."
-              else
-                local existing_expiration_date
-                existing_expiration_date=$(get_participation_expiration_eta "${part_vote_lst}" "${last_committed_block}")
+          if [[ "${part_vote_k}" == "null" || $((part_vote_lst-last_committed_block)) -le 417104 || -z "${participation_key_id}" ]]; then
 
-                echo "Current participation key for account ${account} is expected to expire at: ${existing_expiration_date}"
-                echo "Currently the network is at block: ${last_committed_block}"
-                echo "Current participation key expires at block: ${part_vote_lst}"
-                echo ""
-                echo "This is below the required threshold of 417,104 blocks / ~14 days."
-              fi
-
-              echo ""
-              echo "Generating new key for owner ${account} and contract address ${contract_address}"
-
-              generate_new_key "${contract_address}"
-
-              local partkey_info
-              local voting_key
-              local selection_key
-              local first_round
-              local last_round
-              local key_dilution
-              local stateproof_key
-
-              partkey_info=$(get_most_recent_participation_key_details "${contract_address}")
-              voting_key=$(jq -r '.voting_key' <<< "${partkey_info}")
-              selection_key=$(jq -r '.selection_key' <<< "${partkey_info}")
-              first_round=$(jq -r '.first_round' <<< "${partkey_info}")
-              last_round=$(jq -r '.last_valid' <<< "${partkey_info}")
-              key_dilution=$(jq -r '.key_dilution' <<< "${partkey_info}")
-              stateproof_key=$(jq -r '.stateproof_key' <<< "${partkey_info}")
-
-              echo "Sending transactions to staking contract ${contract_address} for owner ${account}"
-              echo "This will update the staking contract with the new participation key info, allowing participation in the network"
-              echo "You will be asked to enter your password multiple times to confirm the transactions."
-
-              execute_interactive_docker_command "/node/bin/goal clerk send -a 1000 -f ${account} -t ${contract_address} --out=/tmp/payment.txn"
-              execute_interactive_docker_command "/node/bin/goal app call --app-id ${contract_id} --from ${account} --app-arg 'b64:zSTeiA==' --app-arg 'b64:${voting_key}' --app-arg 'b64:${selection_key}' --app-arg 'int:${first_round}' --app-arg 'int:${last_round}' --app-arg 'int:${key_dilution}' --app-arg 'b64:${stateproof_key}' --out=/tmp/app_call.txn"
-
-              execute_docker_command "cat /tmp/{payment,app_call}.txn > /tmp/combined.txn"
-              execute_interactive_docker_command "/node/bin/goal clerk group -i /tmp/combined.txn -o /tmp/grouped.txn > /dev/null"
-              execute_interactive_docker_command "/node/bin/goal clerk split -i /tmp/grouped.txn -o /tmp/split.txn > /dev/null"
-              execute_interactive_docker_command "/node/bin/goal clerk sign -i /tmp/split-0.txn -o /tmp/signed-0.txn"
-              execute_interactive_docker_command "/node/bin/goal clerk sign -i /tmp/split-1.txn -o /tmp/signed-1.txn"
-              execute_docker_command "cat /tmp/signed-{0,1}.txn > /tmp/signed-combined.txn"
-              execute_interactive_docker_command "/node/bin/goal clerk rawsend -f /tmp/signed-combined.txn"
-
-              if [[ -n ${participation_key_id} ]]; then
-                execute_interactive_docker_command "/node/bin/goal account deletepartkey --partkeyid ${participation_key_id}"
-              fi
+            if  [[ "${part_vote_k}" == "null" ]]; then
+              echo "No staking participation key detected."
+            elif [[ -z ${participation_key_id} ]]; then
+              echo "Registered staking participation key is not installed locally."
             else
               local existing_expiration_date
               existing_expiration_date=$(get_participation_expiration_eta "${part_vote_lst}" "${last_committed_block}")
 
-              echo "Current staking participation key for owner ${account}, and"
-              echo "contract address ${contract_address} is expected to expire at: ${existing_expiration_date}"
-              echo "This is above the required threshold of 417,104 blocks / ~14 days."
-              echo "No new staking participation key will be generated."
+              echo "Current participation key for account ${account} is expected to expire at: ${existing_expiration_date}"
+              echo "Currently the network is at block: ${last_committed_block}"
+              echo "Current participation key expires at block: ${part_vote_lst}"
               echo ""
+              echo "This is below the required threshold of 417,104 blocks / ~14 days."
             fi
-          done
 
-          echo ""
-          echo "${bold}To learn how to use your staking contract visit: https://staking.voi.network${normal}"
-        else
-          display_banner "No staking contract detected"
+            echo ""
+            echo "Generating new key for owner ${account} and contract address ${contract_address}"
 
-          echo "No staking contracts found for owner ${account}. To learn more visit: https://staking.voi.network"
-        fi
+            generate_new_key "${contract_address}"
+
+            local partkey_info
+            local voting_key
+            local selection_key
+            local first_round
+            local last_round
+            local key_dilution
+            local stateproof_key
+
+            partkey_info=$(get_most_recent_participation_key_details "${contract_address}")
+            voting_key=$(jq -r '.voting_key' <<< "${partkey_info}")
+            selection_key=$(jq -r '.selection_key' <<< "${partkey_info}")
+            first_round=$(jq -r '.first_round' <<< "${partkey_info}")
+            last_round=$(jq -r '.last_valid' <<< "${partkey_info}")
+            key_dilution=$(jq -r '.key_dilution' <<< "${partkey_info}")
+            stateproof_key=$(jq -r '.stateproof_key' <<< "${partkey_info}")
+
+            echo "Sending transactions to staking contract ${contract_address} for owner ${account}"
+            echo "This will update the staking contract with the new participation key info, allowing participation in the network"
+            echo "You will be asked to enter your password multiple times to confirm the transactions."
+
+            execute_interactive_docker_command "/node/bin/goal clerk send -a 1000 -f ${account} -t ${contract_address} --out=/tmp/payment.txn"
+            execute_interactive_docker_command "/node/bin/goal app call --app-id ${contract_id} --from ${account} --app-arg 'b64:zSTeiA==' --app-arg 'b64:${voting_key}' --app-arg 'b64:${selection_key}' --app-arg 'int:${first_round}' --app-arg 'int:${last_round}' --app-arg 'int:${key_dilution}' --app-arg 'b64:${stateproof_key}' --out=/tmp/app_call.txn"
+
+            execute_docker_command "cat /tmp/{payment,app_call}.txn > /tmp/combined.txn"
+            execute_interactive_docker_command "/node/bin/goal clerk group -i /tmp/combined.txn -o /tmp/grouped.txn > /dev/null"
+            execute_interactive_docker_command "/node/bin/goal clerk split -i /tmp/grouped.txn -o /tmp/split.txn > /dev/null"
+            execute_interactive_docker_command "/node/bin/goal clerk sign -i /tmp/split-0.txn -o /tmp/signed-0.txn"
+            execute_interactive_docker_command "/node/bin/goal clerk sign -i /tmp/split-1.txn -o /tmp/signed-1.txn"
+            execute_docker_command "cat /tmp/signed-{0,1}.txn > /tmp/signed-combined.txn"
+            execute_interactive_docker_command "/node/bin/goal clerk rawsend -f /tmp/signed-combined.txn"
+
+            if [[ -n ${participation_key_id} ]]; then
+              execute_interactive_docker_command "/node/bin/goal account deletepartkey --partkeyid ${participation_key_id}"
+            fi
+          else
+            local existing_expiration_date
+            existing_expiration_date=$(get_participation_expiration_eta "${part_vote_lst}" "${last_committed_block}")
+
+            echo "Current staking participation key for owner ${account}, and"
+            echo "contract address ${contract_address} is expected to expire at: ${existing_expiration_date}"
+            echo "This is above the required threshold of 417,104 blocks / ~14 days."
+            echo "No new staking participation key will be generated."
+            echo ""
+          fi
+        done
+
+        echo ""
+        echo "${bold}To learn how to use your staking contract visit: https://staking.voi.network${normal}"
+      else
+        display_banner "No staking contract detected"
+
+        echo "No staking contracts found for owner ${account}. To learn more visit: https://staking.voi.network"
       fi
-    done
-  fi
+    fi
+  done
 }
 
 change_account_online_status() {
