@@ -33,7 +33,7 @@ export VOINETWORK_NETWORK=mainnet
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
-## Peer limits
+## Peer Limits
 
 The default maximum number of incoming peers is 90. To change this limit, run the following command:
 
@@ -41,6 +41,19 @@ The default maximum number of incoming peers is 90. To change this limit, run th
 ~/voi/bin/set-peer-limit <new_limit>
 ```
 
+
 !!! warning
     The maximum number of incoming peers should not exceed what your node can handle.
     If you fail network performance test you may be removed from the network.
+
+
+## Allowing Metrics Gathering
+
+To allow metrics gathering used for incentive calculations it is important that you allow the metrics
+collector from `85.10.205.105` to access your server.
+
+If you have **ufw** installed you can allow the IP address with the following command:
+
+```bash
+sudo ufw allow from 85.10.250.105 to any port 9100
+```
