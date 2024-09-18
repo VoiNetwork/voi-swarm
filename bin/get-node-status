@@ -24,11 +24,11 @@ get_last_committed_block() {
 }
 
 get_accounts() {
-  if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voitest-v1/accountList.json"'; then
+  if execute_sudo 'test ! -f "/var/lib/voi/algod/data/voimain-v1.0/accountList.json"'; then
     util_abort "Account list not found. Exiting the program."
   fi
 
-  accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voitest-v1/accountList.json')
+  accounts_json=$(execute_sudo 'cat /var/lib/voi/algod/data/voimain-v1.0/accountList.json')
   number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
 
   if [[ $number_of_accounts -eq 0 ]]; then
