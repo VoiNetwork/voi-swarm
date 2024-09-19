@@ -315,10 +315,10 @@ set_network_identifier() {
       network_identifier="voibeta-v1.0"
       ;;
     "testnet")
-      network_identifier="voitest-v1"
+      network_identifier="voitest-v1.0"
       ;;
     *)
-      network_identifier="voitest-v1"
+      network_identifier="voitest-v1.0"
       ;;
   esac
 }
@@ -332,10 +332,10 @@ get_network_identifier() {
         echo "voibeta-v1.0"
         ;;
       "testnet")
-        echo "voitest-v1"
+        echo "voitest-v1.0"
         ;;
       *)
-        echo "voitest-v1"
+        echo "voitest-v1.0"
         ;;
     esac
 }
