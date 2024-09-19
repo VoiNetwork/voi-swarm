@@ -35,9 +35,3 @@ To migrate an existing installation to mainnet, use the following command:
 export VOINETWORK_NETWORK=mainnet
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
-
-???+ info
-    While the installation detects existing host-based setups (such as D13) on the same host
-    and offers migration automatically,
-    it is important to familiarize yourself with the [migration steps](../../migrating/), in particular,
-    if you are [migrating from a different host](../../migrating/#installing-on-a-new-server).

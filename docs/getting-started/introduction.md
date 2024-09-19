@@ -41,5 +41,4 @@ To learn more about Voi, visit the [Voi documentation website](https://docs.voi.
 |-----------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|-------------------|
 | [Voi Swarm](../../installation/system-requirements)                   | You want to explore, and possibly join the network by using a dedicated server.                      | Linux             |
 | [Austs One Click Node](https://github.com/AustP/austs-one-click-node) | You want to explore what Voi is about, and with an easy graphical interface and with no commitment.  | Windows/Linux/Mac |
-| [D13 guide](https://d13.co/posts/set-up-voi-participation-node/)      | Understanding the setup process and with more control (advanced use case, and no longer recommended) | Linux             |
 | Roll your own                                                         | You have a specific use case that doesn't fit the above options.                                     | Any               |

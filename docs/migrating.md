@@ -1,6 +1,6 @@
 # Migrating to Voi Swarm
 
-## From host-based based setups (including D13)
+## From host-based based setups
 
 Install Voi Swarm on your server by importing your existing wallet using your mnemonic:
 
@@ -11,7 +11,7 @@ export VOINETWORK_IMPORT_ACCOUNT=1
 
 === "Installing on same server"
 
-    During the installation, the setup will detect existing Voi and Algorand based setups on the same host and offer
+    During the installation, the setup will detect compatible AVM based setups on the same host and offer
     migration automatically.
 
     If you want to migrate manually after installation run this command:
