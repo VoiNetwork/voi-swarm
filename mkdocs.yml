@@ -112,6 +112,7 @@ nav:
   - Operating:
         - Running your node: operating/running-your-node.md
         - Participation keys: operating/participation-keys.md
+        - Staking program: operating/staking-program.md
         - Setup notifications: operating/setup-notifications.md
   - Notification Guides:
       - Amazon SES: notification-guides/amazon-ses.md
