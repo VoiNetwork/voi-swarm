@@ -1373,8 +1373,8 @@ if [[ ${new_network} -eq 1 ]]; then
   ensure_accounts_are_offline "${existing_network}"
 fi
 
-get_telemetry_name
-set_telemetry_name
+#get_telemetry_name
+#set_telemetry_name
 
 display_banner "Installing Docker"
 
