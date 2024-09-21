@@ -1067,39 +1067,39 @@ set_telemetry_name() {
     return
   fi
 
-  detect_existing_host_based_setup
+#  detect_existing_host_based_setup
+#
+#  if [[ ${migrate_host_based_setup} -eq 1 ]]; then
+#    return
+#  fi
 
-  if [[ ${migrate_host_based_setup} -eq 1 ]]; then
-    return
-  fi
+#  display_banner "Telemetry"
 
-  display_banner "Telemetry"
-
-  if [[ -z ${VOINETWORK_TELEMETRY_NAME} && ! -f "/var/lib/voi/algod/data/logging.config" ]]; then
-    echo "Voi uses telemetry to make the network better and reward users with Voi if participating."
-    echo ""
-    echo "If you wish to opt-in to telemetry sharing, you can provide a telemetry name below."
-    echo "We'll add 'VOI:' at the start to show you're using this package."
-    echo ""
-    echo "To skip telemetry sharing, type 'opt-out' below."
-    echo ""
-    echo "Visit https://voinetwork.github.io/voi-swarm/getting-started/telemetry/ to learn how to set your own custom name."
-    echo ""
-    echo "Enter your telemetry name below to get started."
-    # shellcheck disable=SC2162
-    read -p "Telemetry name: " VOINETWORK_TELEMETRY_NAME
-    if [[ ${VOINETWORK_TELEMETRY_NAME} == "opt-out" ]]; then
-      unset VOINETWORK_TELEMETRY_NAME
-      return
-    else
-      VOINETWORK_TELEMETRY_NAME="VOI:$VOINETWORK_TELEMETRY_NAME"
-      update_profile_setting "VOINETWORK_TELEMETRY_NAME" "${VOINETWORK_TELEMETRY_NAME}"
-    fi
-  elif [[ -n ${VOINETWORK_TELEMETRY_NAME} ]]; then
-    echo "Your telemetry name is already set to '${VOINETWORK_TELEMETRY_NAME}'. To change your telemetry settings, execute the command ${HOME}/voi/bin/set-telemetry-name"
-  else
-    echo "Telemetry is disabled. To enable telemetry, execute the command ${HOME}/voi/bin/set-telemetry-name"
-  fi
+#  if [[ -z ${VOINETWORK_TELEMETRY_NAME} && ! -f "/var/lib/voi/algod/data/logging.config" ]]; then
+#    echo "Voi uses telemetry to make the network better and reward users with Voi if participating."
+#    echo ""
+#    echo "If you wish to opt-in to telemetry sharing, you can provide a telemetry name below."
+#    echo "We'll add 'VOI:' at the start to show you're using this package."
+#    echo ""
+#    echo "To skip telemetry sharing, type 'opt-out' below."
+#    echo ""
+#    echo "Visit https://voinetwork.github.io/voi-swarm/getting-started/telemetry/ to learn how to set your own custom name."
+#    echo ""
+#    echo "Enter your telemetry name below to get started."
+#    # shellcheck disable=SC2162
+#    read -p "Telemetry name: " VOINETWORK_TELEMETRY_NAME
+#    if [[ ${VOINETWORK_TELEMETRY_NAME} == "opt-out" ]]; then
+#      unset VOINETWORK_TELEMETRY_NAME
+#      return
+#    else
+#      VOINETWORK_TELEMETRY_NAME="VOI:$VOINETWORK_TELEMETRY_NAME"
+#      update_profile_setting "VOINETWORK_TELEMETRY_NAME" "${VOINETWORK_TELEMETRY_NAME}"
+#    fi
+#  elif [[ -n ${VOINETWORK_TELEMETRY_NAME} ]]; then
+#    echo "Your telemetry name is already set to '${VOINETWORK_TELEMETRY_NAME}'. To change your telemetry settings, execute the command ${HOME}/voi/bin/set-telemetry-name"
+#  else
+#    echo "Telemetry is disabled. To enable telemetry, execute the command ${HOME}/voi/bin/set-telemetry-name"
+#  fi
 }
 
 detect_existing_host_based_setup() {
@@ -1374,7 +1374,7 @@ if [[ ${new_network} -eq 1 ]]; then
 fi
 
 #get_telemetry_name
-#set_telemetry_name
+set_telemetry_name
 
 display_banner "Installing Docker"
 
