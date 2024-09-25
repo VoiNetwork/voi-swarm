@@ -1230,7 +1230,7 @@ set_profile() {
 
   if [[ -z ${VOINETWORK_NETWORK} ]]; then
     # If VOINETWORK_NETWORK is not set, use default "testnet" to profile
-    VOINETWORK_NETWORK="testnet"
+    VOINETWORK_NETWORK="mainnet"
     echo "export VOINETWORK_NETWORK=${VOINETWORK_NETWORK}" >> "${voi_home}/.profile"
   fi
 
