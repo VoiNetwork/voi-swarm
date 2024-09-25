@@ -17,7 +17,6 @@ other systems, use the **VOINETWORK_SKIP_WALLET_SETUP** environment variable.
 To skip wallet setup, run the following command:
 
 ```bash
-export VOINETWORK_NETWORK=mainnet
 export VOINETWORK_SKIP_WALLET_SETUP=1
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
@@ -34,7 +33,6 @@ If you prefer to set a name through the environment, you can do so by setting th
 This would typically be done if you are automating the installation process.
 
 ```bash
-export VOINETWORK_NETWORK=mainnet
 export VOINETWORK_TELEMETRY_NAME="my_custom_telemetry_name"
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
