@@ -41,11 +41,11 @@ A custom telemetry name can be combined with other environment variables.
 
 ## Joining a Specific Network (advanced)
 
-Voi Swarm supports joining the `mainnet`, `betanet`, or `testnet` networks.
+Voi Swarm supports joining the `mainnet`, `betanet`, or `testnet-v1.0` networks.
 To specify a network during installation, set the **VOINETWORK_NETWORK** environment variable:
 
 ```bash
-export VOINETWORK_NETWORK=testnet
+export VOINETWORK_NETWORK=testnet-v1.0
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 

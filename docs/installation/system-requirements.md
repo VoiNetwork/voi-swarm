@@ -66,6 +66,6 @@ with larger cloud providers being at the higher end of the scale.
 When choosing a host,
 consider the location of the data center that you will be using
 and whether there
-is [relay node capacity](https://g.testnet.voi.nodly.io/d/b315a644-1dfa-47cc-ae1e-8cf4f80a72d1/voi-master-dashboard?orgId=1&refresh=10s)
+is [relay node capacity](https://dashboard.voi.network/d/b315a644-1dfa-47cc-ae1e-8cf4f80a72d1/overview?orgId=1&refresh=10s)
 available nearby in the network, if running a participation node.
 Your node will benefit from low latency and high availability if it is located close to a relay node.

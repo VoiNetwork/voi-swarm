@@ -23,6 +23,6 @@ export VOINETWORK_NETWORK=mainnet
 To migrate to Testnet, execute the following command:
 
 ```bash
-export VOINETWORK_NETWORK=testnet
+export VOINETWORK_NETWORK=testnet-v1.0
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
