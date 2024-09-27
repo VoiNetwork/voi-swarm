@@ -283,6 +283,9 @@ set_network_status_url() {
     "testnet")
       network_status_url="https://testnet-api.voi.nodly.io/v2/status"
       ;;
+    "testnet-v1.0")
+      network_status_url="https://testnet-api.voi.nodly.io/v2/status"
+      ;;
     *)
       abort "Unable to find status URL. Swarm is running in the background." true
       ;;
@@ -298,6 +301,9 @@ set_staking_url() {
     staking_url="https://betanet-idx.nautilus.sh/v1/scs/accounts"
     ;;
   "testnet")
+    staking_url="https://arc72-idx.nautilus.sh/v1/scs/accounts"
+    ;;
+  "testnet-v1.0")
     staking_url="https://arc72-idx.nautilus.sh/v1/scs/accounts"
     ;;
   *)
@@ -317,6 +323,9 @@ set_network_identifier() {
     "testnet")
       network_identifier="voitest-v1.0"
       ;;
+    "testnet-v1.0")
+      network_identifier="voitest-v1.0"
+      ;;
     *)
       network_identifier="voitest-v1.0"
       ;;
@@ -332,6 +341,9 @@ get_network_identifier() {
         echo "voibeta-v1.0"
         ;;
       "testnet")
+        echo "voitest-v1.0"
+        ;;
+      "testnet-v1.0")
         echo "voitest-v1.0"
         ;;
       *)
@@ -1229,7 +1241,7 @@ set_profile() {
   fi
 
   if [[ -z ${VOINETWORK_NETWORK} ]]; then
-    # If VOINETWORK_NETWORK is not set, use default "testnet" to profile
+    # If VOINETWORK_NETWORK is not set, use default "mainnet" to profile
     VOINETWORK_NETWORK="mainnet"
     echo "export VOINETWORK_NETWORK=${VOINETWORK_NETWORK}" >> "${voi_home}/.profile"
   fi
@@ -1483,7 +1495,7 @@ else
     execute_interactive_docker_command "/node/bin/goal account new"
     get_account_address
 
-    if [[ ${VOINETWORK_NETWORK} == "testnet" ]]; then
+    if [[ ${VOINETWORK_NETWORK} == "testnet-v1.0" ]]; then
       # Get Voi from faucet
       echo "****************************************************************************************************************"
       echo "*    To join the Voi network, do one of these:"
