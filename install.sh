@@ -327,7 +327,7 @@ set_network_identifier() {
       network_identifier="voitest-v1.0"
       ;;
     *)
-      network_identifier="voitest-v1.0"
+      network_identifier="voimain-v1.0"
       ;;
   esac
 }
@@ -445,11 +445,9 @@ get_account_info() {
   number_of_accounts=$(echo "${accounts_json}" | jq '.Accounts | length')
 
   if [[ $number_of_accounts -gt 1 ]]; then
-    echo "More than one account found in wallet. Skipping account creation."
     skip_account_setup=1
     return 1
   elif [[ $number_of_accounts -eq 1 ]] && [[ $allow_one_account != "true" ]]; then
-    echo "One account found in wallet. Skipping account creation."
     get_account_address
     skip_account_setup=1
     return 1
