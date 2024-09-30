@@ -1493,8 +1493,7 @@ else
     execute_interactive_docker_command "/node/bin/goal account new"
     get_account_address
 
-    if [[ ${VOINETWORK_NETWORK} == "testnet-v1.0" ]]; then
-      # Get Voi from faucet
+    if [[ ${VOINETWORK_NETWORK} == "mainnet" ]]; then
       echo "****************************************************************************************************************"
       echo "*    To join the Voi network, do one of these:"
       echo "*"
@@ -1502,24 +1501,38 @@ else
       echo "*"
       echo "*    OR"
       echo "*"
-      echo "*    b) Get 100 Voi for free:"
-      echo "*       - Go to https://voiager.org/get-started"
-      echo "*       - Connect your account with Kibisis wallet"
-      echo "*       - Enter your address"
-      echo "*       - Authenticate your drip"
-      echo "*       - Receive drip"
+      echo "*    b) Acquire Voi and send it to your account"
+      echo "*       - Go to https://voinetwork.github.io/getting-started/setup-account/#adding-voi-to-your-account"
+      echo "*       - Follow the guidance and options available to acquire Voi"
       echo "*"
       echo "* After you've done this, type 'completed' to go on"
       echo "****************************************************************************************************************"
-
-      # shellcheck disable=SC2162
-      read -p "Type 'completed' when you're ready to continue: " prompt
-      while [[ ${prompt} != "completed" ]]
-      do
-        # shellcheck disable=SC2162
-        read -p "Type 'completed' to continue: " prompt
-      done
+#    elif [[ ${VOINETWORK_NETWORK} == "testnet-v1.0" ]]; then
+#      # Get Voi from faucet
+#      echo "****************************************************************************************************************"
+#      echo "*    To join the Voi network, do one of these:"
+#      echo "*"
+#      echo "*    a) Send at least 1 Voi to your account ${account_addr} from another account"
+#      echo "*"
+#      echo "*    OR"
+#      echo "*"
+#      echo "*    b) Get 100 Voi for free:"
+#      echo "*       - Go to https://voiager.org/get-started"
+#      echo "*       - Connect your account with Kibisis wallet"
+#      echo "*       - Enter your address"
+#      echo "*       - Authenticate your drip"
+#      echo "*       - Receive drip"
+#      echo "*"
+#      echo "* After you've done this, type 'completed' to go on"
+#      echo "****************************************************************************************************************"
     fi
+    # shellcheck disable=SC2162
+    read -p "Type 'completed' when you're ready to continue: " prompt
+    while [[ ${prompt} != "completed" ]]
+    do
+      # shellcheck disable=SC2162
+      read -p "Type 'completed' to continue: " prompt
+    done
   fi
 fi
 

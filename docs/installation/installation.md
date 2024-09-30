@@ -12,6 +12,10 @@ To set up a new Voi node, run the following command:
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
+!!! tip
+    If you are looking to get Voi, you can buy them on centralized exchanges or use a decentralized exchange.
+    Check out [ways to acquire Voi](../../getting-started/setup-account/#adding-voi-to-your-account) for more information.
+
 ## Using an Existing Account/Address with Mnemonic
 
 For installing with an existing account or mnemonic, use this method.

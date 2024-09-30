@@ -99,6 +99,7 @@ nav:
   - Voi Swarm: index.md
   - Getting Started:
         - Introduction: getting-started/introduction.md
+        - Setup Your Account: getting-started/setup-account.md
   - Installation:
         - System requirements: installation/system-requirements.md
         - Prerequisites: installation/prerequisites.md
