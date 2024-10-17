@@ -842,7 +842,7 @@ check_staking_accounts() {
         balance=$(get_account_balance "${account}")
 
         if [[ ${balance} -lt "1000" ]]; then
-          echo "Balance is below 1,000 microVoi. Skipping staking account setup."
+          echo "Balance is below 0.001 Voi. Skipping staking account setup."
           continue
         fi
 
