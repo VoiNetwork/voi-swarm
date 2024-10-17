@@ -839,7 +839,7 @@ check_staking_accounts() {
         echo ""
 
         local balance
-        balance=$(get_account_balance "${account_addr}")
+        balance=$(get_account_balance "${account}")
 
         if [[ ${balance} -lt "1000" ]]; then
           echo "Balance is below 1,000 microVoi. Skipping staking account setup."
