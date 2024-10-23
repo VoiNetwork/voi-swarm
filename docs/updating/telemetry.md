@@ -17,8 +17,6 @@ To get your telemetry status, including enablement/name/GUID, you can run the fo
 ```
 
 ## Setting Your Telemetry Name and GUID
-When updating servers
-or reinstalling, it may be desirable to keep the same telemetry name and GUID for health rewards purposes.
 
 To set your telemetry name and GUID, you can run the following command:
 

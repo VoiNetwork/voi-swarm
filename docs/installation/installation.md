@@ -18,11 +18,7 @@ To set up a new Voi node, run the following command:
 
 ## Using an Existing Account/Address with Mnemonic
 
-For installing with an existing account or mnemonic, use this method.
-After installation, [update your name and GUID](../../updating/telemetry/#getting-your-telemetry-status)
-for health rewards if setting up on a new server.
-
-To import your account and set up a new Voi node, run the following command:
+For installing with an existing account or mnemonic, use the following command:
 
 ```bash
 export VOINETWORK_IMPORT_ACCOUNT=1

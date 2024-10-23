@@ -22,7 +22,7 @@ export VOINETWORK_IMPORT_ACCOUNT=1
 
     This command will do the following steps for you:
 
-    1. Duplicate telemetry settings, including existing telemetry name and GUID, without affecting rewards.
+    1. Duplicate telemetry settings, including existing telemetry name and GUID.
     2. Stop the host-based Voi and Algorand services
     3. Remove the Algorand debian package, to avoid conficts with the Voi Swarm setup
     3. Restart Voi Swarm
