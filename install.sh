@@ -352,6 +352,8 @@ set_docker_image() {
         ;;
     esac
   fi
+
+  update_profile_setting "VOINETWORK_DOCKER_IMAGE" "${VOINETWORK_DOCKER_IMAGE}"
 }
 
 get_network_identifier() {
