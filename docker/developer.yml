@@ -24,7 +24,7 @@ services:
       restart_policy:
         condition: on-failure
   node-exporter:
-    image: ghcr.io/voinetwork/voi-node-${VOINETWORK_NETWORK}:latest
+    image: ${VOINETWORK_DOCKER_IMAGE}
     hostname: ${VOINETWORK_TELEMETRY_NAME}
     environment:
       - GOGC=25
