@@ -1271,14 +1271,15 @@ set_profile() {
 
 get_tarball() {
   local branch
+  local filename="voi-swarm.tar.gz"
   if [[ -n ${VOINETWORK_BRANCH} ]]; then
     branch=${VOINETWORK_BRANCH}
   else
     branch="main"
   fi
-  curl -sSL https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/"${branch}" --output "${voi_home}"/voi-swarm.tar.gz
-  tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
-  rm "${voi_home}"/voi-swarm.tar.gz
+  curl -sSL https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/"${branch}" --output "${voi_home}/${filename}"
+  tar -xzf "${voi_home}/${filename}" -C "${voi_home}" --strip-components=1
+  rm "${voi_home}/${filename}"
 }
 
 preserve_autoupdate() {
