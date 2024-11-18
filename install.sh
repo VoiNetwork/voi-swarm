@@ -332,6 +332,30 @@ set_network_identifier() {
   esac
 }
 
+set_docker_image() {
+  if [[ -z ${VOINETWORK_DOCKER_IMAGE} ]]; then
+    case ${VOINETWORK_PROFILE} in
+      "relay")
+        VOINETWORK_DOCKER_IMAGE="ghcr.io/voinetwork/voi-node-${VOINETWORK_NETWORK}:latest"
+        ;;
+      "developer")
+        VOINETWORK_DOCKER_IMAGE="ghcr.io/voinetwork/voi-node-${VOINETWORK_NETWORK}:latest"
+        ;;
+      "archiver")
+        VOINETWORK_DOCKER_IMAGE="ghcr.io/voinetwork/voi-node-${VOINETWORK_NETWORK}:latest"
+        ;;
+      "participation")
+        VOINETWORK_DOCKER_IMAGE="ghcr.io/voinetwork/voi-node-participation-${VOINETWORK_NETWORK}:latest"
+        ;;
+      *)
+        abort "Invalid profile. Exiting the program."
+        ;;
+    esac
+  fi
+
+  update_profile_setting "VOINETWORK_DOCKER_IMAGE" "${VOINETWORK_DOCKER_IMAGE}"
+}
+
 get_network_identifier() {
     case $1 in
       "mainnet")
@@ -1249,14 +1273,15 @@ set_profile() {
 
 get_tarball() {
   local branch
+  local filename="voi-swarm.tar.gz"
   if [[ -n ${VOINETWORK_BRANCH} ]]; then
     branch=${VOINETWORK_BRANCH}
   else
     branch="main"
   fi
-  curl -sSL https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/"${branch}" --output "${voi_home}"/voi-swarm.tar.gz
-  tar -xzf "${voi_home}"/voi-swarm.tar.gz -C "${voi_home}" --strip-components=1
-  rm "${voi_home}"/voi-swarm.tar.gz
+  curl -sSL https://api.github.com/repos/VoiNetwork/voi-swarm/tarball/"${branch}" --output "${voi_home}/${filename}"
+  tar -xzf "${voi_home}/${filename}" -C "${voi_home}" --strip-components=1
+  rm "${voi_home}/${filename}"
 }
 
 preserve_autoupdate() {
@@ -1364,6 +1389,7 @@ existing_network=$(get_existing_network)
 
 clone_environment_settings_to_profile
 set_profile
+set_docker_image
 
 if [[ ${VOINETWORK_NETWORK} != "${existing_network}" && -n ${existing_network} ]]; then
   new_network=1
