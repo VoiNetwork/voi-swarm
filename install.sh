@@ -332,6 +332,28 @@ set_network_identifier() {
   esac
 }
 
+set_docker_image() {
+  if [[ -z ${VOINETWORK_DOCKER_IMAGE} ]]; then
+    case ${VOINETWORK_PROFILE} in
+      "relay")
+        VOINETWORK_DOCKER_IMAGE="ghcr.io/voinetwork/voi-node-${VOINETWORK_NETWORK}:latest"
+        ;;
+      "developer")
+        VOINETWORK_DOCKER_IMAGE="ghcr.io/voinetwork/voi-node-${VOINETWORK_NETWORK}:latest"
+        ;;
+      "archiver")
+        VOINETWORK_DOCKER_IMAGE="ghcr.io/voinetwork/voi-node-${VOINETWORK_NETWORK}:latest"
+        ;;
+      "participation")
+        VOINETWORK_DOCKER_IMAGE="ghcr.io/voinetwork/voi-node-participation-${VOINETWORK_NETWORK}:latest"
+        ;;
+      *)
+        abort "Invalid profile. Exiting the program."
+        ;;
+    esac
+  fi
+}
+
 get_network_identifier() {
     case $1 in
       "mainnet")
@@ -1364,6 +1386,7 @@ existing_network=$(get_existing_network)
 
 clone_environment_settings_to_profile
 set_profile
+set_docker_image
 
 if [[ ${VOINETWORK_NETWORK} != "${existing_network}" && -n ${existing_network} ]]; then
   new_network=1
