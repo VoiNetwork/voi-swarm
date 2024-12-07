@@ -283,7 +283,7 @@ set_network_status_url() {
     "testnet")
       network_status_url="https://testnet-api.voi.nodly.io/v2/status"
       ;;
-    "testnet-v1.0")
+    "testnet-v1.1")
       network_status_url="https://testnet-api.voi.nodly.io/v2/status"
       ;;
     *)
@@ -303,7 +303,7 @@ set_staking_url() {
   "testnet")
     staking_url="https://arc72-idx.nautilus.sh/v1/scs/accounts"
     ;;
-  "testnet-v1.0")
+  "testnet-v1.1")
     staking_url="https://arc72-idx.nautilus.sh/v1/scs/accounts"
     ;;
   *)
@@ -321,10 +321,10 @@ set_network_identifier() {
       network_identifier="voibeta-v1.0"
       ;;
     "testnet")
-      network_identifier="voitest-v1.0"
+      network_identifier="voitest-v1.1"
       ;;
-    "testnet-v1.0")
-      network_identifier="voitest-v1.0"
+    "testnet-v1.1")
+      network_identifier="voitest-v1.1"
       ;;
     *)
       network_identifier="voimain-v1.0"
@@ -365,13 +365,13 @@ get_network_identifier() {
         echo "voibeta-v1.0"
         ;;
       "testnet")
-        echo "voitest-v1.0"
+        echo "voitest-v1.1"
         ;;
-      "testnet-v1.0")
-        echo "voitest-v1.0"
+      "testnet-v1.1")
+        echo "voitest-v1.1"
         ;;
       *)
-        echo "voitest-v1.0"
+        echo "voitest-v1.1"
         ;;
     esac
 }
@@ -1533,7 +1533,7 @@ else
       echo "*"
       echo "* After you've done this, type 'completed' to go on"
       echo "****************************************************************************************************************"
-#    elif [[ ${VOINETWORK_NETWORK} == "testnet-v1.0" ]]; then
+#    elif [[ ${VOINETWORK_NETWORK} == "testnet-v1.1" ]]; then
 #      # Get Voi from faucet
 #      echo "****************************************************************************************************************"
 #      echo "*    To join the Voi network, do one of these:"

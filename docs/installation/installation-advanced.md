@@ -23,11 +23,11 @@ export VOINETWORK_SKIP_WALLET_SETUP=1
 
 ## Joining a Specific Network (advanced)
 
-Voi Swarm supports joining the `mainnet`, `betanet`, or `testnet-v1.0` networks.
+Voi Swarm supports joining the `mainnet`, `betanet`, or `testnet-v1.1` networks.
 To specify a network during installation, set the **VOINETWORK_NETWORK** environment variable:
 
 ```bash
-export VOINETWORK_NETWORK=testnet-v1.0
+export VOINETWORK_NETWORK=testnet-v1.1
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
