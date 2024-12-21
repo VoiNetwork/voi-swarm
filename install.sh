@@ -284,7 +284,7 @@ set_network_status_url() {
       network_status_url="https://testnet-api.voi.nodely.dev/v2/status"
       ;;
     "testnet-v1.1")
-      network_status_url="https://testnet-api.voi.nodely/v2/status"
+      network_status_url="https://testnet-api.voi.nodely.dev/v2/status"
       ;;
     *)
       abort "Unable to find status URL. Swarm is running in the background." true
