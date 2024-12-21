@@ -278,13 +278,13 @@ set_network_status_url() {
       network_status_url="https://mainnet-api.voi.nodely.dev/v2/status"
       ;;
     "betanet")
-      network_status_url="https://betanet-api.voi.nodly.io/v2/status"
+      network_status_url="https://betanet-api.voi.nodely.dev/v2/status"
       ;;
     "testnet")
-      network_status_url="https://testnet-api.voi.nodly.io/v2/status"
+      network_status_url="https://testnet-api.voi.nodely.dev/v2/status"
       ;;
     "testnet-v1.1")
-      network_status_url="https://testnet-api.voi.nodly.io/v2/status"
+      network_status_url="https://testnet-api.voi.nodely.dev/v2/status"
       ;;
     *)
       abort "Unable to find status URL. Swarm is running in the background." true
