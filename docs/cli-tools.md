@@ -26,7 +26,7 @@ Retrieve the mnemonic of an existing account with the following command:
 
 !!! warning
     Remember to save or write down the 25-word seed phrase that shows up. If you lose it, you will lose access to your account,
-    including any Voi and Via tokens you have. Here's how to [keep your seed phrase safe](https://coinmarketcap.com/academy/article/how-to-protect-your-seed-phrase).
+    including any Voi tokens you have. Here's how to [keep your seed phrase safe](https://coinmarketcap.com/academy/article/how-to-protect-your-seed-phrase).
 
 ### Importing an Account
 
@@ -37,7 +37,8 @@ Import an existing account with the following command:
 ```
 
 !!! note
-    This is for if you made a wallet on a different terminal or a 3rd party wallet provider. *i.e Kibisi or A-Wallet*
+    This is for if you made a wallet on a different terminal or a 3rd party wallet provider.
+i.e Kibisis or A-Wallet*
 
 ### Generating Participation Key
 

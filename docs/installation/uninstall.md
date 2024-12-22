@@ -4,7 +4,7 @@
 
 !!! danger
     Make sure to [keep your account mnemonics](../../cli-tools/#retrieving-account-mnemonic) in a safe place.
-    If you lose it, you will lose access to your account, including any Voi and Via tokens you have.
+    If you lose it, you will lose access to your account, including any Voi tokens you have.
 
 To uninstall, execute the following commands:
 

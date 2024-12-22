@@ -1371,7 +1371,7 @@ if [[ -n ${VOINETWORK_SKIP_WALLET_SETUP} && -n ${VOINETWORK_IMPORT_ACCOUNT} ]]; 
   echo ""
   echo "To import an existing account, set VOINETWORK_IMPORT_ACCOUNT=1 and unset VOINETWORK_SKIP_WALLET_SETUP."
   echo ""
-  echo "Your Voi and Via are linked to your account. Wallets are created automatically if needed."
+  echo "Your Voi are linked to your account. Wallets are created automatically if needed."
   echo "Voi Swarm doesn't support wallet import."
   abort "Exiting the program."
 fi
