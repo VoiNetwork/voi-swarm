@@ -1544,7 +1544,7 @@ else
       echo "*"
       echo "*    b) Get 10 testnet Voi for free:"
       echo "*       - Go to https://faucet.nautilus.sh/"
-      echo "*       - Enter your address (${account_addr})"
+      echo "*       - Enter your address: ${account_addr}"
       echo "*"
       echo "* After you've done this, type 'completed' to go on"
       echo "****************************************************************************************************************"
