@@ -1538,7 +1538,7 @@ else
       echo "****************************************************************************************************************"
       echo "*    To join the Voi network, do one of these:"
       echo "*"
-      echo "*    a) Send at least 1 Voi to your account ${account_addr} from another account"
+      echo "*    a) Send at least 1 testnet Voi to your account ${account_addr} from another account"
       echo "*"
       echo "*    OR"
       echo "*"
