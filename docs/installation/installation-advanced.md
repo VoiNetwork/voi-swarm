@@ -32,4 +32,4 @@ export VOINETWORK_NETWORK=testnet-v1.1
 ```
 
 When joining a new network, you will be prompted to take existing accounts offline.
-New participation keys will then be generated allowing you to go online on the net network.
+New participation keys will then be generated allowing you to go online on the new network.

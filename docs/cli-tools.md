@@ -37,8 +37,7 @@ Import an existing account with the following command:
 ```
 
 !!! note
-    This is for if you made a wallet on a different terminal or a 3rd party wallet provider.
-i.e Kibisis or A-Wallet*
+    Use this command to import wallets created on a different terminal or from third-party wallets, such as Kibisis or A-Wallet.
 
 ### Generating Participation Key
 
