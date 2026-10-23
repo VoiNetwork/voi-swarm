@@ -67,7 +67,7 @@ services:
         constraints:
           - node.role == manager
   scheduler:
-    image: ghcr.io/voinetwork/swarm-cronjob:edge
+    image: crazymax/swarm-cronjob:1.16.0
     logging:
       driver: "local"
     environment:
