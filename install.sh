@@ -280,11 +280,9 @@ set_network_status_url() {
     "betanet")
       network_status_url="https://betanet-api.voi.nodely.dev/v2/status"
       ;;
-    "testnet")
-      network_status_url="https://testnet-api.voi.nodely.dev/v2/status"
-      ;;
-    "testnet-v1.2")
-      network_status_url="https://testnet-api.voi.nodely.dev/v2/status"
+    "testnet" | "testnet-v1.2")
+      ## No public status API for testnet-v1.2; catchup_node waits for the local node instead
+      network_status_url=""
       ;;
     *)
       abort "Unable to find status URL. Swarm is running in the background." true
@@ -380,6 +378,11 @@ catchup_node() {
   display_banner "Catching up with the network... This might take some time, and numbers might briefly increase"
   set_network_status_url
 
+  if [[ -z ${network_status_url} ]]; then
+    wait_for_local_sync
+    return
+  fi
+
   get_node_status
 
   while [[ ${current_node_round} -lt ${current_net_round} ]]; do
@@ -390,6 +393,32 @@ catchup_node() {
       printf "\rWaiting for catchup: One more block to go!                                           "
     fi
     get_node_status
+    sleep 5
+  done
+  echo ""
+  display_banner "Caught up with the network!"
+}
+
+## Used when there's no public status API to compare against: the node is caught up once it
+## has left catchup (Sync Time 0) and has recently committed a block.
+wait_for_local_sync() {
+  local node_status
+  local last_committed_block
+  local sync_time
+  local time_since_last_block
+
+  while true; do
+    node_status=$(execute_docker_command "/node/bin/goal node status")
+    last_committed_block=$(echo "${node_status}" | awk '/^Last committed block:/ {print $4}')
+    sync_time=$(echo "${node_status}" | awk '/^Sync Time:/ {print $3}')
+    time_since_last_block=$(echo "${node_status}" | awk '/^Time since last block:/ {print $5}')
+
+    if [[ ${sync_time} == "0.0s" && ${last_committed_block} -gt 0 && ${time_since_last_block} =~ ^[0-9.]+s$ ]] \
+      && [[ $(echo "${time_since_last_block%s} < 30" | bc) -eq 1 ]]; then
+      break
+    fi
+
+    printf "\rWaiting for catchup: at block %d                     " "${last_committed_block}"
     sleep 5
   done
   echo ""
