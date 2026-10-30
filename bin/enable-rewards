@@ -31,11 +31,11 @@ fi
 echo "This will register your current participation key again with a 2 Voi fee, opting account $1 in to proposer rewards."
 echo "No new participation key is generated."
 # shellcheck disable=SC2162
-read -p "Continue? (yes/no): " prompt
+read -p "Continue? (yes/no): " prompt || exit 1
 while [[ ${prompt} != "yes" && ${prompt} != "no" ]]
   do
   # shellcheck disable=SC2162
-    read -p "Type either yes or no: " prompt
+    read -p "Type either yes or no: " prompt || exit 1
 done
 if [[ ${prompt} == "no" ]]; then
   exit 0
