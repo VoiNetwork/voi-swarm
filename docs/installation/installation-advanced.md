@@ -21,6 +21,18 @@ export VOINETWORK_SKIP_WALLET_SETUP=1
 /bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
 ```
 
+## Opting In to Proposer Rewards (advanced)
+
+When an account with a balance between 30,000 and 70,000,000 Voi registers or renews its participation key,
+the installer asks whether to pay the 2 Voi fee that opts it in to proposer rewards. Your answer is saved.
+To answer ahead of time, for example in headless installs, set the **VOINETWORK_PROPOSER_REWARDS** environment variable
+to `yes` or `no`:
+
+```bash
+export VOINETWORK_PROPOSER_REWARDS=yes
+/bin/bash -c "$(curl -fsSL https://get.voi.network/swarm)"
+```
+
 ## Joining a Specific Network (advanced)
 
 Voi Swarm supports joining the `mainnet`, `betanet`, or `testnet-v1.2` networks.

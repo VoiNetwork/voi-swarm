@@ -16,6 +16,12 @@ staking_url=""
 container_id=""
 latest_key_end_block=""
 previous_network_addresses=""
+keyreg_fee_option=""
+
+# Proposer rewards (consensus v40), amounts in microVoi
+proposer_rewards_keyreg_fee=2000000
+proposer_rewards_min_balance=30000000000
+proposer_rewards_max_balance=70000000000000
 
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -748,10 +754,12 @@ generate_participation_key() {
       echo ""
       echo "You will be asked to enter your password to activate the new key."
 
-      execute_interactive_docker_command "/node/bin/goal account renewpartkey -a ${account} --roundLastValid ${end_block}"
+      set_keyreg_fee_option "${account}"
+      execute_interactive_docker_command "/node/bin/goal account renewpartkey -a ${account} --roundLastValid ${end_block} ${keyreg_fee_option}"
       if [[ -n ${current_key_id} ]]; then
         execute_interactive_docker_command "/node/bin/goal account deletepartkey --partkeyid ${current_key_id}"
       fi
+      display_proposer_rewards_status "${account}"
     else
       local existing_expiration_date
       existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
@@ -1001,8 +1009,78 @@ check_staking_accounts() {
 change_account_online_status() {
   local account
   account=$1
+  set_keyreg_fee_option "${account}"
   echo "Enter your password to join the network for account ${account}."
-  execute_interactive_docker_command "/node/bin/goal account changeonlinestatus -a ${account}"
+  execute_interactive_docker_command "/node/bin/goal account changeonlinestatus -a ${account} ${keyreg_fee_option}"
+  display_proposer_rewards_status "${account}"
+}
+
+# Sets keyreg_fee_option to pay the 2 Voi keyreg fee that opts an account in to proposer rewards, if the
+# operator wants that, and the account has a balance that qualifies for rewards but hasn't opted in yet.
+set_keyreg_fee_option() {
+  local account
+  local account_info
+  local balance
+  account=$1
+  keyreg_fee_option=""
+
+  account_info=$(execute_docker_command "/node/bin/goal account dump -a ${account}")
+  balance=$(jq -r '.algo // 0' <<< "${account_info}")
+
+  if [[ $(jq -r '.ie // false' <<< "${account_info}") == "true" ]]; then
+    return
+  fi
+
+  if [[ ${balance} -lt ${proposer_rewards_min_balance} || ${balance} -gt ${proposer_rewards_max_balance} ]]; then
+    return
+  fi
+
+  if [[ -z ${VOINETWORK_PROPOSER_REWARDS} ]]; then
+    if [[ ${headless_install} -eq 1 ]]; then
+      return
+    fi
+
+    display_banner "Proposer rewards"
+    echo "Accounts with a balance between 30,000 and 70,000,000 Voi can earn rewards for proposing blocks."
+    echo "To opt in, an account pays a one-time 2 Voi fee when registering its participation key."
+    echo "Your choice is saved, and applies to all accounts on this node. To opt in later, use ${voi_home}/bin/enable-rewards"
+    echo ""
+    echo "Do you want to opt in to proposer rewards? (yes/no)"
+    # shellcheck disable=SC2162
+    read -p "Opt in to proposer rewards: " prompt
+    while [[ ${prompt} != "yes" && ${prompt} != "no" ]]
+      do
+      # shellcheck disable=SC2162
+        read -p "Type either yes or no: " prompt
+    done
+    VOINETWORK_PROPOSER_REWARDS=${prompt}
+    update_profile_setting "VOINETWORK_PROPOSER_REWARDS" "${VOINETWORK_PROPOSER_REWARDS}"
+  fi
+
+  if [[ ${VOINETWORK_PROPOSER_REWARDS} == "yes" ]]; then
+    echo "A 2 Voi fee will be paid to opt account ${account} in to proposer rewards."
+    keyreg_fee_option="--fee ${proposer_rewards_keyreg_fee}"
+  fi
+}
+
+display_proposer_rewards_status() {
+  local account
+  local account_info
+  local balance
+  account=$1
+
+  account_info=$(execute_docker_command "/node/bin/goal account dump -a ${account}")
+  balance=$(jq -r '.algo // 0' <<< "${account_info}")
+
+  if [[ ${balance} -lt ${proposer_rewards_min_balance} || ${balance} -gt ${proposer_rewards_max_balance} ]]; then
+    return
+  fi
+
+  if [[ $(jq -r '.ie // false' <<< "${account_info}") == "true" ]]; then
+    echo "Account ${account} is eligible for proposer rewards."
+  else
+    echo "Account ${account} is not eligible for proposer rewards. To opt in, use ${voi_home}/bin/enable-rewards ${account}"
+  fi
 }
 
 join_as_new_user() {
