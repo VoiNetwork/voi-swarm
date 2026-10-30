@@ -77,6 +77,23 @@ Bring an existing account online with the following command:
 ~/voi/bin/go-online <account_address>
 ```
 
+### Opting In to Proposer Rewards
+
+Accounts with a balance between 30,000 and 70,000,000 Voi can earn rewards for proposing blocks.
+To be eligible, an account pays a one-time 2 Voi fee when registering its participation key.
+Opt in an online account with the following command:
+
+```bash
+~/voi/bin/enable-rewards <account_address>
+```
+
+This registers your current participation key again with the 2 Voi fee, without generating a new key.
+If the account's balance is outside the eligible range, you are warned before anything is sent.
+Rewards start a few hundred blocks after opting in.
+
+!!! note
+    An account that is suspended for missing its proposals loses its eligibility, and has to opt in again.
+
 ### Going Offline
 
 Take an existing account offline with the following command:
