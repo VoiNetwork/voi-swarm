@@ -740,8 +740,10 @@ generate_participation_key() {
       existing_expiration_date=$(get_participation_expiration_eta "${active_key_last_valid_round}" "${last_committed_block}")
       new_expiration_date=$(get_participation_expiration_eta "${end_block}" "${last_committed_block}")
 
-      current_key_prefix=$(docker exec -it "${container_id}" bash -c '/node/bin/goal account listpartkeys' | awk -v addr="${account_address}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $3}' | tr -cd '[:digit:]')
-      current_key_id=$(execute_docker_command "/node/bin/goal account partkeyinfo" | grep "${current_key_prefix}" | awk '{print $3}')
+      current_key_prefix=$(docker exec -it "${container_id}" bash -c '/node/bin/goal account listpartkeys' | awk -v addr="${account}" '$1=="yes" && substr($2, 1, 4) == substr(addr, 1, 4) && substr($2, length($2)-3) == substr(addr, length(addr)-3) {print $3}' | tr -d '.\r')
+      if [[ -n ${current_key_prefix} ]]; then
+        current_key_id=$(execute_docker_command "/node/bin/goal account partkeyinfo" | awk -v prefix="${current_key_prefix}" '$1=="Participation" && $2=="ID:" && index($3, prefix) == 1 {print $3}')
+      fi
 
       echo "Current participation key for account ${account} is expected to expire at: ${existing_expiration_date}"
       echo "Currently the network is at block: ${last_committed_block}"
